@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { SocketProvider } from "@/context/SocketContext";
+import "../globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import Navbar from "@/components/Navbar";
 
@@ -15,7 +14,7 @@ export default function RootLayout({ children }) {
       <AuthProvider>
         <body className={`antialiased`}>
           <Navbar />
-          <SocketProvider>{children}</SocketProvider>
+          {children}
         </body>
       </AuthProvider>
     </html>

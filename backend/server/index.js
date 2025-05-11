@@ -12,8 +12,8 @@ const UserInRoom = {};
 
 const io = new Server(server, {
   cors: {
-    // origin: "http://localhost:3000",
-    origin: "https://collabrative-code-editor.vercel.app/",
+    origin: "http://localhost:3000",
+    // origin: "https://collabrative-code-editor.vercel.app/",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -21,20 +21,29 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+
   socket.on("join_document", (roomId, username) => {
     socket.join(roomId);
     if (!UserInRoom[roomId]) UserInRoom[roomId] = [];
 
     const user = { socketId: socket.id, name: username };
     UserInRoom[roomId].push(user);
-    // console.log("USer - -", user);
     io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
 
     console.log(`User Joined Room: ${roomId}`);
   });
 
+
+
+
+
+
+
+
+
+  
+
   socket.on("code-change", ({ roomId, code, file, lang }) => {
-    // console.log(`Received code change for docId: ${code}`);
     socket.to(roomId).emit("changes", { code, file, lang });
   });
 
