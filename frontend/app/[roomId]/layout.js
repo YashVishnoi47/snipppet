@@ -10,6 +10,7 @@ export default function RoomLayout({ children }) {
       <AuthProvider>
         <body className={`w-full h-screen flex flex-col items-center`}>
           <main className="w-full h-full">
+            {/* <Navbar /> */}
             <SocketProvider>{children}</SocketProvider>
           </main>
         </body>

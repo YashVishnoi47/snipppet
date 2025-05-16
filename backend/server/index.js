@@ -21,7 +21,6 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-
   socket.on("join_document", (roomId, username) => {
     socket.join(roomId);
     if (!UserInRoom[roomId]) UserInRoom[roomId] = [];
@@ -33,17 +32,8 @@ io.on("connection", (socket) => {
     console.log(`User Joined Room: ${roomId}`);
   });
 
-
-
-
-
-
-
-
-
-  
-
   socket.on("code-change", ({ roomId, code, file, lang }) => {
+    // console.log("Code Change", { roomId, code, file, lang });
     socket.to(roomId).emit("changes", { code, file, lang });
   });
 

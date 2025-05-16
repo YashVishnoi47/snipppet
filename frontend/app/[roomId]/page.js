@@ -4,6 +4,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
+// import { SocketProvider } from "@/context/SocketContext";
+import CodeNavbar from "@/components/CodeNavbar";
+import GenericEditor from "@/components/codeEditors/GenericEditor";
 
 const WebDevEditor = dynamic(() =>
   import("@/components/codeEditors/WebDevEditor")
@@ -18,10 +21,16 @@ const Room = () => {
   const [activeUsers, setActiveUsers] = useState([]);
   const userName = session?.user.userName || "TEST";
   const [room, setRoom] = useState([]);
-  const [htmlCode, setHtmlCode] = useState("<h1>Hello World</h1>");
-  const [cssCode, setCssCode] = useState("h1 { color: red; }");
-  const [jsCode, setJsCode] = useState("console.log('Hello!');");
-  const [srcDoc, setSrcDoc] = useState("");
+  // const [htmlCode, setHtmlCode] = useState("<h1>Hello World</h1>");
+  // const [cssCode, setCssCode] = useState("h1 { color: red; }");
+  // const [jsCode, setJsCode] = useState("console.log('Hello!');");
+  // const [srcDoc, setSrcDoc] = useState("");
+  const [fileCodes, setFileCodes] = useState({
+    html: "",
+    css: "",
+    js: "",
+    python: "",
+  });
 
   // Fetching the room data by roomId.
   useEffect(() => {
@@ -33,7 +42,7 @@ const Room = () => {
         },
       });
       const data = await res.json();
-      console.log("Room Data: ", data);
+      // console.log("Room Data: ", data);
       setRoom(data);
     };
 
@@ -71,61 +80,62 @@ const Room = () => {
 
   if (!roomId || roomId === "undefined") {
     return <div>No Room Available</div>;
-  };
+  }
 
   return (
-    <div className="flex flex-col w-full h-screen p-4 bg-gray-100">
-      {room.codingLang === "webDev" ? (
-        <div className="flex flex-col">
-          <WebDevEditor
-            srcDoc={srcDoc}
-            setSrcDoc={setSrcDoc}
-            setHtmlCode={setHtmlCode}
-            setCssCode={setCssCode}
-            setJsCode={setJsCode}
-            htmlCode={htmlCode}
-            cssCode={cssCode}
-            jsCode={jsCode}
-            roomId={roomId}
-            socket={socket}
-          />
+    <div className="flex flex-col w-full h-screen">
+      <CodeNavbar Room={room} />
+      {/* {room.codingLang === "webDev" ? (
+          <div className="flex flex-col w-full h-full">
+            <WebDevEditor
+              srcDoc={srcDoc}
+              setSrcDoc={setSrcDoc}
+              setHtmlCode={setHtmlCode}
+              setCssCode={setCssCode}
+              setJsCode={setJsCode}
+              htmlCode={htmlCode}
+              cssCode={cssCode}
+              jsCode={jsCode}
+              roomId={roomId}
+              socket={socket}
+            />
 
-          <div
-            style={{
-              marginBottom: "1rem",
-              padding: "1rem",
-              background: "#f4f4f4",
-              borderRadius: "6px",
-            }}
-          >
-            <h4>👤 Active Users:</h4>
-            {/* <ul>
+            <div
+              style={{
+                marginBottom: "1rem",
+                padding: "1rem",
+                background: "#f4f4f4",
+                borderRadius: "6px",
+              }}
+            >
+              <h4>👤 Active Users:</h4>
+              <ul>
               {activeUsers.map((user) => (
                 <li key={user.socketId}>🟢 {user.name}</li>
               ))}
-            </ul> */}
+            </ul>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center w-full h-full bg-white rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold text-gray-800">Room Not Found</h1>
-          <p className="mt-2 text-gray-600">
-            The room you are looking for does not exist.
-          </p>
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col items-center justify-center w-full h-full bg-white rounded-lg shadow-lg">
+            <h1 className="text-2xl font-bold text-gray-800">Room Not Found</h1>
+            <p className="mt-2 text-gray-600">
+              The room you are looking for does not exist.
+            </p>
+          </div>
+        )} */}
+
+      <div className="flex flex-col w-full h-full">
+        <GenericEditor
+          socket={socket}
+          roomId={roomId}
+          codingLang={room.codingLang}
+          fileCodes={fileCodes}
+          setFileCodes={setFileCodes}
+        />
+      </div>
     </div>
   );
 };
 
 export default Room;
-
-// Only for development purpose
-// const handleCodeChange = (value, viewUpdate) => {
-//   setCode(value);
-//   socket.emit("code-change", {
-//     roomId: roomId,
-//     code: value,
-//     file: "index.html",
-//   });
-// };

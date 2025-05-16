@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { roommFormSchema } from "@/lib/validator";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -33,8 +34,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-import { Input } from "@/components/ui/input";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -76,7 +75,7 @@ const UserProfile = () => {
     FetchUserRooms();
   }, [session]);
 
-  // Creating prrivate coding Rooms
+  // Creating private coding Rooms
   const createPrivateRoom = async (values) => {
     setLoading(true);
 
@@ -89,7 +88,7 @@ const UserProfile = () => {
     });
 
     if (res.ok) {
-      router.refresh();
+      setRooms((prev) => [...prev, rooms]);
       setLoading(false);
     } else {
       alert("Error creating room");
@@ -209,7 +208,7 @@ const UserProfile = () => {
                                       <option value="javascript">
                                         JavaScript
                                       </option>
-                                      <option value="html">Python</option>
+                                      <option value="python">Python</option>
                                       <option value="webDev">
                                         HTML, CSS and JAVASCRIPT
                                       </option>
@@ -221,7 +220,13 @@ const UserProfile = () => {
                               )}
                             />
 
-                            <button type="submit">Submit</button>
+                            <button
+                              className="border-2 px-6 py-2 rounded-full hover:bg-green-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer flex justify-center items-center gap-1"
+                              type="submit"
+                            >
+                              {" "}
+                              Create
+                            </button>
                           </form>
                         </Form>
                       </DialogDescription>
@@ -264,7 +269,7 @@ const UserProfile = () => {
                       <button
                         onClick={handleJoinRoom}
                         text={"Join Room"}
-                        className="w-full border-2 p-2 rounded-full cursor-pointer"
+                        className="w-full border-2 p-2 rounded-full cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out"
                       >
                         Join Room
                       </button>
