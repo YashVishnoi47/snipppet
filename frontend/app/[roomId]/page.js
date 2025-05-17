@@ -3,31 +3,21 @@ import { SocketContext } from "@/context/SocketContext";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
-// import { SocketProvider } from "@/context/SocketContext";
 import CodeNavbar from "@/components/CodeNavbar";
 import GenericEditor from "@/components/codeEditors/GenericEditor";
-
-const WebDevEditor = dynamic(() =>
-  import("@/components/codeEditors/WebDevEditor")
-);
 
 const Room = () => {
   const { data: session } = useSession();
   const params = useParams();
   const roomId = params.roomId;
   const socket = useContext(SocketContext);
-  const [code, setCode] = useState("<h1>Hello World</h1>");
+  // const [code, setCode] = useState("<h1>Hello World</h1>");
   const [activeUsers, setActiveUsers] = useState([]);
   const userName = session?.user.userName || "TEST";
   const [room, setRoom] = useState([]);
-  // const [htmlCode, setHtmlCode] = useState("<h1>Hello World</h1>");
-  // const [cssCode, setCssCode] = useState("h1 { color: red; }");
-  // const [jsCode, setJsCode] = useState("console.log('Hello!');");
-  // const [srcDoc, setSrcDoc] = useState("");
   const [fileCodes, setFileCodes] = useState({
     html: "",
-    css: "",
+    css: "", 
     js: "",
     python: "",
   });
@@ -84,47 +74,7 @@ const Room = () => {
 
   return (
     <div className="flex flex-col w-full h-screen">
-      <CodeNavbar Room={room} />
-      {/* {room.codingLang === "webDev" ? (
-          <div className="flex flex-col w-full h-full">
-            <WebDevEditor
-              srcDoc={srcDoc}
-              setSrcDoc={setSrcDoc}
-              setHtmlCode={setHtmlCode}
-              setCssCode={setCssCode}
-              setJsCode={setJsCode}
-              htmlCode={htmlCode}
-              cssCode={cssCode}
-              jsCode={jsCode}
-              roomId={roomId}
-              socket={socket}
-            />
-
-            <div
-              style={{
-                marginBottom: "1rem",
-                padding: "1rem",
-                background: "#f4f4f4",
-                borderRadius: "6px",
-              }}
-            >
-              <h4>👤 Active Users:</h4>
-              <ul>
-              {activeUsers.map((user) => (
-                <li key={user.socketId}>🟢 {user.name}</li>
-              ))}
-            </ul>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center w-full h-full bg-white rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-gray-800">Room Not Found</h1>
-            <p className="mt-2 text-gray-600">
-              The room you are looking for does not exist.
-            </p>
-          </div>
-        )} */}
-
+      <CodeNavbar activeUsers={activeUsers} Room={room} />
       <div className="flex flex-col w-full h-full">
         <GenericEditor
           socket={socket}

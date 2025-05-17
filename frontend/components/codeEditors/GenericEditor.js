@@ -6,7 +6,7 @@ const GenericEditor = ({
   socket,
   roomId,
   codingLang,
-  fileCodes,
+  fileCodes, 
   setFileCodes,
 }) => {
   const handleCodeChange = (value, file, viewUpdate) => {
