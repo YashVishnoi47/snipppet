@@ -15,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import UserProfileButton from "./utilityComponents/UserProfileButton";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -39,60 +40,8 @@ const Navbar = () => {
         {session ? (
           <div>
             {/* <LogoutButton text={"Login"} /> */}
-            <Popover>
-              <PopoverTrigger className="border-2 rounded-xl w-24 py-1 px-4 cursor-pointer hover:bg-gray-200 transition-all duration-300 ease-in-out">
-                <div className="flex w-full h-full items-center justify-between">
-                  <h1>
-                    {" "}
-                    {/* Welcome!{" "} */}
-                    <span className="text-lg font-normal capitalize">
-                      {session.user.userName}
-                    </span>
-                  </h1>
 
-                  <IoMdArrowDown />
-                </div>
-              </PopoverTrigger>
-              {/* Links */}
-              <PopoverContent className={"p-0"}>
-                {/* Profile */}
-                <div className="flex flex-col gap-1">
-                  <Link
-                    href={"/userProfile"}
-                    className="flex w-full  items-center px-4 py-4 justify-start gap-4 cursor-pointer hover:bg-gray-200 transition-all duration-300 ease-in-out"
-                  >
-                    <MdDashboard className="text-xl" />
-                    <h1>Dashboard</h1>
-                  </Link>
-                </div>
-                {/* Settings */}
-                <div className="flex flex-col gap-1">
-                  <Link
-                    href={"/userProfile"}
-                    className="flex w-full  items-center px-4 py-4 justify-start gap-4 cursor-pointer hover:bg-gray-200 transition-all duration-300 ease-in-out"
-                  >
-                    <IoSettingsOutline className="text-xl" />
-                    <h1>Settings</h1>
-                  </Link>
-                </div>
-                {/* Settings more */}
-                <div className="flex flex-col gap-1">
-                  <Link
-                    href={"/userProfile"}
-                    className="flex w-full  items-center px-4 py-4 justify-start gap-4 cursor-pointer hover:bg-gray-200 transition-all duration-300 ease-in-out"
-                  >
-                    <IoSettingsOutline className="text-xl" />
-                    <h1>Settings</h1>
-                  </Link>
-                </div>
-
-                <Separator className={"mt-3 mb-3"} />
-                {/* Logout */}
-                <div className="flex flex-col gap-1 mb-3">
-                  <LogoutButton text={"Login"} />
-                </div>
-              </PopoverContent>
-            </Popover>
+            <UserProfileButton session={session} />
           </div>
         ) : (
           <div className="flex gap-4">

@@ -11,13 +11,12 @@ const Room = () => {
   const params = useParams();
   const roomId = params.roomId;
   const socket = useContext(SocketContext);
-  // const [code, setCode] = useState("<h1>Hello World</h1>");
   const [activeUsers, setActiveUsers] = useState([]);
   const userName = session?.user.userName || "TEST";
   const [room, setRoom] = useState([]);
   const [fileCodes, setFileCodes] = useState({
     html: "",
-    css: "", 
+    css: "",
     js: "",
     python: "",
   });
@@ -76,13 +75,24 @@ const Room = () => {
     <div className="flex flex-col w-full h-screen">
       <CodeNavbar activeUsers={activeUsers} Room={room} />
       <div className="flex flex-col w-full h-full">
-        <GenericEditor
-          socket={socket}
-          roomId={roomId}
-          codingLang={room.codingLang}
-          fileCodes={fileCodes}
-          setFileCodes={setFileCodes}
-        />
+        {/* Tabs Bar */}
+        {/* <div className="w-full h-10 bg-[#18181B] flex gap-0">
+          <div className="border-2  w-20 text-white flex justify-center items-center">
+            File
+          </div>
+        </div> */}
+        {session ? (
+          <GenericEditor
+            session={session}
+            socket={socket}
+            roomId={roomId}
+            codingLang={room.codingLang}
+            fileCodes={fileCodes}
+            setFileCodes={setFileCodes}
+          />
+        ) : (
+          <h1>PLease log in to access this page</h1>
+        )}
       </div>
     </div>
   );
