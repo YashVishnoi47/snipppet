@@ -31,7 +31,6 @@ const Room = () => {
         },
       });
       const data = await res.json();
-      // console.log("Room Data: ", data);
       setRoom(data);
     };
 

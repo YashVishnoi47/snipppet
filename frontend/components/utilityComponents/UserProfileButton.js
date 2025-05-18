@@ -1,7 +1,7 @@
 import React from "react";
 // import Link1 from "./utilityComponents/Link1";
 import Link from "next/link";
-import { IoMdArrowDown } from "react-icons/io";
+import Image from "next/image";
 import { MdDashboard } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Separator } from "@/components/ui/separator";
