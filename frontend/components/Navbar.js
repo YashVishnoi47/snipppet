@@ -15,14 +15,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import UserProfileButton from "./utilityComponents/UserProfileButton";
+import UserProfileButton from "./userComponents/UserProfileButton";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
   return (
-    <div className="flex justify-center items-center bg-white w-full h-16">
+    <div className="flex justify-center items-center bg-[#0A0A0F] text-[#EDEDED] w-full h-16">
       {/* Logo and Navigation Links */}
       <div className="w-[40%] -2 h-full gap-8 flex justify-start items-center">
         {/* Logo */}
@@ -32,15 +32,11 @@ const Navbar = () => {
         >
           LOGO
         </h1>
-        {/* <Link1 link={"/"} text={"About"}></Link1> */}
-        {/* <Link1 link={"userProfile"} text={"Dasboard"}></Link1> */}
       </div>
 
       <div className="w-[40%] -2 px-2 h-full gap-8 flex justify-end items-center">
         {session ? (
           <div>
-            {/* <LogoutButton text={"Login"} /> */}
-
             <UserProfileButton session={session} />
           </div>
         ) : (

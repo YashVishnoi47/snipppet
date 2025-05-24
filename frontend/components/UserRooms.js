@@ -32,14 +32,14 @@ const UserRooms = ({ room, index }) => {
   return (
     <div
       onClick={handleClick}
-      className="min-w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 hover:shadow-2xl transition-all duration-300 ease-in-out"
+      className="min-w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 border-[#2A2A3B] hover:shadow-lg shadow-[#8B5CF6] text-[#EDEDED] bg-[#1C1C27] transition-all duration-300 ease-in-out"
     >
       {/* Room Image */}
-      <div className="w-full h-[65%] relative bg-gray-500 rounded-3xl">
+      <div className="w-full h-[65%] relative bg-black rounded-3xl">
         {/* <div className="absoulte flex right-1 bg-gray-500 rounded-3xl"> */}
         <RiDeleteBin6Line
           onClick={handleDelete}
-          className="text-4xl hover:scale-110 transition-all duration-300 ease-in-out absolute p-2 border-2 right-4 top-4 bg-white rounded-full"
+          className="text-4xl hover:scale-110 transition-all border-white duration-300 ease-in-out absolute p-2 border-2 right-4 top-4 text-[#fff] bg-[#8B5CF6] hover:text[#8B5CF6AA] rounded-full"
         />
 
         {/* </div> */}
@@ -55,16 +55,16 @@ const UserRooms = ({ room, index }) => {
         {/* Other Details */}
         <div className="w-full flex mt-1 ">
           <div className="flex flex-col gap-1 w-full">
-            <p className="text-yellow-600 text-sm line-clamp-1 w-full">
+            <p className="text-[#00F0B5] text-sm line-clamp-1 capitalize w-full">
               {room?.codingLang || "Language"}
             </p>
-            <p className="text-gray-500 text-sm line-clamp-1 w-full">
+            <p className="text-[#EDEDED] text-sm line-clamp-1 w-full">
               {formatDate(room?.createdAt) || "Created At"}
             </p>
           </div>
 
           <div className="flex flex-col gap-1 w-full">
-            <p className="text-gray-500 text-sm line-clamp-1 w-full">
+            <p className="text-[#EDEDED] text-sm line-clamp-1 w-full">
               {room?.idPublic ? "Public" : "Private"}
             </p>
           </div>

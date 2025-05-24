@@ -46,7 +46,7 @@ const UserProfileButton = ({ session }) => {
               label="Dashboard"
             />
             <MenuLink
-              href="/settings"
+              href="/userSettings"
               icon={<IoSettingsOutline size={18} />}
               label="Settings"
             />

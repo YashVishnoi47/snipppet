@@ -39,7 +39,6 @@ export const authOptions = {
           }
         } catch (error) {
           throw new Error(error);
-          return null;
         }
       },
     }),
@@ -49,8 +48,11 @@ export const authOptions = {
     async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
-        session.user.userName = token.userName;
         session.user.email = token.email;
+        session.user.userName = token.userName;
+        session.user.FirstName = token.FirstName;
+        session.user.LastName = token.LastName;
+        session.user.aboutUser = token.aboutUser;
       }
       return session;
     },
@@ -59,6 +61,9 @@ export const authOptions = {
         token._id = user._id?.toString();
         token.userName = user.userName;
         token.email = user.email;
+        token.FirstName = user.FirstName;
+        token.LastName = user.LastName;
+        token.aboutUser = user.aboutUser;
       }
       return token;
     },

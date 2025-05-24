@@ -11,8 +11,8 @@ const Button2 = ({ text, width, createPrivateRoom, loading }) => {
 
 const StyledWrapper = styled.div`
   button {
-    background-color: #f3f7fe;
-    color: #3b82f6;
+    background-color: #8B5CF6;
+    color: 	#FFFFFF;
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -22,8 +22,8 @@ const StyledWrapper = styled.div`
   }
 
   button:hover {
-    background-color: #3b82f6;
-    box-shadow: 0 0 0 5px #3b83f65f;
+    background-color: #8B5CF6AA;
+    box-shadow: 0 0 0 5px #9c74f7;
     color: #fff;
   }
 `;

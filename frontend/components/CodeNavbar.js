@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import UserProfileButton from "./utilityComponents/UserProfileButton";
+import UserProfileButton from "./userComponents/UserProfileButton";
 import { Switch } from "@/components/ui/switch";
 import { IoMdSettings } from "react-icons/io";
 import { ImExit } from "react-icons/im";
