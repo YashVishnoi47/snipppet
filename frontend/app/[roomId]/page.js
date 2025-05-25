@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import CodeNavbar from "@/components/CodeNavbar";
 import GenericEditor from "@/components/codeEditors/GenericEditor";
+import { editorConfigs } from "@/config/EditorConfig";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -21,6 +22,35 @@ const Room = () => {
     python: "",
   });
 
+  const SaveCodeToDatabase = async () => {
+    const editorKey = Object.entries(editorConfigs).find(
+      ([key, config]) => config.language === room.codingLang
+    )?.[0];
+
+    if (!editorKey) {
+      console.error("No editor found for this coding language.");
+      return;
+    }
+
+    const codeToSave = fileCodes[editorKey];
+    const res = await fetch("api/room/saveCodeToDatabase", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        roomId: roomId,
+        roomCode: codeToSave,
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+    if (data.error) {
+      console.error("Error saving code", data.error);
+    }
+    console.log("Code saved Successfullt", data.message);
+  };
+
   // Fetching the room data by roomId.
   useEffect(() => {
     const getRoomById = async () => {
@@ -32,6 +62,18 @@ const Room = () => {
       });
       const data = await res.json();
       setRoom(data);
+      if (data?.roomCode) {
+        const editorKey = Object.entries(editorConfigs).find(
+          ([key, config]) => config.language === data.codingLang
+        )?.[0];
+
+        if (editorKey) {
+          setFileCodes((prev) => ({
+            ...prev,
+            [editorKey]: data.roomCode,
+          }));
+        }
+      }
     };
 
     if (roomId) {
@@ -72,17 +114,16 @@ const Room = () => {
 
   return (
     <div className="flex flex-col w-full h-screen">
-      <CodeNavbar activeUsers={activeUsers} Room={room} />
+      <CodeNavbar
+        session={session}
+        SaveCodeToDatabase={SaveCodeToDatabase}
+        activeUsers={activeUsers}
+        Room={room}
+      />
       <div className="flex flex-col w-full h-full">
-        {/* Tabs Bar */}
-        {/* <div className="w-full h-10 bg-[#18181B] flex gap-0">
-          <div className="border-2  w-20 text-white flex justify-center items-center">
-            File
-          </div>
-        </div> */}
         {session ? (
           <GenericEditor
-            session={session}
+            SaveCodeToDatabase={SaveCodeToDatabase}
             socket={socket}
             roomId={roomId}
             codingLang={room.codingLang}

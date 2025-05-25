@@ -20,13 +20,14 @@ import UserProfileButton from "./userComponents/UserProfileButton";
 import { Switch } from "@/components/ui/switch";
 import { IoMdSettings } from "react-icons/io";
 import { ImExit } from "react-icons/im";
+import { FaRegSave } from "react-icons/fa";
 
-const CodeNavbar = ({ Room, activeUsers, session }) => {
+const CodeNavbar = ({ Room, activeUsers, session, SaveCodeToDatabase }) => {
   return (
     <div className="w-[full] cursor-text items-center justify-center bg-[#252526] flex h-[8%] border-2 border-black">
       <div className="h-full flex justify-between w-[90%] ">
         {/* Left*/}
-        <div className="h-full flex gap-4 justify-start items-center w-[25%]">
+        <div className="h-full flex gap-6 justify-start items-center w-[25%] ">
           <Popover>
             <PopoverTrigger
               className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-sm bg-transparent text-white hover:bg-white hover:text-black transition duration-300 ease-in-out focus:outline-none"
@@ -71,44 +72,54 @@ const CodeNavbar = ({ Room, activeUsers, session }) => {
               </div>
             </PopoverContent>
           </Popover>
-
-          {/* Here will be the database Status and code save status */}
+          {session?.user._id === Room.createdBy && (
+            <button
+              onClick={SaveCodeToDatabase}
+              type="button"
+              aria-label="Save"
+              className="group inline-flex items-center justify-center rounded-full p-2 text-white transition-all duration-300 ease-in-out bg-transparent cursor-pointer hover:bg-white hover:text-black"
+            >
+              <FaRegSave className="text-lg transition-transform duration-300 group-hover:scale-110" />
+            </button>
+          )}
         </div>
 
         {/* Middle  */}
         <div className="h-full flex gap-4 justify-center items-center w-[25%]">
           {/* Invite People */}
-          <Popover>
-            <PopoverTrigger
-              className="flex items-center gap-2 px-4 py-2 rounded-md border border-white text-white font-mono text-sm transition-all duration-200 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
-              aria-label="Invite People"
-            >
-              <FaUserPlus size={16} />
-              <span>Invite</span>
-            </PopoverTrigger>
+          {session?.user._id === Room.createdBy && (
+            <Popover>
+              <PopoverTrigger
+                className="flex items-center gap-2 px-4 py-2 rounded-md border border-white text-white font-mono text-sm transition-all duration-200 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Invite People"
+              >
+                <FaUserPlus size={16} />
+                <span>Invite</span>
+              </PopoverTrigger>
 
-            <PopoverContent className="w-80 p-4 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg">
-              <section className="flex flex-col gap-4">
-                <h2 className="text-base font-semibold text-white flex items-center gap-2">
-                  <FaUserPlus size={16} />
-                  Invite People
-                </h2>
+              <PopoverContent className="w-80 p-4 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg">
+                <section className="flex flex-col gap-4">
+                  <h2 className="text-base font-semibold text-white flex items-center gap-2">
+                    <FaUserPlus size={16} />
+                    Invite People
+                  </h2>
 
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <input
-                    type="text"
-                    value="https://your-link.com"
-                    readOnly
-                    className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
-                    placeholder="Link"
-                  />
-                  <button className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors">
-                    Copy
-                  </button>
-                </div>
-              </section>
-            </PopoverContent>
-          </Popover>
+                  <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <input
+                      type="text"
+                      value="https://your-link.com"
+                      readOnly
+                      className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
+                      placeholder="Link"
+                    />
+                    <button className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors">
+                      Copy
+                    </button>
+                  </div>
+                </section>
+              </PopoverContent>
+            </Popover>
+          )}
 
           {/* Active User */}
           <Popover>
@@ -140,7 +151,9 @@ const CodeNavbar = ({ Room, activeUsers, session }) => {
                           title="Remove User"
                           className="text-red-400 hover:text-red-500 transition-colors duration-150"
                         >
-                          <MdOutlinePersonRemove size={18} />
+                          {session?.user._id === Room.createdBy && (
+                            <MdOutlinePersonRemove size={18} />
+                          )}
                         </button>
                       </div>
                     ))
@@ -157,28 +170,30 @@ const CodeNavbar = ({ Room, activeUsers, session }) => {
 
         {/* Right */}
         <div className="h-full flex gap-8 justify-end items-center w-[25%]">
-          <Select defaultValue="private">
-            <SelectTrigger
-              className="w-[180px] px-4 py-2 rounded-lg border border-white text-white font-mono text-base transition-all duration-200 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
-              aria-label="Select Room Type"
-            >
-              <SelectValue className={"text-white"} placeholder="Room Type" />
-            </SelectTrigger>
-            <SelectContent className="bg-zinc-900 text-white border border-white rounded-lg">
-              <SelectItem
-                value="public"
-                className="hover:bg-zinc-800 cursor-pointer px-4 py-2 rounded-md transition"
+          {session?.user._id === Room.createdBy && (
+            <Select defaultValue="private">
+              <SelectTrigger
+                className="w-[180px] px-4 py-2 rounded-lg border border-white text-white font-mono text-base transition-all duration-200 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Select Room Type"
               >
-                Public Room
-              </SelectItem>
-              <SelectItem
-                value="private"
-                className="hover:bg-zinc-800 cursor-pointer px-4 py-2 rounded-md transition"
-              >
-                Private Room
-              </SelectItem>
-            </SelectContent>
-          </Select>
+                <SelectValue className={"text-white"} placeholder="Room Type" />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 text-white border border-white rounded-lg">
+                <SelectItem
+                  value="public"
+                  className="hover:bg-zinc-800 cursor-pointer px-4 py-2 rounded-md transition"
+                >
+                  Public Room
+                </SelectItem>
+                <SelectItem
+                  value="private"
+                  className="hover:bg-zinc-800 cursor-pointer px-4 py-2 rounded-md transition"
+                >
+                  Private Room
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          )}
           <UserProfileButton session={session} />
         </div>
       </div>

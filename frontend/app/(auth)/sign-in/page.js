@@ -41,19 +41,19 @@ const SignInpage = () => {
           <div className="flex flex-col">
             <label className="text-sm font-medium mb-1">Email</label>
             <input
-              type={email}
+              type={"email"}
               className="rounded-lg px-4 py-2 bg-white/20 backdrop-blur-md placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-orange-400 border border-white/30 transition-all duration-300"
               onChange={(e) => setEmail(e.target.value)}
-              required={["password"].includes(password)}
+              // required={["password"].includes(password)}
             />
           </div>
           <div className="flex flex-col">
             <label className="text-sm font-medium mb-1">Password</label>
             <input
-              type={password}
+              type={"password"}
               className="rounded-lg px-4 py-2 bg-white/20 backdrop-blur-md placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-orange-400 border border-white/30 transition-all duration-300"
               onChange={(e) => setPassword(e.target.value)}
-              required={["email"].includes(email)}
+              // required={["email"].includes(email)}
             />
           </div>
 

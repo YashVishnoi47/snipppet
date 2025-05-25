@@ -7,7 +7,6 @@ export const GET = async (req) => {
 
     const { searchParams } = new URL(req.url);
     const roomId = searchParams.get("roomId");
-    console.log("Room ID", roomId);
 
     if (!roomId) {
       return new Response("Room ID is required", { status: 400 });

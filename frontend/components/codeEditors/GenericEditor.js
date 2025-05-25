@@ -47,7 +47,9 @@ const GenericEditor = ({
             height="100%"
             width="100%"
             extensions={[config.extension]}
-            onChange={(value) => handleCodeChange(value, key)}
+            onChange={(value) => {
+              handleCodeChange(value, key);
+            }}
             theme="dark"
             className="w-full h-[95%]"
           />

@@ -21,7 +21,11 @@ const roomSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  
+  roomCode: {
+    type: String,
+    default: "",
+  },
+
   //   chatId: {
   //     type: String,
   //     required: true,
