@@ -19,10 +19,10 @@ const UserSettingsComponent = ({ user }) => {
   const form = useForm({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      email: user.email,
-      FirstName: user.FirstName,
-      LastName: user.LastName,
-      aboutUser: user.aboutUser,
+      email: user?.email,
+      FirstName: user?.FirstName,
+      LastName: user?.LastName,
+      aboutUser: user?.aboutUser,
     },
   });
 

@@ -61,6 +61,7 @@ const UserProfile = () => {
     return () => clearTimeout(timeout);
   }, [searchTerm, filterTerm]);
 
+  // Form for Creating Rooms.
   const form = useForm({
     resolver: zodResolver(roommFormSchema),
     defaultValues: {
@@ -94,7 +95,7 @@ const UserProfile = () => {
     FetchUserRooms();
   }, [session, debouncedSearch, filter]);
 
-  // Creating private coding Rooms
+  // Creating private coding Rooms.
   const createPrivateRoom = async (values) => {
     setLoading(true);
 
@@ -148,7 +149,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="w-full h-full justify-center items-center flex flex-col gap-12 bg-[#0A0A0F]">
+    <div className="w-full h-full justify-center items-center flex flex-col gap-12 bg-[#210426]">
       <div className="w-[80%] flex flex-col min-h-[90vh] mt-10">
         {/* top section */}
         <div className="w-full border-b-2 py-2 justify-between flex items-center  h-[10vh]">
@@ -261,13 +262,16 @@ const UserProfile = () => {
                                       id="tech"
                                       name="tech"
                                     >
-                                      <option value="javascript">
-                                        JavaScript
-                                      </option>
-                                      <option value="python">Python</option>
-                                      <option value="webDev">
-                                        HTML, CSS and JAVASCRIPT
-                                      </option>
+                                      {Object.values(editorConfigs).map(
+                                        (item) => (
+                                          <option
+                                            key={item.name}
+                                            value={item.name}
+                                          >
+                                            {item.name}
+                                          </option>
+                                        )
+                                      )}
                                     </select>
                                   </FormControl>
                                   <FormDescription></FormDescription>

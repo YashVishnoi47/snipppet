@@ -15,6 +15,8 @@ const Room = () => {
   const [activeUsers, setActiveUsers] = useState([]);
   const userName = session?.user.userName || "TEST";
   const [room, setRoom] = useState([]);
+  const [compileing, setCompileing] = useState(false);
+  const [compiledCode, setCompiledCode] = useState("");
   const [fileCodes, setFileCodes] = useState({
     html: "",
     css: "",
@@ -22,6 +24,7 @@ const Room = () => {
     python: "",
   });
 
+  // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
     const editorKey = Object.entries(editorConfigs).find(
       ([key, config]) => config.language === room.codingLang
@@ -49,6 +52,48 @@ const Room = () => {
       console.error("Error saving code", data.error);
     }
     console.log("Code saved Successfullt", data.message);
+  };
+
+  // Function For Compiling Code
+  const CompileCode = async () => {
+    setCompileing(true);
+    try {
+      const editorKey = Object.entries(editorConfigs).find(
+        ([key, config]) => config.language === room.codingLang
+      )?.[0];
+
+      if (!editorKey) {
+        console.error("No editor-key found for this coding language.");
+        return;
+      }
+      const code = fileCodes[editorKey];
+      console.log(code);
+      const config = editorConfigs[editorKey];
+      const languageId = config.language_id;
+
+      const res = await fetch("/api/compile", {
+        method: "POST",
+        body: JSON.stringify({
+          source_code: code,
+          language_id: languageId,
+        }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      const result = data.result;
+
+      if (result.stderr) {
+        setCompiledCode(result.stderr);
+      } else {
+        setCompiledCode(result.stdout || result.compile_output || "No output");
+      }
+
+      setCompileing(false);
+    } catch (error) {
+      console.log("Error Compiling Code from Code Editor", error);
+      setCompileing(false);
+    }
   };
 
   // Fetching the room data by roomId.
@@ -115,6 +160,8 @@ const Room = () => {
   return (
     <div className="flex flex-col w-full h-screen">
       <CodeNavbar
+        compileing={compileing}
+        CompileCode={CompileCode}
         session={session}
         SaveCodeToDatabase={SaveCodeToDatabase}
         activeUsers={activeUsers}
@@ -133,6 +180,10 @@ const Room = () => {
         ) : (
           <h1>PLease log in to access this page</h1>
         )}
+
+        <div className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
+          {compiledCode && <p>{compiledCode}</p>}
+        </div>
       </div>
     </div>
   );

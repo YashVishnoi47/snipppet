@@ -22,7 +22,14 @@ import { IoMdSettings } from "react-icons/io";
 import { ImExit } from "react-icons/im";
 import { FaRegSave } from "react-icons/fa";
 
-const CodeNavbar = ({ Room, activeUsers, session, SaveCodeToDatabase }) => {
+const CodeNavbar = ({
+  Room,
+  activeUsers,
+  session,
+  SaveCodeToDatabase,
+  CompileCode,
+  compileing,
+}) => {
   return (
     <div className="w-[full] cursor-text items-center justify-center bg-[#252526] flex h-[8%] border-2 border-black">
       <div className="h-full flex justify-between w-[90%] ">
@@ -82,6 +89,21 @@ const CodeNavbar = ({ Room, activeUsers, session, SaveCodeToDatabase }) => {
               <FaRegSave className="text-lg transition-transform duration-300 group-hover:scale-110" />
             </button>
           )}
+
+          <button
+            onClick={CompileCode}
+            disabled={compileing}
+            className={`px-4 py-1.5 rounded-lg border text-sm font-medium 
+    ${
+      compileing
+        ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+        : "bg-white text-gray-800 hover:bg-gray-100"
+    } 
+    transition-colors duration-150 
+    focus:outline-none focus:ring-1 focus:ring-gray-300`}
+          >
+            {compileing ? "Compiling..." : "Run Code"}
+          </button>
         </div>
 
         {/* Middle  */}

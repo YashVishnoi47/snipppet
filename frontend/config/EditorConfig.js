@@ -21,11 +21,13 @@ export const editorConfigs = {
     icon: "js",
     extension: javascript(),
     language: "webDev",
+    language_id: 63,
   },
   python: {
     name: "Python",
     icon: "python",
     extension: python(),
     language: "python",
+    language_id: 71,
   },
 };

@@ -32,7 +32,7 @@ const UserRooms = ({ room, index }) => {
   return (
     <div
       onClick={handleClick}
-      className="min-w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 border-[#2A2A3B] hover:shadow-lg shadow-[#8B5CF6] text-[#EDEDED] bg-[#1C1C27] transition-all duration-300 ease-in-out"
+      className="min-w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 border-[#2A2A3B] hover:shadow-lg shadow-[#D152EA] text-[#EDEDED] bg-[#1C1C27] transition-all duration-300 ease-in-out"
     >
       {/* Room Image */}
       <div className="w-full h-[65%] relative bg-black rounded-3xl">

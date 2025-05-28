@@ -10,7 +10,6 @@ export const POST = async (req) => {
     if (!session || !session.user || !session.user._id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    // const userID = session.user._id;
     const { email, FirstName, LastName, aboutUser } = await req.json();
 
     const updatedUser = await User.findByIdAndUpdate(
