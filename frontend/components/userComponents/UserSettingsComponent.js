@@ -79,7 +79,7 @@ const UserSettingsComponent = ({ user }) => {
             <input
               type="text"
               disabled
-              value={user.userName}
+              value={user?.userName}
               className="w-[40%] p-2 cursor-not-allowed border border-gray-300 rounded-md bg-gray-100 focus:outline-none"
             />
           </div>

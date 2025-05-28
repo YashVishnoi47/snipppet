@@ -71,29 +71,28 @@ const UserProfile = () => {
     },
   });
 
-  // Fetching User Rooms When the session is available.
-  useEffect(() => {
-    const FetchUserRooms = async () => {
-      try {
-        setFetching(true);
-        const res = await fetch(
-          `/api/room/fetchRoom?roomName=${debouncedSearch}&lang=${filter}`
-        );
-        const data = await res.json();
+  // Function To Fetch User Rooms
+  const FetchUserRooms = async () => {
+    try {
+      setFetching(true);
+      const res = await fetch(
+        `/api/room/fetchRoom?roomName=${debouncedSearch}&lang=${filter}`
+      );
+      const data = await res.json();
+      if (data) {
+        console.log("Room Fetched");
+      }
 
-        if (data) {
-          setFetching(false);
-        }
-        setRooms(data.rooms || []);
-      } catch (error) {
-        console.error("Fetch User Error", error);
-        setRooms([]);
+      if (data) {
         setFetching(false);
       }
-    };
-
-    FetchUserRooms();
-  }, [session, debouncedSearch, filter]);
+      setRooms(data.rooms || []);
+    } catch (error) {
+      console.error("Fetch User Error", error);
+      setRooms([]);
+      setFetching(false);
+    }
+  };
 
   // Creating private coding Rooms.
   const createPrivateRoom = async (values) => {
@@ -109,13 +108,18 @@ const UserProfile = () => {
     const data = await res.json();
 
     if (res.ok) {
-      setRooms((prev) => [...prev, data.room]);
+      await FetchUserRooms();
       setLoading(false);
     } else {
       alert("Error creating room");
       setLoading(false);
     }
   };
+
+  // UseEffect to run the FetchUserRooms(); funtion when the session is available or there is any changes in debouncedSearch or filter.
+  useEffect(() => {
+    FetchUserRooms();
+  }, [session, debouncedSearch, filter]);
 
   // Funtion to Join a room with room ID.
   const handleJoinRoom = async () => {
