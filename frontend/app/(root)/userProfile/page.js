@@ -118,17 +118,22 @@ const UserProfile = () => {
 
   // UseEffect to run the FetchUserRooms(); funtion when the session is available or there is any changes in debouncedSearch or filter.
   useEffect(() => {
+    if (!session?.user._id || document.visibilityState !== "visible") return;
     FetchUserRooms();
-  }, [session, debouncedSearch, filter]);
+  }, [session?.user._id, debouncedSearch, filter]);
 
   // Funtion to Join a room with room ID.
   const handleJoinRoom = async () => {
-    if (!joinRoomId) {
-      alert("Please enter a room ID to join.");
-      return;
+    if (typeof joinRoomId === "string" && /^[a-f\d]{24}$/i.test(joinRoomId)) {
+      const res = await fetch(`/api/room/getRoomById?roomId=${joinRoomId}`);
+      const data = await res.json();
+      if (!data) {
+        alert("Room with this ID does not exists");
+      }
+      router.push(`/${joinRoomId}`);
+    } else {
+      alert("Room with this ID does not exists");
     }
-
-    router.push(`/${joinRoomId}`);
   };
 
   if (!session) {

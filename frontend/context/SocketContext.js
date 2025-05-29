@@ -8,9 +8,12 @@ export function SocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     // const newSocket = io("http://localhost:4000");
-    const newSocket = io("https://collabrative-code-editor-restart.onrender.com",{
-      transports: ['websocket'],
-    });
+    const newSocket = io(
+      "https://collabrative-code-editor-restart.onrender.com",
+      {
+        transports: ["websocket"],
+      }
+    );
     newSocket.on("connect", () => {
       setSocket(newSocket);
     });

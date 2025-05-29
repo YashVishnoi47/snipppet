@@ -27,7 +27,7 @@ export const editorConfigs = {
     name: "Python",
     icon: "python",
     extension: python(),
-    language: "python",
+    language: "Python",
     language_id: 71,
   },
 };
