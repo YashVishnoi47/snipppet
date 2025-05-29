@@ -21,7 +21,6 @@ const UserRooms = ({ room, index }) => {
     });
 
     if (res.ok) {
-      router.push('/userProfile');
       router.refresh();
     } else {
       alert("Error deleting room");
@@ -32,7 +31,7 @@ const UserRooms = ({ room, index }) => {
   return (
     <div
       onClick={handleClick}
-      className="min-w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 border-[#2A2A3B] hover:shadow-lg shadow-[#D152EA] text-[#EDEDED] bg-[#1C1C27] transition-all duration-300 ease-in-out"
+      className="w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 border-[#2A2A3B] hover:shadow-lg shadow-[#D152EA] text-[#EDEDED] bg-[#1C1C27] transition-all duration-300 ease-in-out"
     >
       {/* Room Image */}
       <div className="w-full h-[65%] relative bg-black rounded-3xl">
@@ -46,28 +45,30 @@ const UserRooms = ({ room, index }) => {
       </div>
 
       {/* Room Details */}
-      <div className="w-full h-[35%] flex flex-col justify-start items-start px-4 py-1">
-        {/* Room Name */}
-        <h1 className="font-semibold text-3xl line-clamp-1 w-full">
-          {room?.roomName || "Room 1"}
-        </h1>
+      <div className="w-full h-[35%] flex flex-col justify-between items-start mt-2 px-4 py-1">
+        <div className="flex w-full">
+          {/* Room Name */}
+          <h1 className="font-semibold w-1/2 text-3xl line-clamp-1">
+            {room?.roomName || "No Name"}
+          </h1>
 
-        {/* Other Details */}
-        <div className="w-full flex mt-1 ">
-          <div className="flex flex-col gap-1 w-full">
-            <p className="text-[#00F0B5] text-sm line-clamp-1 capitalize w-full">
-              {room?.codingLang || "Language"}
-            </p>
-            <p className="text-[#EDEDED] text-sm line-clamp-1 w-full">
-              {formatDate(room?.createdAt) || "Created At"}
-            </p>
+          {/* Other Details */}
+          <div className="flex w-1/2 flex-col mt-2">
+            <div className="flex flex-col gap-1 items-end">
+              <p className="text-[#00F0B5] text-sm line-clamp-1 capitalize">
+                {room?.codingLang || "Language"}
+              </p>
+              <p className="text-[#EDEDED] text-sm line-clamp-1">
+                {formatDate(room?.createdAt) || "Created At"}
+              </p>
+            </div>
           </div>
+        </div>
 
-          <div className="flex flex-col gap-1 w-full">
-            <p className="text-[#EDEDED] text-sm line-clamp-1 w-full">
-              {room?.idPublic ? "Public" : "Private"}
-            </p>
-          </div>
+        <div className="flex justify-center items-center border-2  w-full">
+          <p className="text-[#EDEDED] text-sm line-clamp-1 w-full">
+            {room?.idPublic ? "Public" : "Private"}
+          </p>
         </div>
       </div>
     </div>

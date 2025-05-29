@@ -6,6 +6,8 @@ import { useSession } from "next-auth/react";
 import CodeNavbar from "@/components/CodeNavbar";
 import GenericEditor from "@/components/codeEditors/GenericEditor";
 import { editorConfigs } from "@/config/EditorConfig";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -17,6 +19,7 @@ const Room = () => {
   const [room, setRoom] = useState([]);
   const [compileing, setCompileing] = useState(false);
   const [compiledCode, setCompiledCode] = useState("");
+  const [lastSavedCode, setLastSavedCode] = useState("");
   const [fileCodes, setFileCodes] = useState({
     html: "",
     css: "",
@@ -47,12 +50,38 @@ const Room = () => {
       }),
     });
     const data = await res.json();
-    console.log(data);
     if (data.error) {
       console.error("Error saving code", data.error);
+    } else {
+      console.log("Code saved Successfully", data.message);
+      setLastSavedCode(codeToSave);
+      toast.success("Code saved!");
     }
-    console.log("Code saved Successfullt", data.message);
   };
+
+  // Function returning usSaved changes
+  const hasUnsavedChanges = () => {
+    const editorKey = Object.entries(editorConfigs).find(
+      ([key, config]) => config.language === room.codingLang
+    )?.[0];
+    if (!editorKey) return false;
+    return fileCodes[editorKey] !== lastSavedCode;
+  };
+
+  // Stoping the user to leave the room if the changes are not saved
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (hasUnsavedChanges()) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [fileCodes, lastSavedCode, room.codingLang]);
 
   // Function For Compiling Code
   const CompileCode = async () => {
@@ -153,6 +182,26 @@ const Room = () => {
     };
   }, [socket, roomId]);
 
+  // Save Shortcut for Windows or Mac
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+      const isSaveShortcut =
+        (isMac && e.metaKey && e.key === "s") ||
+        (!isMac && e.ctrlKey && e.key === "s");
+
+      if (isSaveShortcut) {
+        e.preventDefault();
+        SaveCodeToDatabase();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fileCodes, room.codingLang]);
+
   if (!roomId || roomId === "undefined") {
     return <div>No Room Available</div>;
   }
@@ -160,6 +209,7 @@ const Room = () => {
   return (
     <div className="flex flex-col w-full h-screen">
       <CodeNavbar
+        hasUnsavedChanges={hasUnsavedChanges}
         compileing={compileing}
         CompileCode={CompileCode}
         session={session}
@@ -181,9 +231,9 @@ const Room = () => {
           <h1>PLease log in to access this page</h1>
         )}
 
-        <div className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
+        <Button className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
           {compiledCode && <p>{compiledCode}</p>}
-        </div>
+        </Button>
       </div>
     </div>
   );

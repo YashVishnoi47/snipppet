@@ -23,6 +23,7 @@ import { ImExit } from "react-icons/im";
 import { FaRegSave } from "react-icons/fa";
 
 const CodeNavbar = ({
+  hasUnsavedChanges,
   Room,
   activeUsers,
   session,
@@ -81,6 +82,7 @@ const CodeNavbar = ({
           </Popover>
           {session?.user._id === Room.createdBy && (
             <button
+              disabled={!hasUnsavedChanges()}
               onClick={SaveCodeToDatabase}
               type="button"
               aria-label="Save"
