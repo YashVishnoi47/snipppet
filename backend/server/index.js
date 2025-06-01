@@ -21,15 +21,45 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("join_document", (roomId, username) => {
-    socket.join(roomId);
+  socket.on("join_document", ({ roomId, username, userId, ownerId, owner }) => {
+    const user = { socketId: socket.id, name: username, userId };
     if (!UserInRoom[roomId]) UserInRoom[roomId] = [];
 
-    const user = { socketId: socket.id, name: username };
-    UserInRoom[roomId].push(user);
-    io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
+    const isOwner = userId === ownerId;
 
-    console.log(`User Joined Room: ${roomId}`);
+    if (isOwner) {
+      socket.join(roomId);
+      UserInRoom[roomId].push(user);
+      io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
+      console.log(`OWNER (${owner?.userName}) joined room: ${roomId}`);
+    } else {
+      const Owner = UserInRoom[roomId].find((u) => u.userId === ownerId);
+
+      if (Owner) {
+        io.to(Owner.socketId).emit("join_request", { user, roomId });
+        console.log(`${username} requested to join room: ${roomId}`);
+      } else {
+        socket.emit("join_denied", { reason: "Owner is not online." });
+        console.log("Owner not online or not in the room.");
+      }
+    }
+
+    console.log(`${user.name} Joined Room: ${roomId}`);
+  });
+
+  socket.on("join_request", ({ roomId, user, accepted }) => {
+    if (accepted) {
+      io.sockets.sockets.get(user.socketId)?.join(roomId);
+      if (!UserInRoom[roomId]) UserInRoom[roomId] = [];
+      UserInRoom[roomId].push(user);
+      io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
+      console.log(`${user.name} accepted into room: ${roomId}`);
+    } else {
+      io.to(user.socketId).emit("join_denied", {
+        reason: "Request denied by owner.",
+      });
+      console.log(`${user.name} was denied access to room: ${roomId}`);
+    }
   });
 
   socket.on("code-change", ({ roomId, code, file, lang }) => {

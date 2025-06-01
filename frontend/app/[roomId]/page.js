@@ -8,15 +8,18 @@ import GenericEditor from "@/components/codeEditors/GenericEditor";
 import { editorConfigs } from "@/config/EditorConfig";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const Room = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const params = useParams();
   const roomId = params.roomId;
   const socket = useContext(SocketContext);
   const [activeUsers, setActiveUsers] = useState([]);
   const userName = session?.user.userName || "TEST";
-  const [room, setRoom] = useState([]);
+  const [room, setRoom] = useState({});
+  const [owner, setOwner] = useState();
   const [compileing, setCompileing] = useState(false);
   const [compiledCode, setCompiledCode] = useState("");
   const [lastSavedCode, setLastSavedCode] = useState("");
@@ -153,34 +156,95 @@ const Room = () => {
     if (roomId) {
       getRoomById();
     }
-  }, [roomId]);
+  }, [socket]);
+
+  // Fetching the Owner of the room
+  useEffect(() => {
+    if (!room || !room.createdBy) return;
+    const getRoomOwner = async () => {
+      try {
+        const res = await fetch(
+          `/api/room/fetchRoomOwnerDetails?ownerID=${room.createdBy}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setOwner(data);
+        } else {
+          console.log("Owner not found");
+        }
+      } catch (err) {
+        console.error("Error fetching room owner:", err);
+      }
+    };
+
+    getRoomOwner();
+  }, [room.createdBy]);
 
   // All the socket events of all the Languages are handled here.
   useEffect(() => {
-    if (!socket) {
-      console.log("⚠️ Socket not available yet...");
-      return;
-    }
+    const ownerID = room.createdBy;
 
-    socket.emit("join_document", roomId, userName);
+    if (!socket || !ownerID || !owner) return;
+
+    socket.emit("join_document", {
+      roomId,
+      username: userName,
+      userId: session?.user._id,
+      ownerId: ownerID,
+      owner,
+    });
 
     socket.on("users-in-room", (users) => {
       setActiveUsers(users);
     });
 
     socket.on("changes", ({ code, file, lang }) => {
-      if (lang === "webDev") {
-        if (file === "html") setHtmlCode(code);
-        else if (file === "css") setCssCode(code);
-        else if (file === "js") setJsCode(code);
-      }
+      setFileCodes((prev) => ({
+        ...prev,
+        [file]: code,
+      }));
     });
 
     return () => {
       socket.off("changes");
       socket.off("users-in-room");
     };
-  }, [socket, roomId]);
+  }, [socket, room, owner]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("join_request", ({ user, roomId }) => {
+      const confirmJoin = window.confirm(
+        `${user.name} wants to join the room.`
+      );
+      socket.emit("join_request", {
+        roomId,
+        user: {
+          name: user.name,
+          userId: user.userId,
+          socketId: user.socketId,
+        },
+        accepted: confirmJoin,
+      });
+    });
+
+    socket.on("join_denied", () => {
+      alert("Room owner denied your join request.");
+      router.push("/")
+    });
+
+    return () => {
+      socket.off("join_request");
+      socket.off("join_denied");
+    };
+  }, [socket]);
 
   // Save Shortcut for Windows or Mac
   useEffect(() => {

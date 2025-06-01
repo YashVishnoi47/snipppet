@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/db/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 
-export const GET = async (req) => {
+export const GET = async () => {
   await connectDB();
   try {
     const session = await getServerSession(authOptions);
