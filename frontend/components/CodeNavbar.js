@@ -23,6 +23,7 @@ import { ImExit } from "react-icons/im";
 import { FaRegSave } from "react-icons/fa";
 
 const CodeNavbar = ({
+  RemoveUserFromRoom,
   hasUnsavedChanges,
   Room,
   activeUsers,
@@ -171,7 +172,7 @@ const CodeNavbar = ({
                           <p className="text-sm font-medium">{user.name}</p>
                         </div>
                         <button
-                          onClick={() => handleRemoveUser?.(user.socketId)}
+                          onClick={() => RemoveUserFromRoom(user)}
                           title="Remove User"
                           className="text-red-400 hover:text-red-500 transition-colors duration-150"
                         >

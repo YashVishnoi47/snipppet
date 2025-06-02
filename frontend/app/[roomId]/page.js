@@ -15,14 +15,15 @@ const Room = () => {
   const router = useRouter();
   const params = useParams();
   const roomId = params.roomId;
-  const socket = useContext(SocketContext);
+  const [lastSavedCode, setLastSavedCode] = useState("");
+  const [compiledCode, setCompiledCode] = useState("");
+  const [compileing, setCompileing] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
   const userName = session?.user.userName || "TEST";
+  const socket = useContext(SocketContext);
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
-  const [compileing, setCompileing] = useState(false);
-  const [compiledCode, setCompiledCode] = useState("");
-  const [lastSavedCode, setLastSavedCode] = useState("");
+  // const [load, setLoad] = useState(false);
   const [fileCodes, setFileCodes] = useState({
     html: "",
     css: "",
@@ -217,6 +218,7 @@ const Room = () => {
     };
   }, [socket, room, owner]);
 
+  // Socket events for join request
   useEffect(() => {
     if (!socket) return;
 
@@ -235,9 +237,20 @@ const Room = () => {
       });
     });
 
+    // socket.on("load_page", ({ load }) => {
+    //   if (load) {
+    //     setLoad(load);
+    //   }
+    // });
+
     socket.on("join_denied", () => {
       alert("Room owner denied your join request.");
-      router.push("/")
+      router.push("/");
+    });
+
+    socket.on("no_Owner", () => {
+      alert("Owner is not in the room you canot join.");
+      router.push("/");
     });
 
     return () => {
@@ -245,6 +258,27 @@ const Room = () => {
       socket.off("join_denied");
     };
   }, [socket]);
+
+  // Remove user from the room
+  const RemoveUserFromRoom = async (user) => {
+    console.log(user);
+    socket.emit("remove_user", {
+      user,
+      roomId,
+    });
+  };
+  useEffect(() => {
+    const handleUserRemoved = () => {
+      alert("Room owner removed you from the room.");
+      router.push("/");
+    };
+
+    socket.on("user_removed", handleUserRemoved);
+
+    return () => {
+      socket.off("user_removed", handleUserRemoved);
+    };
+  }, [router, socket]);
 
   // Save Shortcut for Windows or Mac
   useEffect(() => {
@@ -273,6 +307,7 @@ const Room = () => {
   return (
     <div className="flex flex-col w-full h-screen">
       <CodeNavbar
+        RemoveUserFromRoom={RemoveUserFromRoom}
         hasUnsavedChanges={hasUnsavedChanges}
         compileing={compileing}
         CompileCode={CompileCode}
@@ -295,9 +330,9 @@ const Room = () => {
           <h1>PLease log in to access this page</h1>
         )}
 
-        <Button className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
+        <div className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
           {compiledCode && <p>{compiledCode}</p>}
-        </Button>
+        </div>
       </div>
     </div>
   );

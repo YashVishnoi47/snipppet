@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
         io.to(Owner.socketId).emit("join_request", { user, roomId });
         console.log(`${username} requested to join room: ${roomId}`);
       } else {
-        socket.emit("join_denied", { reason: "Owner is not online." });
+        socket.emit("no_Owner", { reason: "Owner is not online." });
         console.log("Owner not online or not in the room.");
       }
     }
@@ -53,6 +53,7 @@ io.on("connection", (socket) => {
       if (!UserInRoom[roomId]) UserInRoom[roomId] = [];
       UserInRoom[roomId].push(user);
       io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
+      // io.to(user.socketId).emit("load_page", { load: true });
       console.log(`${user.name} accepted into room: ${roomId}`);
     } else {
       io.to(user.socketId).emit("join_denied", {
@@ -60,6 +61,22 @@ io.on("connection", (socket) => {
       });
       console.log(`${user.name} was denied access to room: ${roomId}`);
     }
+  });
+
+  socket.on("remove_user", ({ user, roomId }) => {
+    if (user.socketId === socket.id) return;
+    if (!UserInRoom[roomId]) return;
+    console.log(`User Kicked: ${user.socketId} from Room: ${roomId}`);
+
+    UserInRoom[roomId] = UserInRoom[roomId].filter(
+      (user) => user.socketId !== socket.id
+    );
+
+    io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
+
+    io.to(user.socketId).emit("user_removed", {
+      reason: "Owner removed you from the room.",
+    });
   });
 
   socket.on("code-change", ({ roomId, code, file, lang }) => {
