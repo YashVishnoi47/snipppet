@@ -6,7 +6,7 @@ import { python } from "@codemirror/lang-python";
 export const editorConfigs = {
   html: {
     name: "HTML",
-    icon: "html",
+    icon: "/lang Icons/HTML icon.svg",
     extension: html(),
     language: "webDev",
   },
@@ -18,14 +18,14 @@ export const editorConfigs = {
   },
   js: {
     name: "JavaScript",
-    icon: "js",
+    icon: "/lang Icons/javascript Icon.svg",
     extension: javascript(),
     language: "JavaScript",
     language_id: 63,
   },
   python: {
     name: "Python",
-    icon: "python",
+    icon: "./lang Icons/python Icon.svg",
     extension: python(),
     language: "Python",
     language_id: 71,

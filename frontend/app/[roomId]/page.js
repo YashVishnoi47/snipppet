@@ -31,6 +31,7 @@ const Room = () => {
     python: "",
   });
 
+ 
   // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
     const editorKey = Object.entries(editorConfigs).find(
@@ -100,7 +101,6 @@ const Room = () => {
         return;
       }
       const code = fileCodes[editorKey];
-      console.log(code);
       const config = editorConfigs[editorKey];
       const languageId = config.language_id;
 
@@ -300,7 +300,7 @@ const Room = () => {
     };
   }, [fileCodes, room.codingLang]);
 
-  if (!roomId || roomId === "undefined") {
+  if (!roomId || roomId === "undefined" || !session) {
     return <div>No Room Available</div>;
   }
 
@@ -329,10 +329,11 @@ const Room = () => {
         ) : (
           <h1>PLease log in to access this page</h1>
         )}
-
-        <div className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
-          {compiledCode && <p>{compiledCode}</p>}
-        </div>
+        {session && (
+          <div className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
+            {compiledCode && <p>{compiledCode}</p>}
+          </div>
+        )}
       </div>
     </div>
   );

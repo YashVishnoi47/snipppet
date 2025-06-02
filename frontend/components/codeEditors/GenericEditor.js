@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { editorConfigs } from "@/config/EditorConfig";
+import { dracula } from "@uiw/codemirror-theme-dracula";
+import { githubDark } from '@uiw/codemirror-theme-github';
 
 const GenericEditor = ({
   socket,
@@ -50,7 +52,7 @@ const GenericEditor = ({
             onChange={(value) => {
               handleCodeChange(value, key);
             }}
-            theme="dark"
+            theme={dracula}
             className="w-full h-[95%]"
           />
         </div>

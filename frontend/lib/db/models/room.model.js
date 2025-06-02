@@ -25,7 +25,17 @@ const roomSchema = new Schema({
     type: String,
     default: "",
   },
-
+  roomSettings:{
+    theme:{
+      type:String
+    },
+    fontSize:{
+      type:String
+    },
+    theme:{
+      type:String
+    },
+  }
   //   chatId: {
   //     type: String,
   //     required: true,

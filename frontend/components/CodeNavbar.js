@@ -21,6 +21,8 @@ import { Switch } from "@/components/ui/switch";
 import { IoMdSettings } from "react-icons/io";
 import { ImExit } from "react-icons/im";
 import { FaRegSave } from "react-icons/fa";
+import Image from "next/image";
+import { editorConfigs } from "@/config/EditorConfig";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
@@ -32,6 +34,9 @@ const CodeNavbar = ({
   CompileCode,
   compileing,
 }) => {
+  const config = Object.values(editorConfigs).find(
+    (c) => c.language === Room.codingLang
+  );
   return (
     <div className="w-[full] cursor-text items-center justify-center bg-[#252526] flex h-[8%] border-2 border-black">
       <div className="h-full flex justify-between w-[90%] ">
@@ -42,6 +47,9 @@ const CodeNavbar = ({
               className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-sm bg-transparent text-white hover:bg-white hover:text-black transition duration-300 ease-in-out focus:outline-none"
               aria-label="Open room options"
             >
+              {config && (
+                <Image src={config.icon} height={20} width={20} alt={config.name} />
+              )}
               {Room.codingLang === "python" && <FaPython className="text-xl" />}
               <span className="capitalize text-sm font-medium truncate">
                 {Room.roomName}
