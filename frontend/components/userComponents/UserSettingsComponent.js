@@ -49,15 +49,15 @@ const UserSettingsComponent = ({ user }) => {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full px-4 py-6 space-y-8">
       {/* Profile Section */}
-      <div className="w-full flex flex-col items-center justify-center gap-4 border border-gray-200 rounded-xl p-6 shadow-sm">
+      <div className="flex flex-col items-center justify-center gap-4 border border-[#2A2A3B] rounded-2xl bg-[#1C1C27] p-6 shadow-md">
         <img
           src="/avatar-placeholder.png"
           alt="Profile"
-          className="w-32 h-32 rounded-full object-cover border-4 border-blue-500"
+          className="w-28 h-28 rounded-full object-cover border-4 border-[#00F0B5]"
         />
-        <button className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
+        <button className="px-5 py-2 text-sm font-medium text-white bg-[#00F0B5] rounded-full hover:bg-[#00d1a3] transition duration-200">
           Change Photo
         </button>
       </div>
@@ -65,74 +65,59 @@ const UserSettingsComponent = ({ user }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[80%] h-full flex flex-col justify-start items-center gap-6
-        p-6"
+          className="w-full max-w-3xl mx-auto space-y-6"
         >
           {/* Username */}
-          <div className="w-full flex flex-col gap-2 border border-gray-200 rounded-xl p-6 shadow-sm">
-            <label className="text-xl font-semibold">
-              Username{" "}
-              <span className="text-sm text-gray-700">
-                (You cannot change the Username)
+          <div className="flex flex-col gap-2 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
+            <label className="text-lg font-medium text-[#EDEDED]">
+              Username
+              <span className="block text-xs text-gray-400 font-normal mt-1">
+                (This cannot be changed)
               </span>
             </label>
             <input
               type="text"
               disabled
               value={user?.userName}
-              className="w-[40%] p-2 cursor-not-allowed border border-gray-300 rounded-md bg-gray-100 focus:outline-none"
+              className="w-full md:w-1/2 p-2 bg-[#2A2A3B] border border-[#3A3A4A] text-[#AFAFC1] rounded-md cursor-not-allowed focus:outline-none"
             />
           </div>
 
           {/* First and Last Name */}
-          <div className="w-full flex gap-6 border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div className="w-1/2 flex flex-col gap-2">
-              {/* <label className="text-xl font-semibold">First Name</label>
-              <input
-                type="text"
-                onChange={handleChange}
-                value={form.FirstName}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              /> */}
-
+          <div className="flex flex-col md:flex-row gap-6 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
+            <div className="w-full md:w-1/2">
               <FormField
                 control={form.control}
                 name="FirstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel className="text-[#EDEDED]">First Name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="First Name"
+                        placeholder="Enter your first name"
                         {...field}
-                        className="w-full p-2 border outline-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
                       />
                     </FormControl>
-                    <FormDescription>
-                      {/* This is your public display name. */}
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="w-1/2 flex flex-col gap-2">
+            <div className="w-full md:w-1/2">
               <FormField
                 control={form.control}
                 name="LastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel className="text-[#EDEDED]">Last Name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Last Name"
+                        placeholder="Enter your last name"
                         {...field}
-                        className="w-full p-2 border outline-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
                       />
                     </FormControl>
-                    <FormDescription>
-                      {/* This is your public display name. */}
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -141,23 +126,20 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* Email */}
-          <div className="w-full flex flex-col gap-2 border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-[#EDEDED]">Email</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Email"
+                      placeholder="Enter your email"
                       {...field}
-                      className="w-full p-2 border outline-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
                     />
                   </FormControl>
-                  <FormDescription>
-                    {/* This is your public display name. */}
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -165,30 +147,34 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* About User */}
-          <div className="w-full flex flex-col gap-2 border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
             <FormField
               control={form.control}
               name="aboutUser"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>About User</FormLabel>
+                  <FormLabel className="text-[#EDEDED]">About You</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="About User"
+                      placeholder="Write a short bio..."
                       {...field}
-                      className="w-full p-2 border outline-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
                     />
                   </FormControl>
-                  <FormDescription>
-                    {/* This is your public display name. */}
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
 
-          <Button type="submit">Submit</Button>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-[#00F0B5] text-black font-semibold rounded-full hover:bg-[#00d1a3] transition-all duration-200"
+            >
+              Save Changes
+            </button>
+          </div>
         </form>
       </Form>
     </div>

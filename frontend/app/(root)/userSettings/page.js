@@ -40,9 +40,9 @@ const UserSettings = () => {
 
   const SidebarBtns = [
     { name: "Account", component: "UserSettingsComponent" },
-    { name: "Security", component: "" },
-    { name: "Notifications", component: "" },
-    { name: "Privacy", component: "" },
+    // { name: "Security", component: "" },
+    // { name: "Notifications", component: "" },
+    // { name: "Privacy", component: "" },
   ];
 
   if (!session) {
@@ -50,31 +50,36 @@ const UserSettings = () => {
   }
 
   return (
-    <div className="w-full min-h-[91vh] flex justify-center items-center bg-gray-100">
-      <div className="w-[80%] h-[95%] flex justify-between rounded-xl bg-white">
-        {/* side Bar */}
-        <div className="min-h-[91vh] w-[20%] border-r-2 border-black flex flex-col">
-          <div className="h-[70px] border-b-2 border-black flex items-center justify-center">
-            <h1 className="text-2xl font-bold">User Settings</h1>
+    <div className="w-full min-h-screen flex justify-center items-start bg-[#0F0F1A] py-10 px-4">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row bg-[#1C1C27] rounded-2xl shadow-lg overflow-hidden">
+        {/* Sidebar */}
+        <aside className="w-full md:w-1/4 border-b md:border-b-0 md:border-r border-[#2A2A3B] p-6 bg-[#15151F]">
+          <div className="flex items-center justify-center mb-6">
+            <h1 className="text-xl font-bold text-white tracking-wide">
+              User Settings
+            </h1>
           </div>
-
-          <div className="h-[90%] flex flex-col items-center justify-start">
+          <nav className="space-y-3">
             {SidebarBtns.map((btn, index) => (
-              <div
+              <button
                 key={index}
-                onClick={() => {
-                  setActiveComponent(btn.component);
-                }}
-                className="w-full h-[60px] flex items-center justify-center cursor-pointer hover:bg-gray-200"
+                onClick={() => setActiveComponent(btn.component)}
+                className={`w-full text-left px-4 py-3 rounded-lg transition duration-200 text-[#EDEDED] font-medium hover:bg-[#2A2A3B] ${
+                  activeComponent === btn.component ? "bg-[#2A2A3B]" : ""
+                }`}
               >
-                <h1 className="text-xl font-semibold">{btn.name}</h1>
-              </div>
+                {btn.name}
+              </button>
             ))}
-          </div>
-        </div>
-        {activeComponent === "UserSettingsComponent" && (
-          <UserSettingsComponent user={user} />
-        )}
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="w-full md:w-3/4 p-6">
+          {activeComponent === "UserSettingsComponent" && (
+            <UserSettingsComponent user={user} />
+          )}
+        </main>
       </div>
     </div>
   );

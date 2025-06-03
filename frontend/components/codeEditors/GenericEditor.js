@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { editorConfigs } from "@/config/EditorConfig";
 import { dracula } from "@uiw/codemirror-theme-dracula";
-import { githubDark } from '@uiw/codemirror-theme-github';
+import { githubDark } from "@uiw/codemirror-theme-github";
 
 const GenericEditor = ({
   socket,
@@ -10,6 +10,7 @@ const GenericEditor = ({
   codingLang,
   fileCodes,
   setFileCodes,
+  fontSizes,
 }) => {
   const handleCodeChange = (value, file, viewUpdate) => {
     const updated = { ...fileCodes, [file]: value };
@@ -53,7 +54,8 @@ const GenericEditor = ({
               handleCodeChange(value, key);
             }}
             theme={dracula}
-            className="w-full h-[95%]"
+            className={`w-full h-[95%] text-[${fontSizes}]`}
+            style={{ fontSize: `${fontSizes}px` }}
           />
         </div>
       ));

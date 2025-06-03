@@ -1,9 +1,21 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import UserProfileButton from "./userComponents/UserProfileButton";
 import { FaUserPlus } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
 import { MdOutlinePersonRemove } from "react-icons/md";
 import { FaPython } from "react-icons/fa";
+import { Switch } from "@/components/ui/switch";
+import { IoMdSettings } from "react-icons/io";
+import { ImExit } from "react-icons/im";
+import { FaRegSave } from "react-icons/fa";
+import { editorConfigs } from "@/config/EditorConfig";
+import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Sun, Moon, Laptop } from "lucide-react";
+import { Button } from "./ui/button";
 import {
   Popover,
   PopoverContent,
@@ -16,13 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import UserProfileButton from "./userComponents/UserProfileButton";
-import { Switch } from "@/components/ui/switch";
-import { IoMdSettings } from "react-icons/io";
-import { ImExit } from "react-icons/im";
-import { FaRegSave } from "react-icons/fa";
-import Image from "next/image";
-import { editorConfigs } from "@/config/EditorConfig";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
@@ -33,10 +38,18 @@ const CodeNavbar = ({
   SaveCodeToDatabase,
   CompileCode,
   compileing,
+  setFontSize,
+  fontSize,
 }) => {
+  const [theme, setTheme] = useState();
+
+  const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 32));
+  const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 10));
+  // The Language config/
   const config = Object.values(editorConfigs).find(
     (c) => c.language === Room.codingLang
   );
+
   return (
     <div className="w-[full] cursor-text items-center justify-center bg-[#252526] flex h-[8%] border-2 border-black">
       <div className="h-full flex justify-between w-[90%] ">
@@ -48,7 +61,12 @@ const CodeNavbar = ({
               aria-label="Open room options"
             >
               {config && (
-                <Image src={config.icon} height={20} width={20} alt={config.name} />
+                <Image
+                  src={config.icon}
+                  height={20}
+                  width={20}
+                  alt={config.name}
+                />
               )}
               {Room.codingLang === "python" && <FaPython className="text-xl" />}
               <span className="capitalize text-sm font-medium truncate">
@@ -83,7 +101,7 @@ const CodeNavbar = ({
                   href={"/userProfile"}
                   className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full"
                 >
-                  <ImExit className="text-xl" />
+                  <ImExit className="text-xl text-red-400" />
                   <span>Leave Room</span>
                 </Link>
               </div>
@@ -203,30 +221,57 @@ const CodeNavbar = ({
 
         {/* Right */}
         <div className="h-full flex gap-8 justify-end items-center w-[25%]">
-          {session?.user._id === Room.createdBy && (
-            <Select defaultValue="private">
-              <SelectTrigger
-                className="w-[180px] px-4 py-2 rounded-lg border border-white text-white font-mono text-base transition-all duration-200 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
-                aria-label="Select Room Type"
-              >
-                <SelectValue className={"text-white"} placeholder="Room Type" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 text-white border border-white rounded-lg">
-                <SelectItem
-                  value="public"
-                  className="hover:bg-zinc-800 cursor-pointer px-4 py-2 rounded-md transition"
+          <Popover>
+            <PopoverTrigger className="flex items-center gap-2 px-5 py-2 rounded-md border border-white text-white font-mono text-sm transition hover:bg-white hover:text-black">
+              Open
+            </PopoverTrigger>
+
+            <PopoverContent className="w-[90vw] max-w-sm p-4 space-y-6 bg-[#121212] text-white border border-gray-800 rounded-xl shadow-xl">
+              {/* Font Size Control */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Font Size</Label>
+                <div className="flex items-center justify-between gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={decreaseFont}
+                    disabled={fontSize <= 10}
+                    className="w-10 border-gray-600 text-black text-xl flex justify-center items-center"
+                  >
+                    -
+                  </Button>
+                  <span className="text-sm font-mono">{fontSize}px</span>
+                  <Button
+                    variant="outline"
+                    onClick={increaseFont}
+                    disabled={fontSize >= 32}
+                    className="w-10 border-gray-600 text-black text-xl flex justify-center items-center"
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+
+              {/* Theme Selector */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Theme</Label>
+                <Select
+                  defaultValue={theme}
+                  onValueChange={(value) => setTheme(value)}
                 >
-                  Public Room
-                </SelectItem>
-                <SelectItem
-                  value="private"
-                  className="hover:bg-zinc-800 cursor-pointer px-4 py-2 rounded-md transition"
-                >
-                  Private Room
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          )}
+                  <SelectTrigger className="w-full bg-[#1E1E1E] text-white border border-gray-700">
+                    <SelectValue placeholder="Select Theme" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#1E1E1E] text-white border border-gray-700">
+                    <SelectItem value="light">Light</SelectItem>
+                    <SelectItem value="dark">Dark</SelectItem>
+                    <SelectItem value="system">System</SelectItem>
+                    <SelectItem value="solarized">Solarized</SelectItem>
+                    <SelectItem value="dracula">Dracula</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </PopoverContent>
+          </Popover>
           <UserProfileButton session={session} />
         </div>
       </div>

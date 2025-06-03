@@ -1,6 +1,6 @@
 "use client";
+
 import { signOut, useSession } from "next-auth/react";
-import Button2 from "./utilityComponents/Button2";
 import { MdLogout } from "react-icons/md";
 
 const LogoutButton = () => {
@@ -12,12 +12,12 @@ const LogoutButton = () => {
 
   return (
     <button
-      title="Logout"
-      className="flex w-full items-center px-4 py-3 justify-start gap-4 cursor-pointer hover:bg-red-200 transition-all duration-300 ease-in-out"
       onClick={handleLogout}
+      title="Logout"
+      className="flex w-full items-center justify-start gap-3 px-4 py-2 rounded-lg text-sm font-medium text-[#EDEDED] hover:bg-[#2A2A3B] transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500"
     >
-      <MdLogout className="text-2xl" />
-      <h1 className="text-lg font-normal capitalize">Logout</h1>
+      <MdLogout className="text-xl text-red-400" />
+      <span className="text-base">Logout</span>
     </button>
   );
 };

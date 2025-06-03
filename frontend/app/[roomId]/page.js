@@ -23,6 +23,7 @@ const Room = () => {
   const socket = useContext(SocketContext);
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
+  const [fontSize, setFontSize] = useState(14);
   // const [load, setLoad] = useState(false);
   const [fileCodes, setFileCodes] = useState({
     html: "",
@@ -31,7 +32,6 @@ const Room = () => {
     python: "",
   });
 
- 
   // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
     const editorKey = Object.entries(editorConfigs).find(
@@ -307,6 +307,8 @@ const Room = () => {
   return (
     <div className="flex flex-col w-full h-screen">
       <CodeNavbar
+        fontSize={fontSize}
+        setFontSize={setFontSize}
         RemoveUserFromRoom={RemoveUserFromRoom}
         hasUnsavedChanges={hasUnsavedChanges}
         compileing={compileing}
@@ -319,6 +321,7 @@ const Room = () => {
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
+            fontSizes={fontSize}
             SaveCodeToDatabase={SaveCodeToDatabase}
             socket={socket}
             roomId={roomId}
