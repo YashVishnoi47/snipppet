@@ -3,9 +3,15 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Button } from "./ui/button";
+import { editorConfigs } from "@/config/EditorConfig";
+import Image from "next/image";
 
-const UserRooms = ({ room, index }) => {
+const UserRooms = ({ room, index, FetchUserRooms }) => {
   const router = useRouter();
+  const config = Object.values(editorConfigs).find(
+    (c) => c.language === room.codingLang
+  );
 
   const handleClick = () => {
     router.push(`${room._id}`);
@@ -21,7 +27,7 @@ const UserRooms = ({ room, index }) => {
     });
 
     if (res.ok) {
-      router.refresh();
+      FetchUserRooms();
     } else {
       alert("Error deleting room");
       console.error("Error deleting room");
@@ -29,46 +35,46 @@ const UserRooms = ({ room, index }) => {
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className="w-[350px] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex flex-col rounded-3xl h-[300px] border-1 border-[#2A2A3B] hover:shadow-lg shadow-[#D152EA] text-[#EDEDED] bg-[#1C1C27] transition-all duration-300 ease-in-out"
-    >
-      {/* Room Image */}
-      <div className="w-full h-[65%] relative bg-black rounded-3xl">
-        {/* <div className="absoulte flex right-1 bg-gray-500 rounded-3xl"> */}
-        <RiDeleteBin6Line
-          onClick={handleDelete}
-          className="text-4xl hover:scale-110 transition-all border-white duration-300 ease-in-out absolute p-2 border-2 right-4 top-4 text-[#fff] bg-[#8B5CF6] hover:text[#8B5CF6AA] rounded-full"
+    <div className="max-w-sm w-full hover:scale-[1.02] active:scale-[0.98] rounded-3xl border border-[#2A2A3B] bg-[#1C1C27] shadow-md hover:shadow-[#D152EA]/40 transition-all duration-300 ease-in-out cursor-default overflow-hidden flex sm:flex-row flex-col">
+      {/* Image Section */}
+      <div className="sm:w-[35%] w-full h-[150px] sm:h-auto flex items-center justify-center bg-[#2A2A3B] sm:rounded-l-3xl rounded-t-3xl sm:rounded-t-none p-4">
+        <Image
+          src={config.icon}
+          width={80}
+          height={80}
+          alt={config.name}
+          className="object-contain"
         />
-
-        {/* </div> */}
       </div>
 
-      {/* Room Details */}
-      <div className="w-full h-[35%] flex flex-col justify-between items-start mt-2 px-4 py-1">
-        <div className="flex w-full">
-          {/* Room Name */}
-          <h1 className="font-semibold w-1/2 text-3xl line-clamp-1">
+      {/* Content Section */}
+      <div className="sm:w-[65%] w-full flex flex-col justify-between p-4 text-[#EDEDED]">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-semibold truncate">
             {room?.roomName || "No Name"}
-          </h1>
-
-          {/* Other Details */}
-          <div className="flex w-1/2 flex-col mt-2">
-            <div className="flex flex-col gap-1 items-end">
-              <p className="text-[#00F0B5] text-sm line-clamp-1 capitalize">
-                {room?.codingLang || "Language"}
-              </p>
-              <p className="text-[#EDEDED] text-sm line-clamp-1">
-                {formatDate(room?.createdAt) || "Created At"}
-              </p>
-            </div>
-          </div>
+          </h2>
+          <p className="text-[#00F0B5] text-sm capitalize mt-1 truncate">
+            {room?.codingLang || "Language"}
+          </p>
+          <p className="text-sm text-gray-400 mt-0.5 truncate">
+            {formatDate(room?.createdAt) || "Created At"}
+          </p>
         </div>
 
-        <div className="flex justify-center items-center border-2  w-full">
-          <p className="text-[#EDEDED] text-sm line-clamp-1 w-full">
-            {room?.idPublic ? "Public" : "Private"}
-          </p>
+        {/* Action Buttons */}
+        <div className="flex justify-end gap-2 mt-4">
+          <Button
+            className="bg-white text-black hover:bg-black hover:text-white rounded-full px-4 py-1 transition-all duration-300 ease-in-out cursor-pointer"
+            onClick={handleDelete}
+          >
+            <RiDeleteBin6Line />
+          </Button>
+          <Button
+            className="bg-white text-black hover:bg-black hover:text-white rounded-full px-4 py-1 transition-all duration-300 ease-in-out cursor-pointer"
+            onClick={handleClick}
+          >
+            Join Room
+          </Button>
         </div>
       </div>
     </div>
@@ -76,3 +82,10 @@ const UserRooms = ({ room, index }) => {
 };
 
 export default UserRooms;
+
+{
+  /* <RiDeleteBin6Line
+          onClick={handleDelete}
+          className="text-4xl hover:scale-110 transition-all border-white duration-300 ease-in-out absolute p-2 border-2 right-4 top-4 text-[#fff] bg-[#8B5CF6] hover:text[#8B5CF6AA] rounded-full"
+        /> */
+}

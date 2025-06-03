@@ -15,7 +15,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { roommFormSchema } from "@/lib/validator";
 import { Input } from "@/components/ui/input";
 import { IoFilter } from "react-icons/io5";
-import { editorConfigs } from "@/config/EditorConfig";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +37,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { editorConfigs } from "@/config/EditorConfig";
+import Image from "next/image";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -71,7 +72,7 @@ const UserProfile = () => {
     },
   });
 
-  // Function To Fetch User Rooms
+  // Function To Fetch User Rooms.
   const FetchUserRooms = async () => {
     try {
       setFetching(true);
@@ -158,7 +159,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="w-full h-full justify-center items-center flex flex-col gap-12 bg-[#210426]">
+    <div className="w-full h-full justify-center items-center flex flex-col gap-12  bg-[#090920]">
       <div className="w-[80%] flex flex-col min-h-[90vh] mt-10">
         {/* top section */}
         <div className="w-full border-b-2 py-2 justify-between flex items-center  h-[10vh]">
@@ -169,35 +170,42 @@ const UserProfile = () => {
 
           {/* Filter */}
           <div className="flex gap-6 justify-end w-1/2 h-full p-2">
-            (
             <Popover>
               <PopoverTrigger className="text-white p-2 cursor-pointer rounded-full hover:bg-white hover:text-black transition-all duration-300 ease-in-out flex justify-center items-center">
                 <IoFilter className="text-2xl" />
               </PopoverTrigger>
 
-              <PopoverContent className="w-80 sm:w-96 p-4 rounded-2xl shadow-lg space-y-6">
-                {/* Languge Filter */}
+              <PopoverContent className="w-80 sm:w-96 p-5 rounded-2xl shadow-xl bg-[#1C1C27] border border-[#2A2A3B] text-[#EDEDED] space-y-6">
+                {/* Language Filter */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Language</h3>
-                  <div className="grid grid-cols-2 gap-2">
+                  <h3 className="text-lg font-semibold mb-3 text-white">
+                    Filter by Language
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
                     {Object.values(editorConfigs).map((item) => (
                       <label
                         key={item.name}
-                        className="flex items-center gap-2 cursor-pointer"
+                        className="flex items-center gap-2 cursor-pointer transition-all hover:opacity-90"
                       >
                         <Checkbox
                           checked={filter === item.name}
                           onCheckedChange={() => setFilterTerm(item.name)}
+                          className="data-[state=checked]:bg-[#00F0B5] data-[state=checked]:border-[#00F0B5] transition-all"
                         />
-                        <span className="text-sm">{item.name}</span>
+                        <span className="text-sm capitalize">{item.name}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
-                {/* Action Button */}
-                <div className="flex justify-end gap-4">
-                  <Button onClick={() => setFilter("all")}>Clear Filter</Button>
+                {/* Action Buttons */}
+                <div className="flex justify-end">
+                  <Button
+                    onClick={() => setFilter("all")}
+                    className="rounded-full px-4 py-2 bg-[#00F0B5] text-black hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
+                  >
+                    Clear Filter
+                  </Button>
                 </div>
               </PopoverContent>
             </Popover>
@@ -223,122 +231,136 @@ const UserProfile = () => {
                     <div>
                       <Button2
                         loading={loading}
-                        width={"120px"}
-                        text={"Create Room"}
+                        width="120px"
+                        text="Create Room"
                       />
                     </div>
                   </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className={`font-semibold text-2xl`}>
+
+                  <DialogContent className="bg-[#1C1C27] text-[#EDEDED] border border-[#2A2A3B] rounded-2xl max-w-md w-full shadow-lg">
+                    <DialogHeader className="mb-4">
+                      <DialogTitle className="text-2xl font-semibold">
                         Create Room
                       </DialogTitle>
-                      <DialogDescription asChild>
-                        <Form {...form}>
-                          <form
-                            onSubmit={form.handleSubmit(createPrivateRoom)}
-                            className="space-y-8"
-                          >
-                            {/* Room Name */}
-                            <FormField
-                              control={form.control}
-                              name="roomName"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>RoomName</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="RoomName" {...field} />
-                                  </FormControl>
-                                  <FormDescription></FormDescription>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            {/* Language */}
-                            <FormField
-                              control={form.control}
-                              name="codingLang"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Select Room Language</FormLabel>
-                                  <FormControl>
-                                    <select
-                                      value={field.value}
-                                      onChange={(e) =>
-                                        field.onChange(e.target.value)
-                                      }
-                                      id="tech"
-                                      name="tech"
-                                    >
-                                      {Object.values(editorConfigs).map(
-                                        (item) => (
-                                          <option
-                                            key={item.name}
-                                            value={item.name}
-                                          >
-                                            {item.name}
-                                          </option>
-                                        )
-                                      )}
-                                    </select>
-                                  </FormControl>
-                                  <FormDescription></FormDescription>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <button
-                              className="border-2 px-6 py-2 rounded-full hover:bg-green-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer flex justify-center items-center gap-1"
-                              type="submit"
-                            >
-                              {" "}
-                              Create
-                            </button>
-                          </form>
-                        </Form>
-                      </DialogDescription>
                     </DialogHeader>
+
+                    <Form {...form}>
+                      <form
+                        onSubmit={form.handleSubmit(createPrivateRoom)}
+                        className="space-y-6"
+                      >
+                        {/* Room Name Field */}
+                        <FormField
+                          control={form.control}
+                          name="roomName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sm">
+                                Room Name
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter your room name"
+                                  className="w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-[#EDEDED] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0B5] transition-all duration-200 ease-in-out"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Language Selector */}
+                        <FormField
+                          control={form.control}
+                          name="codingLang"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sm">
+                                Select Language
+                              </FormLabel>
+                              <FormControl>
+                                <select
+                                  id="tech"
+                                  name="tech"
+                                  value={field.value}
+                                  onChange={(e) =>
+                                    field.onChange(e.target.value)
+                                  }
+                                  className="w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-[#EDEDED] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0B5] hover:border-[#00F0B5] transition-all duration-200 ease-in-out"
+                                >
+                                  <option value="" disabled>
+                                    Choose a language
+                                  </option>
+                                  {Object.values(editorConfigs).map((item) => (
+                                    <option key={item.name} value={item.name}>
+                                      {/* <Image
+                                        src={item.icon}
+                                        width={10}
+                                        height={10}
+                                        alt={item.name}
+                                      /> */}
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Submit Button */}
+                        <div className="flex justify-end">
+                          <button
+                            type="submit"
+                            className="px-6 py-2 rounded-full bg-white text-black hover:bg-black hover:text-white transition-all duration-300 ease-in-out font-medium shadow-md cursor-pointer"
+                          >
+                            Create
+                          </button>
+                        </div>
+                      </form>
+                    </Form>
                   </DialogContent>
                 </Dialog>
 
                 <Popover>
                   <PopoverTrigger asChild>
                     <div>
-                      <Button2 text={"Join Room"} />
+                      <Button2 text="Join Room" />
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent>
-                    <div className="flex flex-col gap-6 p-6 ">
-                      <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+
+                  <PopoverContent className="w-[320px] p-6 bg-[#1C1C27] border border-[#2A2A3B] rounded-2xl shadow-lg text-[#EDEDED]">
+                    <div className="flex flex-col gap-6">
+                      {/* Heading */}
+                      <h1 className="text-2xl font-semibold tracking-tight">
                         Join a Room
                       </h1>
 
+                      {/* Room ID Field */}
                       <div className="flex flex-col gap-2">
                         <label
                           htmlFor="room-id"
-                          className="text-sm font-medium text-gray-700"
+                          className="text-sm font-medium text-[#EDEDED]"
                         >
                           Room Key
                         </label>
                         <Input
-                          onChange={(e) => {
-                            setjoinRoomId(e.target.value);
-                          }}
                           id="room-id"
                           placeholder="Enter your Room ID"
-                          className="text-sm"
+                          onChange={(e) => setjoinRoomId(e.target.value)}
+                          className="w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-sm text-[#EDEDED] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0B5] transition-all duration-200 ease-in-out"
                         />
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-400">
                           Ask the host for the room key to join.
                         </p>
                       </div>
 
+                      {/* Join Button */}
                       <button
                         onClick={handleJoinRoom}
-                        text={"Join Room"}
-                        className="w-full border-2 p-2 rounded-full cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out"
+                        className="w-full px-4 py-2 rounded-full bg-[#00F0B5] text-black hover:bg-white hover:text-black transition-all duration-300 ease-in-out font-medium shadow-md"
                       >
                         Join Room
                       </button>
@@ -354,7 +376,11 @@ const UserProfile = () => {
             {rooms.length > 0 ? (
               <div className="flex flex-wrap w-full  justify-center sm:justify-start items-center gap-8">
                 {rooms.map((room) => (
-                  <UserRooms key={room._id} room={room} />
+                  <UserRooms
+                    FetchUserRooms={FetchUserRooms}
+                    key={room._id}
+                    room={room}
+                  />
                 ))}
               </div>
             ) : (
@@ -376,3 +402,6 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+
+
+
