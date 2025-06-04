@@ -25,14 +25,14 @@ export const POST = async (req) => {
     });
 
     if (newRoom) {
-      return Response.json(
-        { message: "User Created Successfully" },
+      return NextResponse.json(
+        { message: "Room Created Successfully" },
         { status: 201 }
       );
     }
     return new Response("Room not created", { status: 409 });
   } catch (error) {
-    console.error("Error creating room:", error);
+    // console.error("Error creating room:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

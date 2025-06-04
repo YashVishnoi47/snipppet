@@ -38,7 +38,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { editorConfigs } from "@/config/EditorConfig";
-import Image from "next/image";
+import { toast } from "sonner";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -107,13 +107,19 @@ const UserProfile = () => {
       }),
     });
     const data = await res.json();
+    console.log(data);
 
     if (res.ok) {
       await FetchUserRooms();
       setLoading(false);
+      toast.success("Room Created", {
+        description: data.message,
+      });
     } else {
-      alert("Error creating room");
       setLoading(false);
+      toast.error("Error Creating Room", {
+        description: data.error,
+      });
     }
   };
 
@@ -402,6 +408,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-
-
-

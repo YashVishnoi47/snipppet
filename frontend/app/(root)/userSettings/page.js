@@ -25,6 +25,9 @@ const UserSettings = () => {
 
         if (res.ok) {
           const data = await res.json();
+          toast.success("Room Deleted", {
+            description: "Your room was successfully removed.",
+          });
           if (data.user) {
             setUser(data.user);
           } else {

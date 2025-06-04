@@ -7,8 +7,12 @@ import CodeNavbar from "@/components/CodeNavbar";
 import GenericEditor from "@/components/codeEditors/GenericEditor";
 import { editorConfigs } from "@/config/EditorConfig";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { dracula } from "@uiw/codemirror-theme-dracula";
+import { githubDark } from "@uiw/codemirror-theme-github";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { material } from "@uiw/codemirror-theme-material";
+import { sublime } from "@uiw/codemirror-theme-sublime";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -23,6 +27,14 @@ const Room = () => {
   const socket = useContext(SocketContext);
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
+  const [theme, setTheme] = useState("dark");
+  const themeMap = {
+    dark: oneDark,
+    GithubDark: githubDark,
+    dracula: dracula,
+    material: material,
+    sublime: sublime,
+  };
   const [fontSize, setFontSize] = useState(14);
   // const [load, setLoad] = useState(false);
   const [fileCodes, setFileCodes] = useState({
@@ -317,10 +329,13 @@ const Room = () => {
         SaveCodeToDatabase={SaveCodeToDatabase}
         activeUsers={activeUsers}
         Room={room}
+        theme={theme}
+        setTheme={setTheme}
       />
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
+            themeMap={themeMap}
             fontSizes={fontSize}
             SaveCodeToDatabase={SaveCodeToDatabase}
             socket={socket}
@@ -328,6 +343,7 @@ const Room = () => {
             codingLang={room.codingLang}
             fileCodes={fileCodes}
             setFileCodes={setFileCodes}
+            theme={theme}
           />
         ) : (
           <h1>PLease log in to access this page</h1>

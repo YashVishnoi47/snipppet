@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const UserSettingsComponent = ({ user }) => {
   const form = useForm({
@@ -39,12 +40,17 @@ const UserSettingsComponent = ({ user }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Profile updated successfully!");
+        toast.success("Profile Updated", {
+          description: data.message,
+        });
       } else {
         alert(`Error: ${data.error}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Error updating userprofile", {
+        description: data.error,
+      });
     }
   }
 

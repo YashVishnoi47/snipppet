@@ -14,8 +14,9 @@ export async function DELETE(request) {
     }
 
     return new Response("Room deleted successfully", { status: 200 });
+
   } catch (error) {
-    console.error("Error deleting room:", error);
+    // console.error("Error deleting room:", error);
     return new Response("Internal Server Error", { status: 500 });
   }
 }

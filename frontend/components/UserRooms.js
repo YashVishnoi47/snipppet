@@ -6,6 +6,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { Button } from "./ui/button";
 import { editorConfigs } from "@/config/EditorConfig";
 import Image from "next/image";
+import { toast } from "sonner";
 
 const UserRooms = ({ room, index, FetchUserRooms }) => {
   const router = useRouter();
@@ -28,9 +29,14 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
 
     if (res.ok) {
       FetchUserRooms();
+      toast.success("Room Deleted", {
+        description: "Your room was successfully removed.",
+      });
     } else {
-      alert("Error deleting room");
-      console.error("Error deleting room");
+      toast.error("Error Deleting Room", {
+        description: "Your room was successfully removed.",
+      });
+      // console.error("Error deleting room");
     }
   };
 

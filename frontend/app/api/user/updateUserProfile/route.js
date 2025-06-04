@@ -26,7 +26,7 @@ export const POST = async (req) => {
     return new Response(
       JSON.stringify(
         {
-          message: "User updated successfully",
+          message: "User Profile updated successfully",
           user: updatedUser,
         },
         { status: 200 }
