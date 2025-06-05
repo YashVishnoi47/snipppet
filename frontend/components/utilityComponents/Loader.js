@@ -1,22 +1,20 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Loader = () => {
   return (
     <StyledWrapper>
       <div className="dot-spinner">
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
-        <div className="dot-spinner__dot" />
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className={`dot-spinner__dot dot-spinner__dot--${i + 1}`}
+          />
+        ))}
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .dot-spinner {
@@ -27,32 +25,6 @@ const StyledWrapper = styled.div`
     --uib-speed: 0.9s;
     height: 2.8rem;
     width: 2.8rem;
-    /*animation: float 3s linear infinite;*/
-  }
-
-  @keyframes float {
-    0% {
-      transform: rotate(0deg) translate(100px) rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg) translate(100px) rotate(-360deg);
-    }
-  }
-
-  .dot-spinner__dot::before {
-    content: '';
-    height: 20%;
-    width: 20%;
-    border-radius: 50%;
-    background-color: #fff;
-    filter: drop-shadow(0 0 10px rgb(95, 150, 202));
-    box-shadow: -6px -6px 11px #c1c1c1,
-               6px 6px 11px #ffffff;
-    transform: scale(0);
-    opacity: 0.5;
-    animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
-    box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
   }
 
   .dot-spinner__dot {
@@ -64,75 +36,84 @@ const StyledWrapper = styled.div`
     justify-content: flex-start;
     height: 100%;
     width: 100%;
+
+    &::before {
+      content: "";
+      height: 20%;
+      width: 20%;
+      border-radius: 50%;
+      background-color: #7c3aed; /* Purple accent */
+      opacity: 0;
+      animation: pulse-theme var(--uib-speed) ease-in-out infinite;
+      box-shadow: 0 0 8px rgba(124, 58, 237, 0.6);
+      transform: scale(0);
+    }
   }
 
-  .dot-spinner__dot:nth-child(2) {
+  /* Position each dot around a circle */
+  /* 8 dots at 45° increments */
+  .dot-spinner__dot--1 {
+    transform: rotate(0deg);
+  }
+  .dot-spinner__dot--2 {
     transform: rotate(45deg);
   }
-
-  .dot-spinner__dot:nth-child(2)::before {
-    animation-delay: calc(var(--uib-speed) * -0.875);
-  }
-
-  .dot-spinner__dot:nth-child(3) {
+  .dot-spinner__dot--3 {
     transform: rotate(90deg);
   }
-
-  .dot-spinner__dot:nth-child(3)::before {
-    animation-delay: calc(var(--uib-speed) * -0.75);
-  }
-
-  .dot-spinner__dot:nth-child(4) {
+  .dot-spinner__dot--4 {
     transform: rotate(135deg);
   }
-
-  .dot-spinner__dot:nth-child(4)::before {
-    animation-delay: calc(var(--uib-speed) * -0.625);
-  }
-
-  .dot-spinner__dot:nth-child(5) {
+  .dot-spinner__dot--5 {
     transform: rotate(180deg);
   }
-
-  .dot-spinner__dot:nth-child(5)::before {
-    animation-delay: calc(var(--uib-speed) * -0.5);
-  }
-
-  .dot-spinner__dot:nth-child(6) {
+  .dot-spinner__dot--6 {
     transform: rotate(225deg);
   }
-
-  .dot-spinner__dot:nth-child(6)::before {
-    animation-delay: calc(var(--uib-speed) * -0.375);
-  }
-
-  .dot-spinner__dot:nth-child(7) {
+  .dot-spinner__dot--7 {
     transform: rotate(270deg);
   }
-
-  .dot-spinner__dot:nth-child(7)::before {
-    animation-delay: calc(var(--uib-speed) * -0.25);
-  }
-
-  .dot-spinner__dot:nth-child(8) {
+  .dot-spinner__dot--8 {
     transform: rotate(315deg);
   }
 
-  .dot-spinner__dot:nth-child(8)::before {
+  /* Staggered animation delays */
+  .dot-spinner__dot--1::before {
+    animation-delay: calc(var(--uib-speed) * -1);
+  }
+  .dot-spinner__dot--2::before {
+    animation-delay: calc(var(--uib-speed) * -0.875);
+  }
+  .dot-spinner__dot--3::before {
+    animation-delay: calc(var(--uib-speed) * -0.75);
+  }
+  .dot-spinner__dot--4::before {
+    animation-delay: calc(var(--uib-speed) * -0.625);
+  }
+  .dot-spinner__dot--5::before {
+    animation-delay: calc(var(--uib-speed) * -0.5);
+  }
+  .dot-spinner__dot--6::before {
+    animation-delay: calc(var(--uib-speed) * -0.375);
+  }
+  .dot-spinner__dot--7::before {
+    animation-delay: calc(var(--uib-speed) * -0.25);
+  }
+  .dot-spinner__dot--8::before {
     animation-delay: calc(var(--uib-speed) * -0.125);
   }
 
-  @keyframes pulse0112 {
+  @keyframes pulse-theme {
     0%,
     100% {
       transform: scale(0);
-      opacity: 0.5;
+      opacity: 0.3;
     }
-
     50% {
       transform: scale(1);
       opacity: 1;
     }
-  }`;
+  }
+`;
 
 export default Loader;

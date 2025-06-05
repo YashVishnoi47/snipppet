@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,7 +27,6 @@ const UserSettingsComponent = ({ user }) => {
   });
 
   async function onSubmit(values) {
-    console.log("Form submitted with values:", values);
     try {
       const res = await fetch("/api/user/updateUserProfile", {
         method: "POST",
@@ -47,23 +45,20 @@ const UserSettingsComponent = ({ user }) => {
         alert(`Error: ${data.error}`);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Error updating userprofile", {
-        description: data.error,
-      });
+      toast.error("Error updating user profile");
     }
   }
 
   return (
     <div className="w-full h-full px-4 py-6 space-y-8">
       {/* Profile Section */}
-      <div className="flex flex-col items-center justify-center gap-4 border border-[#2A2A3B] rounded-2xl bg-[#1C1C27] p-6 shadow-md">
+      <div className="flex flex-col items-center justify-center gap-4 border border-[#222] rounded-2xl bg-[#000] p-6 shadow-md">
         <img
           src="/avatar-placeholder.png"
           alt="Profile"
-          className="w-28 h-28 rounded-full object-cover border-4 border-[#00F0B5]"
+          className="w-28 h-28 rounded-full object-cover border-4 border-[#7C3AED]"
         />
-        <button className="px-5 py-2 text-sm font-medium text-white bg-[#00F0B5] rounded-full hover:bg-[#00d1a3] transition duration-200">
+        <button className="px-5 py-2 text-sm font-medium text-white bg-[#7C3AED] rounded-full hover:bg-[#5B21B6] transition duration-200">
           Change Photo
         </button>
       </div>
@@ -74,8 +69,8 @@ const UserSettingsComponent = ({ user }) => {
           className="w-full max-w-3xl mx-auto space-y-6"
         >
           {/* Username */}
-          <div className="flex flex-col gap-2 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
-            <label className="text-lg font-medium text-[#EDEDED]">
+          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
+            <label className="text-lg font-medium text-white">
               Username
               <span className="block text-xs text-gray-400 font-normal mt-1">
                 (This cannot be changed)
@@ -85,24 +80,24 @@ const UserSettingsComponent = ({ user }) => {
               type="text"
               disabled
               value={user?.userName}
-              className="w-full md:w-1/2 p-2 bg-[#2A2A3B] border border-[#3A3A4A] text-[#AFAFC1] rounded-md cursor-not-allowed focus:outline-none"
+              className="w-full md:w-1/2 p-2 bg-[#111] border border-[#333] text-[#999] rounded-md cursor-not-allowed focus:outline-none"
             />
           </div>
 
           {/* First and Last Name */}
-          <div className="flex flex-col md:flex-row gap-6 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
+          <div className="flex flex-col md:flex-row gap-6 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
             <div className="w-full md:w-1/2">
               <FormField
                 control={form.control}
                 name="FirstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#EDEDED]">First Name</FormLabel>
+                    <FormLabel className="text-white">First Name</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your first name"
                         {...field}
-                        className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
+                        className="w-full p-3 bg-[#111] text-white border border-[#333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -116,12 +111,12 @@ const UserSettingsComponent = ({ user }) => {
                 name="LastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#EDEDED]">Last Name</FormLabel>
+                    <FormLabel className="text-white">Last Name</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your last name"
                         {...field}
-                        className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
+                        className="w-full p-3 bg-[#111] text-white border border-[#333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -132,18 +127,18 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* Email */}
-          <div className="flex flex-col gap-2 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#EDEDED]">Email</FormLabel>
+                  <FormLabel className="text-white">Email</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your email"
                       {...field}
-                      className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
+                      className="w-full p-3 bg-[#111] text-white border border-[#333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -153,18 +148,18 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* About User */}
-          <div className="flex flex-col gap-2 border border-[#2A2A3B] rounded-2xl p-6 bg-[#1C1C27] shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
             <FormField
               control={form.control}
               name="aboutUser"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#EDEDED]">About You</FormLabel>
+                  <FormLabel className="text-white">About You</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Write a short bio..."
                       {...field}
-                      className="w-full p-3 bg-[#2A2A3B] text-[#EDEDED] border border-[#3A3A4A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00F0B5]"
+                      className="w-full p-3 bg-[#111] text-white border border-[#333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -176,7 +171,7 @@ const UserSettingsComponent = ({ user }) => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#00F0B5] text-black font-semibold rounded-full hover:bg-[#00d1a3] transition-all duration-200"
+              className="px-6 py-2 bg-[#7C3AED] text-white font-semibold rounded-full hover:bg-[#5B21B6] transition-all duration-200"
             >
               Save Changes
             </button>

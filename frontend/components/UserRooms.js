@@ -41,9 +41,9 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
   };
 
   return (
-    <div className="max-w-sm w-full hover:scale-[1.02] active:scale-[0.98] rounded-3xl border border-[#2A2A3B] bg-[#1C1C27] shadow-md hover:shadow-[#D152EA]/40 transition-all duration-300 ease-in-out cursor-default overflow-hidden flex sm:flex-row flex-col">
+    <div className="max-w-sm w-full hover:scale-[1.02] active:scale-[0.98] rounded-3xl border border-[#1B1B2F] bg-[#111114] shadow-md hover:shadow-[#7C3AED]/50 transition-all duration-300 ease-in-out cursor-default overflow-hidden flex sm:flex-row flex-col">
       {/* Image Section */}
-      <div className="sm:w-[35%] w-full h-[150px] sm:h-auto flex items-center justify-center bg-[#2A2A3B] sm:rounded-l-3xl rounded-t-3xl sm:rounded-t-none p-4">
+      <div className="sm:w-[35%] w-full h-[150px] sm:h-auto flex items-center justify-center bg-[#18181B] sm:rounded-l-3xl rounded-t-3xl sm:rounded-t-none p-4">
         <Image
           src={config.icon}
           width={80}
@@ -54,15 +54,15 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
       </div>
 
       {/* Content Section */}
-      <div className="sm:w-[65%] w-full flex flex-col justify-between p-4 text-[#EDEDED]">
+      <div className="sm:w-[65%] w-full flex-col justify-between p-4 text-[#E0E0E0]">
         <div>
           <h2 className="text-xl sm:text-2xl font-semibold truncate">
             {room?.roomName || "No Name"}
           </h2>
-          <p className="text-[#00F0B5] text-sm capitalize mt-1 truncate">
+          <p className="text-[#7C3AED] text-sm capitalize mt-1 truncate">
             {room?.codingLang || "Language"}
           </p>
-          <p className="text-sm text-gray-400 mt-0.5 truncate">
+          <p className="text-sm text-[#6E6E7E] mt-0.5 truncate">
             {formatDate(room?.createdAt) || "Created At"}
           </p>
         </div>
@@ -70,13 +70,13 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
         {/* Action Buttons */}
         <div className="flex justify-end gap-2 mt-4">
           <Button
-            className="bg-white text-black hover:bg-black hover:text-white rounded-full px-4 py-1 transition-all duration-300 ease-in-out cursor-pointer"
+            className="bg-[#18181B] text-[#E0E0E0] border border-[#2A2A3B] hover:bg-[#1F1F29] hover:border-[#7C3AED] hover:text-white rounded-full px-4 py-1 transition-all duration-300 ease-in-out cursor-pointer"
             onClick={handleDelete}
           >
             <RiDeleteBin6Line />
           </Button>
           <Button
-            className="bg-white text-black hover:bg-black hover:text-white rounded-full px-4 py-1 transition-all duration-300 ease-in-out cursor-pointer"
+            className="bg-[#18181B] text-[#E0E0E0] border border-[#2A2A3B] hover:bg-[#1F1F29] hover:border-[#7C3AED] hover:text-white rounded-full px-4 py-1 transition-all duration-300 ease-in-out cursor-pointer"
             onClick={handleClick}
           >
             Join Room

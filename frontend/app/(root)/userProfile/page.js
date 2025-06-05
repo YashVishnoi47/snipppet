@@ -15,6 +15,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { roommFormSchema } from "@/lib/validator";
 import { Input } from "@/components/ui/input";
 import { IoFilter } from "react-icons/io5";
+import { editorConfigs } from "@/config/EditorConfig";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -37,8 +39,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { editorConfigs } from "@/config/EditorConfig";
-import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -80,9 +87,6 @@ const UserProfile = () => {
         `/api/room/fetchRoom?roomName=${debouncedSearch}&lang=${filter}`
       );
       const data = await res.json();
-      if (data) {
-        console.log("Room Fetched");
-      }
 
       if (data) {
         setFetching(false);
@@ -135,11 +139,16 @@ const UserProfile = () => {
       const res = await fetch(`/api/room/getRoomById?roomId=${joinRoomId}`);
       const data = await res.json();
       if (!data) {
-        alert("Room with this ID does not exists");
+        // alert("Room with this ID does not exists");
+        toast.error("Room not found", {
+          description: "Room with this ID does not exists.",
+        });
       }
       router.push(`/${joinRoomId}`);
     } else {
-      alert("Room with this ID does not exists");
+      toast.error("Room not found", {
+        description: "Room with this ID does not exists.",
+      });
     }
   };
 
@@ -165,7 +174,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="w-full h-full justify-center items-center flex flex-col gap-12  bg-[#090920]">
+    <div className="w-full h-full justify-center items-center flex flex-col gap-12  bg-[#000]">
       <div className="w-[80%] flex flex-col min-h-[90vh] mt-10">
         {/* top section */}
         <div className="w-full border-b-2 py-2 justify-between flex items-center  h-[10vh]">
@@ -177,14 +186,42 @@ const UserProfile = () => {
           {/* Filter */}
           <div className="flex gap-6 justify-end w-1/2 h-full p-2">
             <Popover>
-              <PopoverTrigger className="text-white p-2 cursor-pointer rounded-full hover:bg-white hover:text-black transition-all duration-300 ease-in-out flex justify-center items-center">
+              <PopoverTrigger
+                className="
+      text-[#E0E0E0]
+      p-2
+      cursor-pointer
+      rounded-full
+      hover:bg-[#333348]
+      hover:text-white
+      transition-all
+      duration-300
+      ease-in-out
+      flex
+      justify-center
+      items-center
+    "
+              >
                 <IoFilter className="text-2xl" />
               </PopoverTrigger>
 
-              <PopoverContent className="w-80 sm:w-96 p-5 rounded-2xl shadow-xl bg-[#1C1C27] border border-[#2A2A3B] text-[#EDEDED] space-y-6">
+              <PopoverContent
+                className="
+      w-80
+      sm:w-96
+      p-5
+      rounded-2xl
+      shadow-xl
+      bg-[#1C1C27]
+      border
+      border-[#333348]
+      text-[#E0E0E0]
+      space-y-6
+    "
+              >
                 {/* Language Filter */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-3 text-white">
+                  <h3 className="text-lg font-semibold mb-3 text-[#E0E0E0]">
                     Filter by Language
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
@@ -196,9 +233,15 @@ const UserProfile = () => {
                         <Checkbox
                           checked={filter === item.name}
                           onCheckedChange={() => setFilterTerm(item.name)}
-                          className="data-[state=checked]:bg-[#00F0B5] data-[state=checked]:border-[#00F0B5] transition-all"
+                          className="
+                data-[state=checked]:bg-[#7C3AED]
+                data-[state=checked]:border-[#7C3AED]
+                transition-all
+              "
                         />
-                        <span className="text-sm capitalize">{item.name}</span>
+                        <span className="text-sm capitalize text-[#E0E0E0]">
+                          {item.name}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -208,7 +251,17 @@ const UserProfile = () => {
                 <div className="flex justify-end">
                   <Button
                     onClick={() => setFilter("all")}
-                    className="rounded-full px-4 py-2 bg-[#00F0B5] text-black hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
+                    className="
+          rounded-full
+          px-4
+          py-2
+          bg-[#7C3AED]
+          text-white
+          hover:bg-[#5B21B6]
+          transition-all
+          duration-300
+          ease-in-out
+        "
                   >
                     Clear Filter
                   </Button>
@@ -222,13 +275,13 @@ const UserProfile = () => {
         <div className="w-full flex flex-col items-start h-[90vh] border-red-700">
           {/* Header Text */}
           <div className="w-full py-2 mt-2 flex justify-between items-start gap-2">
-            <div className="w-1/2 flex flex-col gap-2">
-              <h1 className="text-3xl font-bold text-[#EDEDED]">
-                {" "}
-                <span className="capitalize ">{session?.user.userName}</span>s
-                Rooms
+            <div className="w-1/2 flex flex-col gap-1 sm:gap-2">
+              <h1 className="text-4xl sm:text-3xl font-semibold capitalize tracking-tight text-[#E0E0E0]">
+                {`${session?.user.userName}'s Rooms`}
               </h1>
-              <p className="text-[#EDEDED]">Total Rooms - {rooms.length}</p>
+              <p className="text-sm text-[#A3A3A3]">
+                Total Rooms: {rooms.length}
+              </p>
             </div>
             <div className="w-1/2 flex justify-end items-center">
               <div className="flex gap-4">
@@ -239,11 +292,12 @@ const UserProfile = () => {
                         loading={loading}
                         width="120px"
                         text="Create Room"
+                        className="bg-[#2F2F38] text-[#E0E0E0] hover:bg-[#333348] hover:text-white transition-all duration-300 ease-in-out"
                       />
                     </div>
                   </DialogTrigger>
 
-                  <DialogContent className="bg-[#1C1C27] text-[#EDEDED] border border-[#2A2A3B] rounded-2xl max-w-md w-full shadow-lg">
+                  <DialogContent className="bg-[#1C1C27] text-[#E0E0E0] border border-[#333348] rounded-2xl max-w-md w-full shadow-lg">
                     <DialogHeader className="mb-4">
                       <DialogTitle className="text-2xl font-semibold">
                         Create Room
@@ -261,13 +315,13 @@ const UserProfile = () => {
                           name="roomName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-sm">
+                              <FormLabel className="text-sm text-[#E0E0E0]">
                                 Room Name
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   placeholder="Enter your room name"
-                                  className="w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-[#EDEDED] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0B5] transition-all duration-200 ease-in-out"
+                                  className=" w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-[#E0E0E0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7C3AED] transition-all duration-200 ease-in-out"
                                   {...field}
                                 />
                               </FormControl>
@@ -282,34 +336,32 @@ const UserProfile = () => {
                           name="codingLang"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-sm">
+                              <FormLabel className="text-sm text-[#E0E0E0]">
                                 Select Language
                               </FormLabel>
                               <FormControl>
-                                <select
-                                  id="tech"
-                                  name="tech"
+                                <Select
                                   value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(e.target.value)
-                                  }
-                                  className="w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-[#EDEDED] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0B5] hover:border-[#00F0B5] transition-all duration-200 ease-in-out"
+                                  onValueChange={field.onChange}
                                 >
-                                  <option value="" disabled>
-                                    Choose a language
-                                  </option>
-                                  {Object.values(editorConfigs).map((item) => (
-                                    <option key={item.name} value={item.name}>
-                                      {/* <Image
-                                        src={item.icon}
-                                        width={10}
-                                        height={10}
-                                        alt={item.name}
-                                      /> */}
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
+                                  <SelectTrigger className="w-full bg-[#2F2F38] border border-[#444459] text-[#E0E0E0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7C3AED] hover:border-[#7C3AED] transition-all duration-200 ease-in-out">
+                                    <SelectValue placeholder="Choose a language" />
+                                  </SelectTrigger>
+
+                                  <SelectContent className="bg-[#2F2F38] text-[#E0E0E0] border border-[#444459]">
+                                    {Object.values(editorConfigs).map(
+                                      (item) => (
+                                        <SelectItem
+                                          key={item.name}
+                                          value={item.name}
+                                          className=" px-4 py-2 rounded-lg hover:bg-[#333348] focus:text-white focus:bg-[#7C3AED] data-[state=checked]:bg-[#7C3AED] data-[state=checked]:text-white transition-colors duration-150 ease-in-out"
+                                        >
+                                          {item.name}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectContent>
+                                </Select>
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -320,7 +372,7 @@ const UserProfile = () => {
                         <div className="flex justify-end">
                           <button
                             type="submit"
-                            className="px-6 py-2 rounded-full bg-white text-black hover:bg-black hover:text-white transition-all duration-300 ease-in-out font-medium shadow-md cursor-pointer"
+                            className=" px-6 py-2 rounded-full bg-[#7C3AED] text-white hover:bg-[#5B21B6] transition-all duration-300 ease-in-out font-medium shadow-md cursor-pointer"
                           >
                             Create
                           </button>
@@ -333,11 +385,14 @@ const UserProfile = () => {
                 <Popover>
                   <PopoverTrigger asChild>
                     <div>
-                      <Button2 text="Join Room" />
+                      <Button2
+                        text="Join Room"
+                        className=" bg-[#2F2F38] text-[#E0E0E0] hover:bg-[#333348] hover:text-white transition-all duration-300 ease-in-out"
+                      />
                     </div>
                   </PopoverTrigger>
 
-                  <PopoverContent className="w-[320px] p-6 bg-[#1C1C27] border border-[#2A2A3B] rounded-2xl shadow-lg text-[#EDEDED]">
+                  <PopoverContent className="w-[320px] p-6 bg-[#1C1C27] border border-[#333348] rounded-2xl shadow-lg text-[#E0E0E0]">
                     <div className="flex flex-col gap-6">
                       {/* Heading */}
                       <h1 className="text-2xl font-semibold tracking-tight">
@@ -348,7 +403,7 @@ const UserProfile = () => {
                       <div className="flex flex-col gap-2">
                         <label
                           htmlFor="room-id"
-                          className="text-sm font-medium text-[#EDEDED]"
+                          className="text-sm font-medium text-[#E0E0E0]"
                         >
                           Room Key
                         </label>
@@ -356,9 +411,9 @@ const UserProfile = () => {
                           id="room-id"
                           placeholder="Enter your Room ID"
                           onChange={(e) => setjoinRoomId(e.target.value)}
-                          className="w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-sm text-[#EDEDED] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0B5] transition-all duration-200 ease-in-out"
+                          className=" w-full px-4 py-2 bg-[#2A2A3B] border border-[#3C3C4D] text-sm text-[#E0E0E0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7C3AED] transition-all duration-200 ease-in-out"
                         />
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-[#6E6E7E]">
                           Ask the host for the room key to join.
                         </p>
                       </div>
@@ -366,7 +421,7 @@ const UserProfile = () => {
                       {/* Join Button */}
                       <button
                         onClick={handleJoinRoom}
-                        className="w-full px-4 py-2 rounded-full bg-[#00F0B5] text-black hover:bg-white hover:text-black transition-all duration-300 ease-in-out font-medium shadow-md"
+                        className="w-full px-4 py-2 rounded-full bg-[#7C3AED] text-white hover:bg-[#5B21B6] transition-all duration-300 ease-in-out font-medium shadow-md"
                       >
                         Join Room
                       </button>
