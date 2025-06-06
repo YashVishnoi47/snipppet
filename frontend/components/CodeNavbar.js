@@ -73,13 +73,13 @@ const CodeNavbar = ({
   };
 
   return (
-    <div className="w-[full] cursor-text items-center justify-center bg-[#252526] flex h-[8%] border-2 border-black">
+    <div className="w-[full] cursor-text items-center justify-center bg-[#000] flex h-[10%] border-2 border-black">
       <div className="h-full flex justify-between w-[90%] ">
         {/* Left*/}
         <div className="h-full flex gap-6 justify-start items-center w-[25%] ">
           <Popover>
             <PopoverTrigger
-              className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-sm bg-transparent text-white hover:bg-white hover:text-black transition duration-300 ease-in-out focus:outline-none"
+              className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-sm bg-transparent text-white hover:bg-[#7C3AED] hover:border-[#7C3AED] hover:text-white transition duration-300 ease-in-out focus:outline-none"
               aria-label="Open room options"
             >
               {config && (
@@ -144,14 +144,11 @@ const CodeNavbar = ({
           <button
             onClick={CompileCode}
             disabled={compileing}
-            className={`px-4 py-1.5 rounded-lg border text-sm font-medium 
-    ${
-      compileing
-        ? "bg-gray-100 text-gray-500 cursor-not-allowed"
-        : "bg-white text-gray-800 hover:bg-gray-100"
-    } 
-    transition-colors duration-150 
-    focus:outline-none focus:ring-1 focus:ring-gray-300`}
+            className={`px-4 py-2  rounded-lg text-sm font-medium  ${
+              compileing
+                ? "bg-[#7C3AED] text-white cursor-not-allowed border border-[#3C3C4D]"
+                : "bg-[#7C3AED] hover:bg-[#7C3AED]/20 text-[#fff] border border-[#3C3C4D] hover:border-[#7C3AED] hover:text-white cursor-pointer"
+            }  transition-colors duration-200`}
           >
             {compileing ? "Compiling..." : "Run Code"}
           </button>
@@ -163,7 +160,7 @@ const CodeNavbar = ({
           {session?.user._id === Room.createdBy && (
             <Popover>
               <PopoverTrigger
-                className="flex items-center gap-2 px-4 py-2 rounded-md border border-white text-white font-mono text-sm transition-all duration-200 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
+                className="flex items-center gap-2 px-4 py-2 rounded-md border-2 bg-[#7C3AED]/20 text-[#E0E0E0] font-mono text-sm transition-all duration-200 hover:bg-[#7C3AED] border-[#3C3C4D] hover:text-white hover:border-[#7C3AED] focus:outline-none cursor-pointer"
                 aria-label="Invite People"
               >
                 <FaUserPlus size={16} />
@@ -197,7 +194,7 @@ const CodeNavbar = ({
           {/* Active User */}
           <Popover>
             <PopoverTrigger
-              className="flex items-center gap-2 px-4 py-2 rounded-md border border-white text-white font-mono text-sm hover:bg-white hover:text-black transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex items-center gap-2 px-4 py-2 rounded-md border bg-[#7C3AED]/20 border-[#3C3C4D] text-[#E0E0E0] font-mono text-sm hover:bg-[#7C3AED] hover:text-white transition-all duration-200 focus:outline-none   cursor-pointer"
               aria-label="Show active users"
             >
               Active Users – {activeUsers.length}
@@ -244,8 +241,8 @@ const CodeNavbar = ({
         {/* Right */}
         <div className="h-full flex gap-8 justify-end items-center w-[25%]">
           <Popover>
-            <PopoverTrigger className="flex items-center gap-2 px-8 py-2 rounded-md border border-white text-white font-mono text-sm transition hover:bg-white hover:text-black">
-              Edit
+            <PopoverTrigger className="flex items-center gap-2 px-8 py-2 rounded-md border border-[#3C3C4D] text-[#E0E0E0] font-mono text-sm transition bg-[#7C3AED]/20 hover:bg-[#7C3AED] hover:text-white cursor-pointer">
+              Change
             </PopoverTrigger>
 
             <PopoverContent className="w-[90vw] max-w-sm p-4 space-y-6 bg-[#121212] text-white border border-gray-800 rounded-xl shadow-xl">

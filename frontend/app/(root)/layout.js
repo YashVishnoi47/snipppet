@@ -1,20 +1,24 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import AuthProvider from "@/context/AuthProvider";
-import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { Inter } from 'next/font/google';
+
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 export const metadata = {
-  title: "My Next.js App",
-  description: "A collaborative code editor with WebSockets",
+  title: "Snippet",
+  description: "Seamless Real-Time Code Collaboration.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <AuthProvider>
-        <body className={`antialiased`}>
-          <Navbar />
+        <body className={`antialiased ${inter.variable}`}>
           {children}
           <Toaster richColors closeButton theme="light" />
         </body>

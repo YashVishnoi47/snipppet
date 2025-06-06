@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-center items-center bg-[#000] text-[#EDEDED] w-full h-16">
       {/* Logo and Navigation Links */}
-      <div className="w-[40%] -2 h-full gap-8 flex justify-start items-center">
+      <div className="w-[40%]  h-full gap-8 flex justify-start items-center">
         {/* Logo */}
         <h1
           onClick={() => router.push("/")}

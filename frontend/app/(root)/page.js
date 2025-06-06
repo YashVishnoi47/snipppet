@@ -1,7 +1,19 @@
+import FloatNav from "@/components/LandingPageComponents/FloatNav";
+import HeroArea from "@/components/LandingPageComponents/HeroArea";
+import ParticlesBackground from "@/components/ParticleComponent";
+import Image from "next/image";
+
 export default function Home() {
   return (
-    <div className="flex flex-col items-center bg-[#000] text-white justify-start h-screen bg--100">
-      <h1>Collaborative Code Editor</h1>
+    <div className="flex w-full bg-black selection:bg-[#7C3AED] selection:text-black flex-col items-center  text-white justify-start ">
+      <div className="relative z-10">
+        <FloatNav />
+        <section className="flex w-full relative flex-col items-center text-white justify-start h-screen bg-transparent ">
+          <ParticlesBackground />
+          <HeroArea />
+        </section>
+        <section className="flex w-full flex-col items-center bg-[#] text-white justify-start h-screen"></section>
+      </div>
     </div>
   );
 }

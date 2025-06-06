@@ -46,6 +46,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Navbar from "@/components/Navbar";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -175,6 +176,7 @@ const UserProfile = () => {
 
   return (
     <div className="w-full h-full justify-center items-center flex flex-col gap-12  bg-[#000]">
+      <Navbar />
       <div className="w-[80%] flex flex-col min-h-[90vh] mt-10">
         {/* top section */}
         <div className="w-full border-b-2 py-2 justify-between flex items-center  h-[10vh]">
