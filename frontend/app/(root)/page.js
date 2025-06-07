@@ -1,6 +1,5 @@
 import FloatNav from "@/components/LandingPageComponents/FloatNav";
 import HeroArea from "@/components/LandingPageComponents/HeroArea";
-import ParticlesBackground from "@/components/ParticleComponent";
 import Image from "next/image";
 
 export default function Home() {
@@ -8,11 +7,10 @@ export default function Home() {
     <div className="flex w-full bg-black selection:bg-[#7C3AED] selection:text-black flex-col items-center  text-white justify-start ">
       <div className="relative z-10">
         <FloatNav />
-        <section className="flex w-full relative flex-col items-center text-white justify-start h-screen bg-transparent ">
-          <ParticlesBackground />
+        <section className="flex w-full -2 relative flex-col items-center text-white justify-start h-screen bg-transparent ">
           <HeroArea />
         </section>
-        <section className="flex w-full flex-col items-center bg-[#] text-white justify-start h-screen"></section>
+        <section className="flex w-full -2 flex-col items-center bg-[#] text-white justify-start h-screen"></section>
       </div>
     </div>
   );
