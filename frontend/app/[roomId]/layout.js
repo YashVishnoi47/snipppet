@@ -15,7 +15,7 @@ export default function RoomLayout({ children }) {
   return (
     <html lang="en">
       <AuthProvider>
-        <body className={`w-full h-screen flex flex-col items-center ${inter.variable}`}>
+        <body className={`w-full h-screen selection:text-white selection:bg-[#7C3AED] flex flex-col items-center ${inter.variable}`}>
           <main className="w-full h-full">
             {/* <Navbar /> */}
             <SocketProvider>{children}</SocketProvider>

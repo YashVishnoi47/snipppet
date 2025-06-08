@@ -1,5 +1,4 @@
 "use client";
-import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import UserProfileButton from "./userComponents/UserProfileButton";
@@ -26,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
@@ -47,6 +47,18 @@ const CodeNavbar = ({
   const config = Object.values(editorConfigs).find(
     (c) => c.language === Room.codingLang
   );
+
+  // Function to handle copying text
+  const handleCopyText = () => {
+    navigator.clipboard
+      .writeText(Room._id)
+      .then(() => {
+        toast.success("Room Id copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
 
   // Themes
   const themes = {
@@ -174,18 +186,26 @@ const CodeNavbar = ({
                     Invite People
                   </h2>
 
-                  <div className="flex flex-col sm:flex-row items-center gap-3">
-                    <input
-                      type="text"
-                      value="https://your-link.com"
-                      readOnly
-                      className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
-                      placeholder="Link"
-                    />
-                    <button className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors">
+                  <div className="flex flex-col sm:flex-row items-start gap-3">
+                    <div className="flex flex-col justify-center items-center">
+                      <input
+                        type="text"
+                        value={Room._id}
+                        readOnly
+                        className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
+                        placeholder="Link"
+                      />
+                    </div>
+                    <button
+                      onClick={handleCopyText}
+                      className="w-full sm:w-auto px-4 py-2 text-sm border border-black font-medium text-white bg-[#7C3AED] rounded-lg hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] cursor-pointer transition-all duration-200"
+                    >
                       Copy
                     </button>
                   </div>
+                  <p className="text-gray-300 text-sm ml-2 w-full">
+                    Share this Code to invite others to the room.
+                  </p>
                 </section>
               </PopoverContent>
             </Popover>
