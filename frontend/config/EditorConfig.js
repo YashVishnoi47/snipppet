@@ -4,18 +4,18 @@ import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 
 export const editorConfigs = {
-  html: {
-    name: "HTML",
-    icon: "/lang Icons/HTML icon.svg",
-    extension: html(),
-    language: "webDev",
-  },
-  css: {
-    name: "CSS",
-    icon: "css",
-    extension: css(),
-    language: "webDev",
-  },
+  // html: {
+  //   name: "HTML",
+  //   icon: "/lang Icons/HTML icon.svg",
+  //   extension: html(),
+  //   language: "webDev",
+  // },
+  // css: {
+  //   name: "CSS",
+  //   icon: "css",
+  //   extension: css(),
+  //   language: "webDev",
+  // },
   js: {
     name: "JavaScript",
     icon: "/lang Icons/javascript Icon.svg",
