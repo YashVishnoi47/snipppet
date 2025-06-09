@@ -156,13 +156,20 @@ const CodeNavbar = ({
           <button
             onClick={CompileCode}
             disabled={compileing}
-            className={`px-4 py-2  rounded-lg text-sm font-medium  ${
+            aria-label={compileing ? "Compiling..." : "Compile Code"}
+            className={`relative flex items-center justify-center h-10 w-10 rounded-full border text-sm font-medium transition-all duration-200 ${
               compileing
-                ? "bg-[#7C3AED] text-white cursor-not-allowed border border-[#3C3C4D]"
-                : "bg-[#7C3AED] hover:bg-[#7C3AED]/20 text-[#fff] border border-[#3C3C4D] hover:border-[#7C3AED] hover:text-white cursor-pointer"
-            }  transition-colors duration-200`}
+                ? "bg-[#7C3AED] text-white border-[#3C3C4D] cursor-not-allowed"
+                : "bg-[#1E1E2E] hover:bg-[#7C3AED]/20 text-white border-[#3C3C4D] hover:border-[#7C3AED] cursor-pointer"
+            } `}
           >
-            {compileing ? "Compiling..." : "Run Code"}
+            <Image
+              src={compileing ? "/gaerSpinner.svg" : "/play.svg"}
+              height={20}
+              width={20}
+              alt={compileing ? "Compiling..." : "Compile Icon"}
+              // className={compileing ? "" : ""}
+            />
           </button>
         </div>
 
