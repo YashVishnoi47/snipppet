@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
+import Navbar from "@/components/Navbar";
 
 const UserSettingsComponent = dynamic(() =>
   import("@/components/userComponents/UserSettingsComponent")
@@ -57,7 +58,8 @@ const UserSettings = () => {
   }
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-start bg-black py-10 px-4">
+    <div className="w-full min-h-screen flex flex-col justify-start   items-center bg-black py-10 px-4">
+      <Navbar />
       <div className="w-full max-w-6xl flex flex-col md:flex-row bg-[#0A0A0A] rounded-2xl shadow-lg overflow-hidden border border-[#1A1A1A]">
         {/* Sidebar */}
         <aside className="w-full md:w-1/4 border-b md:border-b-0 md:border-r border-[#1F1F1F] p-6 bg-[#18181B]">

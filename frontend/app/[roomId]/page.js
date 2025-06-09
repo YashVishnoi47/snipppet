@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import CodeNavbar from "@/components/CodeNavbar";
-import GenericEditor from "@/components/codeEditors/GenericEditor";
+import GenericEditor from "@/components/codeEditorComponents/GenericEditor";
 import { editorConfigs } from "@/config/EditorConfig";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ import { githubDark } from "@uiw/codemirror-theme-github";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { material } from "@uiw/codemirror-theme-material";
 import { sublime } from "@uiw/codemirror-theme-sublime";
+import Taskbar from "@/components/codeEditorComponents/Taskbar";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -28,6 +29,8 @@ const Room = () => {
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
   const [theme, setTheme] = useState("dark");
+  const [updateTime, setUpdateTime] = useState("");
+  const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
   const themeMap = {
     dark: oneDark,
     GithubDark: githubDark,
@@ -70,7 +73,6 @@ const Room = () => {
     if (data.error) {
       console.error("Error saving code", data.error);
     } else {
-      console.log("Code saved Successfully", data.message);
       setLastSavedCode(codeToSave);
       toast.success("Code saved!");
     }
@@ -170,6 +172,26 @@ const Room = () => {
       getRoomById();
     }
   }, [socket]);
+
+  // Fetching the room latest Update time by roomId.
+  useEffect(() => {
+    const getRoomUpdateById = async () => {
+      const res = await fetch(`/api/room/getRoomUpdateById?roomId=${roomId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data) {
+        setUpdateTime(data.updatedAt);
+      }
+    };
+
+    if (roomId) {
+      getRoomUpdateById();
+    }
+  }, [socket, lastSavedCode]);
 
   // Fetching the Owner of the room
   useEffect(() => {
@@ -317,16 +339,14 @@ const Room = () => {
   }
 
   return (
-    <div className="flex flex-col w-full h-screen">
+    <div className="flex flex-col w-full h-screen bg-black">
       <CodeNavbar
         fontSize={fontSize}
         setFontSize={setFontSize}
         RemoveUserFromRoom={RemoveUserFromRoom}
-        hasUnsavedChanges={hasUnsavedChanges}
         compileing={compileing}
         CompileCode={CompileCode}
         session={session}
-        SaveCodeToDatabase={SaveCodeToDatabase}
         activeUsers={activeUsers}
         Room={room}
         theme={theme}
@@ -335,6 +355,7 @@ const Room = () => {
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
+            setCursorPosition={setCursorPosition}
             themeMap={themeMap}
             fontSizes={fontSize}
             SaveCodeToDatabase={SaveCodeToDatabase}
@@ -349,8 +370,18 @@ const Room = () => {
           <h1>PLease log in to access this page</h1>
         )}
         {session && (
-          <div className="border-2 flex justify-center items-center border-black h-20 bg-black text-lg text-white">
-            {compiledCode && <p>{compiledCode}</p>}
+          <div className="flex justify-center items-center h-10 bg-black text-lg text-white">
+            {/* {compiledCode && <p>{compiledCode}</p>} */}
+            <Taskbar
+              room={room}
+              session={session}
+              theme={theme}
+              activeUsers={activeUsers}
+              cursorPosition={cursorPosition}
+              updateTime={updateTime}
+              SaveCodeToDatabase={SaveCodeToDatabase}
+              hasUnsavedChanges={hasUnsavedChanges}
+            />
           </div>
         )}
       </div>

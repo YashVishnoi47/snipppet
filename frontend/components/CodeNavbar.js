@@ -13,6 +13,7 @@ import { FaRegSave } from "react-icons/fa";
 import { editorConfigs } from "@/config/EditorConfig";
 import { Label } from "@/components/ui/label";
 import { Button } from "./ui/button";
+import { motion } from "framer-motion";
 import {
   Popover,
   PopoverContent,
@@ -29,11 +30,9 @@ import { toast } from "sonner";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
-  hasUnsavedChanges,
   Room,
   activeUsers,
   session,
-  SaveCodeToDatabase,
   CompileCode,
   compileing,
   setFontSize,
@@ -85,7 +84,19 @@ const CodeNavbar = ({
   };
 
   return (
-    <div className="w-[full] cursor-text items-center justify-center bg-[#000] flex h-[10%] border-2 border-black">
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 80,
+        damping: 15,
+        duration: 1.4,
+        bounce: 0.25,
+        delay: 0.5,
+      }}
+      className="w-[full] cursor-text items-center justify-center bg-[#000] flex h-[10%] border-2 border-black"
+    >
       <div className="h-full flex justify-between w-[90%] ">
         {/* Left*/}
         <div className="h-full flex gap-6 justify-start items-center w-[25%] ">
@@ -141,17 +152,6 @@ const CodeNavbar = ({
               </div>
             </PopoverContent>
           </Popover>
-          {session?.user._id === Room.createdBy && (
-            <button
-              disabled={!hasUnsavedChanges()}
-              onClick={SaveCodeToDatabase}
-              type="button"
-              aria-label="Save"
-              className="group inline-flex items-center justify-center rounded-full p-2 text-white transition-all duration-300 ease-in-out bg-transparent cursor-pointer hover:bg-white hover:text-black"
-            >
-              <FaRegSave className="text-lg transition-transform duration-300 group-hover:scale-110" />
-            </button>
-          )}
 
           <button
             onClick={CompileCode}
@@ -314,7 +314,7 @@ const CodeNavbar = ({
           <UserProfileButton session={session} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

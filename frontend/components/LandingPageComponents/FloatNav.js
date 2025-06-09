@@ -1,11 +1,8 @@
 "use client";
 import React from "react";
-import { Button } from "../ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Button2 from "../utilityComponents/Button2";
 import { useSession } from "next-auth/react";
-import UserProfileButton from "../userComponents/UserProfileButton";
 
 const FloatNav = () => {
   const { data: session } = useSession();

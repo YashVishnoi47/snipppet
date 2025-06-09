@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { editorConfigs } from "@/config/EditorConfig";
 
-
 const GenericEditor = ({
   socket,
   roomId,
@@ -12,6 +11,7 @@ const GenericEditor = ({
   fontSizes,
   theme,
   themeMap,
+  setCursorPosition
 }) => {
   const handleCodeChange = (value, file, viewUpdate) => {
     const updated = { ...fileCodes, [file]: value };
@@ -25,6 +25,22 @@ const GenericEditor = ({
     });
   };
 
+
+  // Cursor Position
+  const handleUpdate = (viewUpdate) => {
+    const view = viewUpdate.view;
+    const pos = view.state.selection.main.head;
+    const lineInfo = view.state.doc.lineAt(pos);
+    const line = lineInfo.number;
+    const column = pos - lineInfo.from + 1;
+
+    setCursorPosition((prev) => {
+      if (prev.line !== line || prev.column !== column) {
+        return { line, column };
+      }
+      return prev;
+    });
+  };
   // Handiling the incoming Change
   useEffect(() => {
     const handleIncomingChange = ({ file, code }) => {
@@ -54,8 +70,9 @@ const GenericEditor = ({
             onChange={(value) => {
               handleCodeChange(value, key);
             }}
+            onUpdate={handleUpdate}
             theme={themeMap[theme]}
-            className={`w-full h-[95%] text-[${fontSizes}]`}
+            className={`w-full h-[100%] text-[${fontSizes}]`}
             style={{ fontSize: `${fontSizes}px` }}
           />
         </div>
@@ -64,8 +81,8 @@ const GenericEditor = ({
 
   return (
     <div className="flex w-full h-full">
-      <div className="w-full flex flex-col">
-        <div className="flex-1 overflow-auto bg-zinc-900 border border-zinc-800 shadow-sm">
+      <div className="w-full h-full flex flex-col">
+        <div className="flex w-full h-full overflow-auto bg-zinc-900 ">
           {renderEditor()}
         </div>
       </div>
