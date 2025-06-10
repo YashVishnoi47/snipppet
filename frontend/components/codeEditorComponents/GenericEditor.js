@@ -7,16 +7,17 @@ const GenericEditor = ({
   socket,
   roomId,
   codingLang,
-  fileCodes,
-  setFileCodes,
-  fontSizes,
-  theme,
   themeMap,
-  setCursorPosition,
-  terminal,
-  compiledCode,
   room,
   termialfunc,
+
+  fileCodes,
+  setFileCodes,
+  compiledCode,
+  fontSize,
+  theme,
+  setCursorPosition,
+  terminal,
 }) => {
   const terminalWrapperRef = useRef(null);
   const [mode, setMode] = useState("split");
@@ -78,8 +79,8 @@ const GenericEditor = ({
             }}
             onUpdate={handleUpdate}
             theme={themeMap[theme]}
-            className={`w-full h-[100%] text-[${fontSizes}]`}
-            style={{ fontSize: `${fontSizes}px` }}
+            className={`w-full h-[100%] text-[${fontSize}]`}
+            style={{ fontSize: `${fontSize}px` }}
           />
         </div>
       ));

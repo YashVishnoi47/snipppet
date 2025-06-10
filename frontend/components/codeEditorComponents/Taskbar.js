@@ -9,20 +9,18 @@ import { motion } from "framer-motion";
 import { FaRegSave } from "react-icons/fa";
 
 const Taskbar = ({
-  updateTime,
-  cursorPosition,
   room,
-  activeUsers,
-  theme,
   session,
   hasUnsavedChanges,
   SaveCodeToDatabase,
-  setTerminal,
-  terminal,
-  termialfunc
-}) => {
-  
+  termialfunc,
 
+  theme,
+  activeUsers,
+  cursorPosition,
+  terminal,
+  updateTime,
+}) => {
   return (
     <motion.div
       initial={{ y: 50 }}

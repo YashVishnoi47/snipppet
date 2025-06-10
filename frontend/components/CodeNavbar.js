@@ -27,32 +27,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useRoomStore } from "@/stores/useRoomStore";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
-  Room,
-  activeUsers,
   session,
+  room,
   CompileCode,
   compileing,
   setFontSize,
   fontSize,
   setTheme,
   theme,
+  activeUsers,
 }) => {
   const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 32));
   const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 10));
   // The Language config/
   const config = Object.values(editorConfigs).find(
-    (c) => c.language === Room.codingLang
+    (c) => c.language === room.codingLang
   );
 
   // Function to handle copying text
   const handleCopyText = () => {
     navigator.clipboard
-      .writeText(Room._id)
+      .writeText(room._id)
       .then(() => {
-        toast.success("Room Id copied to clipboard!");
+        toast.success("room Id copied to clipboard!");
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
@@ -113,9 +114,9 @@ const CodeNavbar = ({
                   alt={config.name}
                 />
               )}
-              {Room.codingLang === "python" && <FaPython className="text-xl" />}
+              {room.codingLang === "python" && <FaPython className="text-xl" />}
               <span className="capitalize text-sm font-medium truncate">
-                {Room.roomName}
+                {room.roomName}
               </span>
             </PopoverTrigger>
 
@@ -127,7 +128,7 @@ const CodeNavbar = ({
                   <Switch />
                 </div>
 
-                {/* Room Settings */}
+                {/* room Settings */}
                 <button
                   className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full"
                   onClick={() => {
@@ -135,19 +136,19 @@ const CodeNavbar = ({
                   }}
                 >
                   <IoMdSettings className="text-xl" />
-                  <span>Room Settings</span>
+                  <span>room Settings</span>
                 </button>
 
                 {/* Divider */}
                 <Separator className="border-t border-zinc-700 my-1" />
 
-                {/* Leave Room */}
+                {/* Leave room */}
                 <Link
                   href={"/userProfile"}
                   className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full"
                 >
                   <ImExit className="text-xl text-red-400" />
-                  <span>Leave Room</span>
+                  <span>Leave room</span>
                 </Link>
               </div>
             </PopoverContent>
@@ -176,7 +177,7 @@ const CodeNavbar = ({
         {/* Middle  */}
         <div className="h-full flex gap-4 justify-center items-center w-[25%]">
           {/* Invite People */}
-          {session?.user._id === Room.createdBy && (
+          {session?.user._id === room.createdBy && (
             <Popover>
               <PopoverTrigger
                 className="flex items-center gap-2 px-4 py-2 rounded-md border-2 bg-[#7C3AED]/20 text-[#E0E0E0] font-mono text-sm transition-all duration-200 hover:bg-[#7C3AED] border-[#3C3C4D] hover:text-white hover:border-[#7C3AED] focus:outline-none cursor-pointer"
@@ -197,7 +198,7 @@ const CodeNavbar = ({
                     <div className="flex flex-col justify-center items-center">
                       <input
                         type="text"
-                        value={Room._id}
+                        value={room._id}
                         readOnly
                         className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
                         placeholder="Link"
@@ -248,7 +249,7 @@ const CodeNavbar = ({
                           title="Remove User"
                           className="text-red-400 hover:text-red-500 transition-colors duration-150"
                         >
-                          {session?.user._id === Room.createdBy && (
+                          {session?.user._id === room.createdBy && (
                             <MdOutlinePersonRemove size={18} />
                           )}
                         </button>

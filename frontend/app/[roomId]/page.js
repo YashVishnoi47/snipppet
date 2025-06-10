@@ -15,6 +15,7 @@ import { material } from "@uiw/codemirror-theme-material";
 import { sublime } from "@uiw/codemirror-theme-sublime";
 import Taskbar from "@/components/codeEditorComponents/Taskbar";
 
+
 const Room = () => {
   const { data: session } = useSession();
   const [lastSavedCode, setLastSavedCode] = useState("");
@@ -23,10 +24,17 @@ const Room = () => {
   const [activeUsers, setActiveUsers] = useState([]);
   const [updateTime, setUpdateTime] = useState("");
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
-  const [room, setRoom] = useState({});
-  const [owner, setOwner] = useState();
   const [theme, setTheme] = useState("dark");
   const [terminal, setTerminal] = useState(false);
+  const [fileCodes, setFileCodes] = useState({
+    html: "",
+    css: "",
+    js: "",
+    python: "",
+  });
+  const [fontSize, setFontSize] = useState(14);
+  const [room, setRoom] = useState({});
+  const [owner, setOwner] = useState();
   const themeMap = {
     dark: oneDark,
     GithubDark: githubDark,
@@ -34,16 +42,9 @@ const Room = () => {
     material: material,
     sublime: sublime,
   };
-  const [fileCodes, setFileCodes] = useState({
-    html: "",
-    css: "",
-    js: "",
-    python: "",
-  });
   const router = useRouter();
   const params = useParams();
   const socket = useContext(SocketContext);
-  const [fontSize, setFontSize] = useState(14);
   const userName = session?.user.userName || "TEST";
   const roomId = params.roomId;
 
@@ -352,53 +353,52 @@ const Room = () => {
   return (
     <div className="flex flex-col w-full h-screen bg-black">
       <CodeNavbar
-        fontSize={fontSize}
-        setFontSize={setFontSize}
-        RemoveUserFromRoom={RemoveUserFromRoom}
         compileing={compileing}
+        setFontSize={setFontSize}
+        fontSize={fontSize}
+        setTheme={setTheme}
+        RemoveUserFromRoom={RemoveUserFromRoom}
         CompileCode={CompileCode}
         session={session}
-        activeUsers={activeUsers}
-        Room={room}
+        room={room}
         theme={theme}
-        setTheme={setTheme}
+        activeUsers={activeUsers}
       />
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
-            setCursorPosition={setCursorPosition}
             themeMap={themeMap}
-            fontSizes={fontSize}
             SaveCodeToDatabase={SaveCodeToDatabase}
             socket={socket}
             roomId={roomId}
+            activeUsers={activeUsers}
             room={room}
             codingLang={room.codingLang}
+            termialfunc={termialfunc}
             fileCodes={fileCodes}
             setFileCodes={setFileCodes}
-            theme={theme}
-            terminal={terminal}
             compiledCode={compiledCode}
-            termialfunc={termialfunc}
+            fontSize={fontSize}
+            theme={theme}
+            setCursorPosition={setCursorPosition}
+            terminal={terminal}
           />
         ) : (
           <h1>PLease log in to access this page</h1>
         )}
         {session && (
           <div className="flex justify-center items-center h-10 bg-black text-lg text-white">
-            {/* {compiledCode && <p>{compiledCode}</p>} */}
             <Taskbar
               room={room}
               session={session}
+              SaveCodeToDatabase={SaveCodeToDatabase}
+              hasUnsavedChanges={hasUnsavedChanges}
+              termialfunc={termialfunc}
               theme={theme}
               activeUsers={activeUsers}
               cursorPosition={cursorPosition}
-              updateTime={updateTime}
-              SaveCodeToDatabase={SaveCodeToDatabase}
-              hasUnsavedChanges={hasUnsavedChanges}
-              setTerminal={setTerminal}
               terminal={terminal}
-              termialfunc={termialfunc}
+              updateTime={updateTime}
             />
           </div>
         )}
