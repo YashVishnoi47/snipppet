@@ -17,7 +17,12 @@ const Taskbar = ({
   session,
   hasUnsavedChanges,
   SaveCodeToDatabase,
+  setTerminal,
+  terminal,
+  termialfunc
 }) => {
+  
+
   return (
     <motion.div
       initial={{ y: 50 }}
@@ -67,6 +72,18 @@ const Taskbar = ({
 
       {/* Right Side of the TaskBar*/}
       <div className="h-full w-[60%] gap-1 items-center flex justify-end">
+        {/* Terminal*/}
+        <button
+          onClick={termialfunc}
+          className={`px-3 py-1 items-center gap-2 flex justify-end hover:text-white transition-all text-sm duration-200 ease-in-out rounded-md cursor-default select-none ${
+            terminal
+              ? " hover:bg-[#7C3AED]/20 text-green-600"
+              : "hover:bg-[#7C3AED]/20 text-red-600"
+          }`}
+        >
+          Terminal
+        </button>
+
         {/* Line and column */}
         <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out rounded-md cursor-default select-none">
           <div className="text-[#E0E0E0] flex gap-1 text-sm capitalize">

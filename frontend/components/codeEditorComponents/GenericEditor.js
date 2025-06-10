@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { editorConfigs } from "@/config/EditorConfig";
+import Terminal from "./Terminal";
 
 const GenericEditor = ({
   socket,
@@ -11,8 +12,14 @@ const GenericEditor = ({
   fontSizes,
   theme,
   themeMap,
-  setCursorPosition
+  setCursorPosition,
+  terminal,
+  compiledCode,
+  room,
+  termialfunc,
 }) => {
+  const terminalWrapperRef = useRef(null);
+  const [mode, setMode] = useState("split");
   const handleCodeChange = (value, file, viewUpdate) => {
     const updated = { ...fileCodes, [file]: value };
     setFileCodes(updated);
@@ -24,7 +31,6 @@ const GenericEditor = ({
       lang: codingLang,
     });
   };
-
 
   // Cursor Position
   const handleUpdate = (viewUpdate) => {
@@ -80,12 +86,27 @@ const GenericEditor = ({
   };
 
   return (
-    <div className="flex w-full h-full">
+    <div
+      ref={terminalWrapperRef}
+      className="flex relative w-full h-full overflow-hidden"
+    >
       <div className="w-full h-full flex flex-col">
         <div className="flex w-full h-full overflow-auto bg-zinc-900 ">
           {renderEditor()}
         </div>
       </div>
+      {terminal === true ? (
+        <Terminal
+          termialfunc={termialfunc}
+          room={room}
+          compiledCode={compiledCode}
+          dragBoundsRef={terminalWrapperRef}
+          mode={mode}
+          setMode={setMode}
+        />
+      ) : (
+        ""
+      )}
       {codingLang === "webDev" && (
         <div className="w-1/2 bg-white">
           {/* Output Preview for WebDev */}

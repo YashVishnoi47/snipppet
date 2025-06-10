@@ -17,20 +17,16 @@ import Taskbar from "@/components/codeEditorComponents/Taskbar";
 
 const Room = () => {
   const { data: session } = useSession();
-  const router = useRouter();
-  const params = useParams();
-  const roomId = params.roomId;
   const [lastSavedCode, setLastSavedCode] = useState("");
   const [compiledCode, setCompiledCode] = useState("");
   const [compileing, setCompileing] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
-  const userName = session?.user.userName || "TEST";
-  const socket = useContext(SocketContext);
+  const [updateTime, setUpdateTime] = useState("");
+  const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
   const [theme, setTheme] = useState("dark");
-  const [updateTime, setUpdateTime] = useState("");
-  const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
+  const [terminal, setTerminal] = useState(false);
   const themeMap = {
     dark: oneDark,
     GithubDark: githubDark,
@@ -38,14 +34,18 @@ const Room = () => {
     material: material,
     sublime: sublime,
   };
-  const [fontSize, setFontSize] = useState(14);
-  // const [load, setLoad] = useState(false);
   const [fileCodes, setFileCodes] = useState({
     html: "",
     css: "",
     js: "",
     python: "",
   });
+  const router = useRouter();
+  const params = useParams();
+  const socket = useContext(SocketContext);
+  const [fontSize, setFontSize] = useState(14);
+  const userName = session?.user.userName || "TEST";
+  const roomId = params.roomId;
 
   // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
@@ -127,13 +127,14 @@ const Room = () => {
       });
 
       const data = await res.json();
-      console.log(data);
       const result = data.result;
 
       if (result.stderr) {
         setCompiledCode(result.stderr);
+        setTerminal(true);
       } else {
         setCompiledCode(result.stdout || result.compile_output || "No output");
+        setTerminal(true);
       }
 
       setCompileing(false);
@@ -334,6 +335,16 @@ const Room = () => {
     };
   }, [fileCodes, room.codingLang]);
 
+  // Terminal State
+  const termialfunc = () => {
+    if (terminal === true) {
+      setTerminal(false);
+    } else {
+      setTerminal(true);
+    }
+    console.log(terminal);
+  };
+
   if (!roomId || roomId === "undefined" || !session) {
     return <div>No Room Available</div>;
   }
@@ -361,10 +372,14 @@ const Room = () => {
             SaveCodeToDatabase={SaveCodeToDatabase}
             socket={socket}
             roomId={roomId}
+            room={room}
             codingLang={room.codingLang}
             fileCodes={fileCodes}
             setFileCodes={setFileCodes}
             theme={theme}
+            terminal={terminal}
+            compiledCode={compiledCode}
+            termialfunc={termialfunc}
           />
         ) : (
           <h1>PLease log in to access this page</h1>
@@ -381,6 +396,9 @@ const Room = () => {
               updateTime={updateTime}
               SaveCodeToDatabase={SaveCodeToDatabase}
               hasUnsavedChanges={hasUnsavedChanges}
+              setTerminal={setTerminal}
+              terminal={terminal}
+              termialfunc={termialfunc}
             />
           </div>
         )}
