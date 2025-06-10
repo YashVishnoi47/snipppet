@@ -27,7 +27,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useRoomStore } from "@/stores/useRoomStore";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
