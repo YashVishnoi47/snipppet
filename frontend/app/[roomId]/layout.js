@@ -20,7 +20,7 @@ export default function RoomLayout({ children }) {
             {/* <Navbar /> */}
             <SocketProvider>{children}</SocketProvider>
           </main>
-          <Toaster richColors closeButton theme="light" />
+          <Toaster richColors closeButton theme="dark" />
         </body>
       </AuthProvider>
     </html>

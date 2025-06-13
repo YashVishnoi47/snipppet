@@ -15,7 +15,6 @@ import { material } from "@uiw/codemirror-theme-material";
 import { sublime } from "@uiw/codemirror-theme-sublime";
 import Taskbar from "@/components/codeEditorComponents/Taskbar";
 
-
 const Room = () => {
   const { data: session } = useSession();
   const [lastSavedCode, setLastSavedCode] = useState("");
@@ -35,6 +34,7 @@ const Room = () => {
   const [fontSize, setFontSize] = useState(14);
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
+  const [live, setLive] = useState(false);
   const themeMap = {
     dark: oneDark,
     GithubDark: githubDark,
@@ -44,9 +44,18 @@ const Room = () => {
   };
   const router = useRouter();
   const params = useParams();
-  const socket = useContext(SocketContext);
+  const { socket, connectSocket } = useContext(SocketContext);
   const userName = session?.user.userName || "TEST";
   const roomId = params.roomId;
+
+  // Trigger socket connection when live mode is enabled
+  useEffect(() => {
+    if (live === "public") {
+      connectSocket();
+    } else {
+      return;
+    }
+  }, [live]);
 
   // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
@@ -103,7 +112,7 @@ const Room = () => {
     };
   }, [fileCodes, lastSavedCode, room.codingLang]);
 
-  // Function For Compiling Code
+  // Function For Compiling Code.
   const CompileCode = async () => {
     setCompileing(true);
     try {
@@ -156,6 +165,7 @@ const Room = () => {
       });
       const data = await res.json();
       setRoom(data);
+      setLive(data.isPublic);
       if (data?.roomCode) {
         const editorKey = Object.entries(editorConfigs).find(
           ([key, config]) => config.language === data.codingLang
@@ -173,7 +183,7 @@ const Room = () => {
     if (roomId) {
       getRoomById();
     }
-  }, [socket]);
+  }, []);
 
   // Fetching the room latest Update time by roomId.
   useEffect(() => {
@@ -193,7 +203,7 @@ const Room = () => {
     if (roomId) {
       getRoomUpdateById();
     }
-  }, [socket, lastSavedCode]);
+  }, [lastSavedCode]);
 
   // Fetching the Owner of the room
   useEffect(() => {
@@ -228,7 +238,6 @@ const Room = () => {
     const ownerID = room.createdBy;
 
     if (!socket || !ownerID || !owner) return;
-
     socket.emit("join_document", {
       roomId,
       username: userName,
@@ -273,12 +282,6 @@ const Room = () => {
       });
     });
 
-    // socket.on("load_page", ({ load }) => {
-    //   if (load) {
-    //     setLoad(load);
-    //   }
-    // });
-
     socket.on("join_denied", () => {
       alert("Room owner denied your join request.");
       router.push("/");
@@ -297,13 +300,14 @@ const Room = () => {
 
   // Remove user from the room
   const RemoveUserFromRoom = async (user) => {
-    console.log(user);
+    if (!socket) return;
     socket.emit("remove_user", {
       user,
       roomId,
     });
   };
   useEffect(() => {
+    if (!socket) return;
     const handleUserRemoved = () => {
       alert("Room owner removed you from the room.");
       router.push("/");
@@ -316,7 +320,7 @@ const Room = () => {
     };
   }, [router, socket]);
 
-  // Save Shortcut for Windows or Mac
+  // Save Shortcut for Windows and Mac
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
@@ -336,6 +340,22 @@ const Room = () => {
     };
   }, [fileCodes, room.codingLang]);
 
+  // User removed by the owner.
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleForceExit = ({ reason }) => {
+      alert(reason || "You were removed from the room.");
+      router.push("/");
+    };
+
+    socket.on("force_exit", handleForceExit);
+
+    return () => {
+      socket.off("force_exit", handleForceExit);
+    };
+  }, [socket]);
+
   // Terminal State
   const termialfunc = () => {
     if (terminal === true) {
@@ -346,13 +366,91 @@ const Room = () => {
     console.log(terminal);
   };
 
+  // Function to switch Private and public status of room.
+  const handleRoomStatus = async () => {
+    if (live === "private") {
+      const isLive = "public";
+      try {
+        const res = await fetch(
+          `/api/room/updateRoomStatus?roomId=${roomId}&live=${isLive}`,
+          {
+            method: "POST",
+          }
+        );
+
+        if (res) {
+          setLive("public");
+          toast.success("Your Room is Public now.");
+        }
+      } catch (error) {
+        console.log("Internal Error", error);
+      }
+    } else {
+      const isLive = "private";
+      try {
+        const res = await fetch(
+          `/api/room/updateRoomStatus?roomId=${roomId}&live=${isLive}`,
+          {
+            method: "POST",
+          }
+        );
+
+        if (res) {
+          setLive("private");
+          socket.emit("clear_room", roomId);
+          setActiveUsers([]);
+          toast.success("Your Room is Private now.");
+        }
+      } catch (error) {
+        console.log("Internal Error", error);
+      }
+    }
+  };
+
+  // Removing all the user from the room when the room is set to private.
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleForceExit = ({ reason }) => {
+      alert(reason || "You were removed from the room.");
+      router.push("/");
+    };
+
+    socket.on("clear_room", handleForceExit);
+
+    return () => {
+      socket.off("clear_room", handleForceExit);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleForceExit = ({ reason }) => {
+      handleRoomStatus();
+      router.push("/");
+      toast.error(reason || "Room is now private");
+    };
+
+    socket.on("force_exit", handleForceExit);
+
+    return () => {
+      socket.off("force_exit", handleForceExit);
+    };
+  }, [socket]);
+
   if (!roomId || roomId === "undefined" || !session) {
-    return <div>No Room Available</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center bg-black text-white text-2xl font-extrabold">
+        No Room Available
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col w-full h-screen bg-black">
       <CodeNavbar
+        live={live}
         compileing={compileing}
         setFontSize={setFontSize}
         fontSize={fontSize}
@@ -384,7 +482,9 @@ const Room = () => {
             terminal={terminal}
           />
         ) : (
-          <h1>PLease log in to access this page</h1>
+          <h1 className="w-full h-full text-white flex justify-center items-center font-extrabold bg-black">
+            PLease log in to access this page
+          </h1>
         )}
         {session && (
           <div className="flex justify-center items-center h-10 bg-black text-lg text-white">
@@ -399,6 +499,8 @@ const Room = () => {
               cursorPosition={cursorPosition}
               terminal={terminal}
               updateTime={updateTime}
+              live={live}
+              handleRoomStatus={handleRoomStatus}
             />
           </div>
         )}

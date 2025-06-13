@@ -139,13 +139,16 @@ const UserProfile = () => {
     if (typeof joinRoomId === "string" && /^[a-f\d]{24}$/i.test(joinRoomId)) {
       const res = await fetch(`/api/room/getRoomById?roomId=${joinRoomId}`);
       const data = await res.json();
-      if (!data) {
-        // alert("Room with this ID does not exists");
-        toast.error("Room not found", {
-          description: "Room with this ID does not exists.",
-        });
+
+      if (data) {
+        if (session?.user._id !== data.createdBy && data.isPublic === "public") {
+          router.push(`/${joinRoomId}`);
+        } else {
+          toast.error("Room is Ofline", {
+            description: "The room is not Live",
+          });
+        }
       }
-      router.push(`/${joinRoomId}`);
     } else {
       toast.error("Room not found", {
         description: "Room with this ID does not exists.",

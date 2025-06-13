@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
     console.log(`User Kicked: ${user.socketId} from Room: ${roomId}`);
 
     UserInRoom[roomId] = UserInRoom[roomId].filter(
-      (user) => user.socketId !== socket.id
+      (u) => u.socketId !== user.socketId
     );
 
     io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
@@ -84,12 +84,47 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("changes", { code, file, lang });
   });
 
+  socket.on("clear_room", (roomId) => {
+    socket.leave(roomId);
+
+    const otherUsers = UserInRoom[roomId]?.filter(
+      (user) => user.socketId !== socket.id
+    );
+
+    for (const user of otherUsers) {
+      io.to(user.socketId).emit("force_exit", {
+        reason: "The room is now private.",
+      });
+      io.sockets.sockets.get(user.socketId)?.leave(roomId);
+    }
+
+    if (otherUsers?.length === 1) {
+      delete UserInRoom[roomId];
+    }
+    console.log("User in room is updated");
+    io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
+  });
+
   socket.on("disconnect", () => {
     for (const roomId in UserInRoom) {
       console.log("User Disconnected", socket.id);
-      UserInRoom[roomId] = UserInRoom[roomId].filter(
-        (user) => user.socketId !== socket.id
+      const wasOwner = UserInRoom[roomId]?.some(
+        (user) => user.socketId === socket.id
       );
+
+      if (wasOwner) {
+        console.log("Owner disconnected, making room private");
+        io.to(roomId).emit("force_exit", {
+          reason: "Room is now private because the owner left.",
+        });
+        
+        // delete UserInRoom[roomId];
+      } else {
+        UserInRoom[roomId] = UserInRoom[roomId].filter(
+          (user) => user.socketId !== socket.id
+        );
+      }
+
       io.to(roomId).emit("users-in-room", UserInRoom[roomId]);
     }
   });

@@ -16,11 +16,13 @@ const Taskbar = ({
   termialfunc,
 
   theme,
-  activeUsers,
   cursorPosition,
   terminal,
   updateTime,
+  live,
+  handleRoomStatus,
 }) => {
+  const isLive = room.isPublic;
   return (
     <motion.div
       initial={{ y: 50 }}
@@ -106,31 +108,57 @@ const Taskbar = ({
             </TooltipContent>
           </Tooltip>
         </div>
-
+        
         {/* Room Status */}
-        <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all font-medium duration-200 ease-in-out rounded-md cursor-default select-none">
-          {activeUsers.length > 1 ? (
-            <Tooltip delayDuration={500}>
-              <TooltipTrigger>
-                {" "}
-                <p className="text-sm capitalize text-green-500 ">Live</p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Your room is live</p>
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <Tooltip delayDuration={500}>
-              <TooltipTrigger>
-                {" "}
-                <p className="text-sm capitalize text-red-500 ">Offline</p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Your room is offline</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </div>
+        {session?.user._id === room.createdBy ? (
+          <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all font-medium duration-200 ease-in-out rounded-md cursor-default select-none">
+            {live === "public" ? (
+              <Tooltip delayDuration={500}>
+                <TooltipTrigger onClick={handleRoomStatus}>
+                  {" "}
+                  <p className="text-sm capitalize text-green-500">Live</p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your room is live</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <Tooltip delayDuration={500}>
+                <TooltipTrigger onClick={handleRoomStatus}>
+                  {" "}
+                  <p className="text-sm capitalize text-red-500 ">Offline</p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your room is offline</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+        ) : (
+          <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all font-medium duration-200 ease-in-out rounded-md cursor-default select-none">
+            {live === "public" ? (
+              <Tooltip delayDuration={500}>
+                <TooltipTrigger>
+                  {" "}
+                  <p className="text-sm capitalize text-green-500">Live</p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your room is live</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <Tooltip delayDuration={500}>
+                <TooltipTrigger>
+                  {" "}
+                  <p className="text-sm capitalize text-red-500 ">Offline</p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your room is offline</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+        )}
 
         {/* Coding Lang */}
         <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all font-medium duration-200 ease-in-out rounded-md cursor-default select-none">

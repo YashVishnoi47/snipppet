@@ -1,4 +1,5 @@
 import mongoose, { model, models, Schema } from "mongoose";
+import { boolean } from "zod";
 
 const roomSchema = new Schema(
   {
@@ -18,14 +19,15 @@ const roomSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    idPublic: {
-      type: Boolean,
-      default: false,
+    isPublic: {
+      type: String,
+      default: "private",
     },
     roomCode: {
       type: String,
       default: "",
     },
+
     roomSettings: {
       theme: {
         type: String,

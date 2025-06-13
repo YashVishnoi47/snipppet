@@ -22,6 +22,8 @@ const GenericEditor = ({
   const terminalWrapperRef = useRef(null);
   const [mode, setMode] = useState("split");
   const handleCodeChange = (value, file, viewUpdate) => {
+    if (!socket) return;
+
     const updated = { ...fileCodes, [file]: value };
     setFileCodes(updated);
 
@@ -50,6 +52,7 @@ const GenericEditor = ({
   };
   // Handiling the incoming Change
   useEffect(() => {
+    if (!socket) return;
     const handleIncomingChange = ({ file, code }) => {
       setFileCodes((prev) => ({
         ...prev,

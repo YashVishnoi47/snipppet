@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { AlertCircle } from "lucide-react";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
@@ -39,6 +40,7 @@ const CodeNavbar = ({
   setTheme,
   theme,
   activeUsers,
+  live,
 }) => {
   const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 32));
   const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 10));
@@ -185,36 +187,50 @@ const CodeNavbar = ({
                 <FaUserPlus size={16} />
                 <span>Invite</span>
               </PopoverTrigger>
+              {live === "public" ? (
+                <PopoverContent className="w-80 p-4 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg">
+                  <section className="flex flex-col gap-4">
+                    <h2 className="text-base font-semibold text-white flex items-center gap-2">
+                      <FaUserPlus size={16} />
+                      Invite People
+                    </h2>
 
-              <PopoverContent className="w-80 p-4 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg">
-                <section className="flex flex-col gap-4">
-                  <h2 className="text-base font-semibold text-white flex items-center gap-2">
-                    <FaUserPlus size={16} />
-                    Invite People
-                  </h2>
-
-                  <div className="flex flex-col sm:flex-row items-start gap-3">
-                    <div className="flex flex-col justify-center items-center">
-                      <input
-                        type="text"
-                        value={room._id}
-                        readOnly
-                        className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
-                        placeholder="Link"
-                      />
+                    <div className="flex flex-col sm:flex-row items-start gap-3">
+                      <div className="flex flex-col justify-center items-center">
+                        <input
+                          type="text"
+                          value={room._id}
+                          readOnly
+                          className="w-full sm:flex-1 rounded-full border border-zinc-700 bg-zinc-800 py-2 px-4 text-sm text-white focus:outline-none"
+                          placeholder="Link"
+                        />
+                      </div>
+                      <button
+                        onClick={handleCopyText}
+                        className="w-full sm:w-auto px-4 py-2 text-sm border border-black font-medium text-white bg-[#7C3AED] rounded-lg hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] cursor-pointer transition-all duration-200"
+                      >
+                        Copy
+                      </button>
                     </div>
-                    <button
-                      onClick={handleCopyText}
-                      className="w-full sm:w-auto px-4 py-2 text-sm border border-black font-medium text-white bg-[#7C3AED] rounded-lg hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] cursor-pointer transition-all duration-200"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p className="text-gray-300 text-sm ml-2 w-full">
-                    Share this Code to invite others to the room.
-                  </p>
-                </section>
-              </PopoverContent>
+                    <p className="text-gray-300 text-sm ml-2 w-full">
+                      Share this Code to invite others to the room.
+                    </p>
+                  </section>
+                </PopoverContent>
+              ) : (
+                <PopoverContent className="w-80 p-5 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-xl">
+                  <section className="flex items-start gap-4 text-white">
+                    <AlertCircle className="text-red-500 w-6 h-6 mt-1" />
+                    <div className="flex flex-col">
+                      <h3 className="text-lg font-semibold">Room Offline</h3>
+                      <p className="text-sm text-zinc-400 mt-1">
+                        Live session is currently disabled. Please enable Live
+                        Mode to continue.
+                      </p>
+                    </div>
+                  </section>
+                </PopoverContent>
+              )}
             </Popover>
           )}
 
