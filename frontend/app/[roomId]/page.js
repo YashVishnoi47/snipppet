@@ -14,6 +14,7 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { material } from "@uiw/codemirror-theme-material";
 import { sublime } from "@uiw/codemirror-theme-sublime";
 import Taskbar from "@/components/codeEditorComponents/Taskbar";
+import DialogBox from "@/components/dialogBoxes/DialogBox";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -35,6 +36,7 @@ const Room = () => {
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
   const [live, setLive] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const themeMap = {
     dark: oneDark,
     GithubDark: githubDark,
@@ -56,6 +58,13 @@ const Room = () => {
       return;
     }
   }, [live]);
+
+  useEffect(() => {
+    if (socket && live === "public") {
+      setOpenDialog(false);
+      console.log("Dialog is now disabled");
+    }
+  }, [socket, live]);
 
   // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
@@ -380,6 +389,8 @@ const Room = () => {
 
         if (res) {
           setLive("public");
+          setOpenDialog(true);
+          console.log("Dilaog is now enabled");
           toast.success("Your Room is Public now.");
         }
       } catch (error) {
@@ -480,6 +491,7 @@ const Room = () => {
             theme={theme}
             setCursorPosition={setCursorPosition}
             terminal={terminal}
+            openDialog={openDialog}
           />
         ) : (
           <h1 className="w-full h-full text-white flex justify-center items-center font-extrabold bg-black">

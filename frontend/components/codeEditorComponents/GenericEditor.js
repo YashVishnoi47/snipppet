@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { editorConfigs } from "@/config/EditorConfig";
 import Terminal from "./Terminal";
+import DialogBox from "../dialogBoxes/DialogBox";
+
 
 const GenericEditor = ({
   socket,
@@ -18,6 +20,7 @@ const GenericEditor = ({
   theme,
   setCursorPosition,
   terminal,
+  openDialog,
 }) => {
   const terminalWrapperRef = useRef(null);
   const [mode, setMode] = useState("split");
@@ -97,7 +100,8 @@ const GenericEditor = ({
       className="flex relative w-full h-full overflow-hidden"
     >
       <div className="w-full h-full flex flex-col">
-        <div className="flex w-full h-full overflow-auto bg-zinc-900 ">
+        <div className="flex w-full h-full overflow-auto bg-zinc-900">
+          {openDialog === true && <DialogBox />}
           {renderEditor()}
         </div>
       </div>

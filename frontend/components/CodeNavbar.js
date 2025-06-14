@@ -26,6 +26,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
 
@@ -144,13 +152,36 @@ const CodeNavbar = ({
                 <Separator className="border-t border-zinc-700 my-1" />
 
                 {/* Leave room */}
-                <Link
-                  href={"/userProfile"}
-                  className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full"
-                >
-                  <ImExit className="text-xl text-red-400" />
-                  <span>Leave room</span>
-                </Link>
+                {live !== "public" ? (
+                  <Link
+                    href={"/userProfile"}
+                    className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full"
+                  >
+                    <ImExit className="text-xl text-red-400" />
+                    <span>Leave room</span>
+                  </Link>
+                ) : (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full text-zinc-100">
+                        <ImExit className="text-xl text-red-400" />
+                        Leave Room
+                      </button>
+                    </DialogTrigger>
+
+                    <DialogContent className="bg-[#18181B] border border-[#2A2A3B] text-zinc-100 max-w-sm sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="text-white text-lg">
+                          The Room is Live
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                          You cannot leave the room while it’s live. Please stop
+                          the room before leaving.
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
             </PopoverContent>
           </Popover>

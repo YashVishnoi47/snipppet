@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
       io.sockets.sockets.get(user.socketId)?.leave(roomId);
     }
 
-    if (otherUsers?.length === 1) {
+    if (otherUsers?.length >= 0) {
       delete UserInRoom[roomId];
     }
     console.log("User in room is updated");

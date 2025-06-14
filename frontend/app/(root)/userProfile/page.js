@@ -161,7 +161,7 @@ const UserProfile = () => {
 
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-black">
         <div className="p-8 rounded-2xl shadow-lg bg-white text-center">
           <h1 className="text-2xl font-semibold text-gray-800 mb-4">
             Access Restricted
