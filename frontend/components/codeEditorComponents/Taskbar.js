@@ -108,7 +108,7 @@ const Taskbar = ({
             </TooltipContent>
           </Tooltip>
         </div>
-        
+
         {/* Room Status */}
         {session?.user._id === room.createdBy ? (
           <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all font-medium duration-200 ease-in-out rounded-md cursor-default select-none">
@@ -119,7 +119,7 @@ const Taskbar = ({
                   <p className="text-sm capitalize text-green-500">Live</p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Your room is live</p>
+                  <p>Click to make room Offline</p>
                 </TooltipContent>
               </Tooltip>
             ) : (
@@ -129,7 +129,7 @@ const Taskbar = ({
                   <p className="text-sm capitalize text-red-500 ">Offline</p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Your room is offline</p>
+                  <p>Click to make room Online.</p>
                 </TooltipContent>
               </Tooltip>
             )}

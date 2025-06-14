@@ -22,17 +22,19 @@ const GenericEditor = ({
   const terminalWrapperRef = useRef(null);
   const [mode, setMode] = useState("split");
   const handleCodeChange = (value, file, viewUpdate) => {
-    if (!socket) return;
-
     const updated = { ...fileCodes, [file]: value };
     setFileCodes(updated);
 
-    socket.emit("code-change", {
-      roomId: roomId,
-      code: value,
-      file,
-      lang: codingLang,
-    });
+    if (socket) {
+      socket.emit("code-change", {
+        roomId: roomId,
+        code: value,
+        file,
+        lang: codingLang,
+      });
+    } else {
+      return;
+    }
   };
 
   // Cursor Position

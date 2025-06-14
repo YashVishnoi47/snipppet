@@ -2,11 +2,6 @@
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import Link from "next/link";
-import SearchBar from "@/components/utilityComponents/SearchBar";
-import Button2 from "@/components/utilityComponents/Button2";
-import UserRooms from "@/components/UserRooms";
-import Loader from "@/components/utilityComponents/Loader";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -17,6 +12,12 @@ import { Input } from "@/components/ui/input";
 import { IoFilter } from "react-icons/io5";
 import { editorConfigs } from "@/config/EditorConfig";
 import { toast } from "sonner";
+import Link from "next/link";
+import SearchBar from "@/components/utilityComponents/SearchBar";
+import Button2 from "@/components/utilityComponents/Button2";
+import UserRooms from "@/components/UserRooms";
+import Loader from "@/components/utilityComponents/Loader";
+import Navbar from "@/components/Navbar";
 import {
   Dialog,
   DialogContent,
@@ -46,7 +47,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Navbar from "@/components/Navbar";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -141,7 +141,10 @@ const UserProfile = () => {
       const data = await res.json();
 
       if (data) {
-        if (session?.user._id !== data.createdBy && data.isPublic === "public") {
+        if (
+          session?.user._id !== data.createdBy &&
+          data.isPublic === "public"
+        ) {
           router.push(`/${joinRoomId}`);
         } else {
           toast.error("Room is Ofline", {
