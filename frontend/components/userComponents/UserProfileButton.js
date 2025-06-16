@@ -56,7 +56,12 @@ const UserProfileButton = ({ session }) => {
             <Separator className="my-3 bg-[#3A3A4D]" />
 
             {/* Logout */}
-            <LogoutButton text="Logout" />
+            <LogoutButton
+              className={
+                "flex w-full items-center justify-start gap-3 px-4 py-2 rounded-lg text-sm font-medium text-[#EDEDED] hover:bg-[#2A2A3B] transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500"
+              }
+              text="Logout"
+            />
           </div>
         </PopoverContent>
       </Popover>

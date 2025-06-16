@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
+import LogoutButton from "../LogoutButton";
 
 const FloatNav = () => {
   const { data: session } = useSession();
@@ -27,7 +28,7 @@ const FloatNav = () => {
           {/* Other Links */}
           <div className="p-4 h-full w-full ml-1 flex justify-start items-center">
             <Link href={"/"}>
-              <button className="px-4 rounded-lg py-3 text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-sm">
+              <button className="px-4  py-3 rounded-lg text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-sm">
                 Features
               </button>
             </Link>
@@ -47,11 +48,19 @@ const FloatNav = () => {
         {/* Right */}
         <div className="w-1/2 h-full flex gap-4 justify-end items-center">
           {session ? (
-            <Link href={"/userProfile"}>
-              <button className="cursor-pointer px-6 py-2 text-[#E0E0E0] border bg-[#7C3AED] border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white">
-                Dashboard
-              </button>
-            </Link>
+            <div className="w-full h-full flex gap-4 justify-end items-center">
+              <Link href={"/userProfile"}>
+                <button className="cursor-pointer px-6 py-2 text-[#E0E0E0] border bg-[#7C3AED] border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white">
+                  Dashboard
+                </button>
+              </Link>
+
+              <LogoutButton
+                className={
+                  "flex items-center justify-center gap-3 px-4  py-3 rounded-lg text-sm font-medium text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer"
+                }
+              />
+            </div>
           ) : (
             <div className="gap-4 flex">
               <Link href={"/sign-in"}>
