@@ -12,8 +12,8 @@ const LogoutButton = ({ className, text }) => {
 
   return (
     <button onClick={handleLogout} title="Logout" className={` ${className} `}>
-      <MdLogout className="text-xl text-red-400" />
-      {text && <span className="text-base">{text}</span>}
+      <MdLogout className={`text-xl ${text ? "text-red-400" : ""} `} />
+      {text && <span className="text-bold">{text}</span>}
     </button>
   );
 };

@@ -48,7 +48,7 @@ const FloatNav = () => {
         {/* Right */}
         <div className="w-1/2 h-full flex gap-4 justify-end items-center">
           {session ? (
-            <div className="w-full h-full flex gap-4 justify-end items-center">
+            <div className="w-full h-full flex gap-3 justify-end items-center">
               <Link href={"/userProfile"}>
                 <button className="cursor-pointer px-6 py-2 text-[#E0E0E0] border bg-[#7C3AED] border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white">
                   Dashboard
@@ -57,7 +57,7 @@ const FloatNav = () => {
 
               <LogoutButton
                 className={
-                  "flex items-center justify-center gap-3 px-4  py-3 rounded-lg text-sm font-medium text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer"
+                  "flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-[#E0E0E0] bg-[#7C3AED] hover:bg-[#7C3AED]/20 border border-[#3C3C4D] hover:border-[#7C3AED] transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer"
                 }
               />
             </div>

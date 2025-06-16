@@ -181,11 +181,11 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="w-full h-full justify-center items-center flex flex-col gap-12  bg-[#000]">
+    <div className="w-full h-full justify-center items-center flex flex-col bg-[#000] gap-6">
       <Navbar />
-      <div className="w-[80%] flex flex-col min-h-[90vh] mt-10">
+      <div className="w-[80%] relative flex flex-col min-h-[90vh]">
         {/* top section */}
-        <div className="w-full border-b-2 py-2 justify-between flex items-center  h-[10vh]">
+        <div className="w-full h-[10vh] border-b-2 py-2 justify-between flex items-center">
           {/* Search Box */}
           <div className="w-full max-w-[300px]">
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
