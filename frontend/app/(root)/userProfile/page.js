@@ -181,7 +181,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="w-full h-full justify-center items-center flex flex-col bg-[#000] gap-6">
+    <div className="w-full h-full justify-center items-center flex flex-col bg-[#000] gap-4">
       <Navbar />
       <div className="w-[80%] relative flex flex-col min-h-[90vh]">
         {/* top section */}

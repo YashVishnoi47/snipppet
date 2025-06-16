@@ -11,8 +11,8 @@ const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   return (
-    <div className="flex justify-center items-center bg-[#000] text-[#EDEDED] w-full h-[100px]">
-      <div className="h-[70%] w-[80%] items-center justify-between rounded-2xl flex px-4 bg-[#fff]/10 backdrop-blur-md z-50">
+    <div className="flex justify-center items-start bg-[#000] text-[#EDEDED] w-full h-[100px]">
+      <div className="h-[70%] w-[80%] items-center mt-2 justify-between rounded-2xl flex px-4 bg-[#000] backdrop-blur-md z-50">
         {/* Logo and Navigation Links */}
         <div className="w-[40%]  h-full gap-8 flex justify-start items-center">
           {/* Logo */}
