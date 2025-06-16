@@ -365,7 +365,7 @@ const Room = () => {
     };
   }, [socket]);
 
-  // Terminal State
+  // Terminal State.
   const termialfunc = () => {
     if (terminal === true) {
       setTerminal(false);
@@ -465,18 +465,17 @@ const Room = () => {
         compileing={compileing}
         setFontSize={setFontSize}
         fontSize={fontSize}
-        setTheme={setTheme}
         RemoveUserFromRoom={RemoveUserFromRoom}
         CompileCode={CompileCode}
         session={session}
         room={room}
-        theme={theme}
         activeUsers={activeUsers}
       />
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
             themeMap={themeMap}
+            theme={theme}
             SaveCodeToDatabase={SaveCodeToDatabase}
             socket={socket}
             roomId={roomId}
@@ -488,7 +487,6 @@ const Room = () => {
             setFileCodes={setFileCodes}
             compiledCode={compiledCode}
             fontSize={fontSize}
-            theme={theme}
             setCursorPosition={setCursorPosition}
             terminal={terminal}
             openDialog={openDialog}
@@ -507,6 +505,7 @@ const Room = () => {
               hasUnsavedChanges={hasUnsavedChanges}
               termialfunc={termialfunc}
               theme={theme}
+              setTheme={setTheme}
               activeUsers={activeUsers}
               cursorPosition={cursorPosition}
               terminal={terminal}

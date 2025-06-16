@@ -6,7 +6,22 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
-import { FaRegSave } from "react-icons/fa";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const Taskbar = ({
   room,
@@ -15,6 +30,7 @@ const Taskbar = ({
   SaveCodeToDatabase,
   termialfunc,
 
+  setTheme,
   theme,
   cursorPosition,
   terminal,
@@ -23,6 +39,29 @@ const Taskbar = ({
   handleRoomStatus,
 }) => {
   const isLive = room.isPublic;
+  // Themes
+  const themes = {
+    light: {
+      name: "Light",
+      value: "light",
+    },
+    dark: {
+      name: "Dark",
+      value: "oneDark",
+    },
+    dracula: {
+      name: "Dracula",
+      value: "dracula",
+    },
+    material: {
+      name: "Material",
+      value: "mracula",
+    },
+    sublime: {
+      name: "Sublime",
+      value: "sublime",
+    },
+  };
   return (
     <motion.div
       initial={{ y: 50 }}
@@ -35,7 +74,7 @@ const Taskbar = ({
         bounce: 0.25,
         delay: 1,
       }}
-      className="flex items-center px-2 w-full h-full text-white"
+      className="flex items-center px-2 w-full min-h-full text-white"
     >
       {/* Code Save info */}
       <div className="h-full w-[40%] flex gap-2 items-center">
@@ -99,13 +138,43 @@ const Taskbar = ({
         {/* Theme */}
         <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all duration-200 ease-in-out rounded-md cursor-default select-none">
           <Tooltip delayDuration={100}>
-            <TooltipTrigger>
-              {" "}
-              <p className="text-sm capitalize">Theme - {theme}</p>
+            <TooltipTrigger asChild>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="text-sm capitalize">
+                    Theme - {theme}
+                  </button>
+                </DialogTrigger>
+
+                <DialogContent className="w-[90vw] max-w-sm bg-[#121212] text-white border border-gray-800 rounded-xl shadow-xl">
+                  <DialogHeader>
+                    <DialogTitle className="text-sm font-medium">
+                      Theme - {theme}
+                    </DialogTitle>
+                    <DialogDescription className="text-muted-foreground text-xs">
+                      Select your preferred theme from the list below.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-medium">Choose Theme</Label>
+                    <Select defaultValue={theme} onValueChange={setTheme}>
+                      <SelectTrigger className="w-full bg-[#1E1E1E] text-white border border-gray-700">
+                        <SelectValue placeholder="Select Theme" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#1E1E1E] text-white border border-gray-700">
+                        {Object.entries(themes).map(([key, { name }]) => (
+                          <SelectItem key={key} value={key}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </TooltipTrigger>
-            <TooltipContent>
-              <p>Go to Room settings to change the Theme</p>
-            </TooltipContent>
+            <TooltipContent>Click to change the theme</TooltipContent>
           </Tooltip>
         </div>
 

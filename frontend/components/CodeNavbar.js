@@ -20,22 +20,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 const CodeNavbar = ({
   RemoveUserFromRoom,
@@ -45,13 +42,19 @@ const CodeNavbar = ({
   compileing,
   setFontSize,
   fontSize,
-  setTheme,
-  theme,
   activeUsers,
   live,
 }) => {
-  const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 32));
-  const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 10));
+  const [tab, setTab] = useState("general");
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const increaseFont = () => {
+    setFontSize((prev) => Math.min(prev + 2, 32));
+  };
+
+  const decreaseFont = () => {
+    setFontSize((prev) => Math.max(prev - 2, 10));
+  };
+
   // The Language config/
   const config = Object.values(editorConfigs).find(
     (c) => c.language === room.codingLang
@@ -69,30 +72,6 @@ const CodeNavbar = ({
       });
   };
 
-  // Themes
-  const themes = {
-    light: {
-      name: "Light",
-      value: "light",
-    },
-    dark: {
-      name: "Dark",
-      value: "oneDark",
-    },
-    dracula: {
-      name: "Dracula",
-      value: "dracula",
-    },
-    material: {
-      name: "Material",
-      value: "mracula",
-    },
-    sublime: {
-      name: "Sublime",
-      value: "sublime",
-    },
-  };
-
   return (
     <motion.div
       initial={{ y: -100 }}
@@ -105,11 +84,11 @@ const CodeNavbar = ({
         bounce: 0.25,
         delay: 0.5,
       }}
-      className="w-[full] cursor-text items-center justify-center bg-[#000] flex h-[10%] border-2 border-black"
+      className="w-[full] cursor-text items-center justify-center bg-[#000] flex min-h-[10%] border-2 border-black"
     >
       <div className="h-full flex justify-between w-[90%] ">
         {/* Left*/}
-        <div className="h-full flex gap-6 justify-start items-center w-[25%] ">
+        <div className="h-full flex gap-4 justify-start items-center w-[25%] ">
           <Popover>
             <PopoverTrigger
               className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-sm bg-transparent text-white hover:bg-[#7C3AED] hover:border-[#7C3AED] hover:text-white transition duration-300 ease-in-out focus:outline-none"
@@ -138,15 +117,104 @@ const CodeNavbar = ({
                 </div>
 
                 {/* room Settings */}
-                <button
-                  className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full"
-                  onClick={() => {
-                    // handle room settings open
-                  }}
-                >
-                  <IoMdSettings className="text-xl" />
-                  <span>room Settings</span>
-                </button>
+                {/* <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+                  <DialogTrigger asChild>
+                    <button className="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md hover:bg-zinc-800 transition w-full text-white">
+                      <IoMdSettings className="text-xl" />
+                      Room Settings
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="w-[100vh] max-w-5xl h-[70vh] bg-[#121212] border border-[#2A2A3B] text-white rounded-xl shadow-2xl">
+                    <DialogHeader>
+                      <DialogTitle className="text-white text-lg">
+                        Room Settings
+                      </DialogTitle>
+                      <DialogDescription className="text-sm w-full h-full flex">
+                        <Tabs defaultValue="account" className="w-[400px]">
+                          <TabsList className="bg-[#1E1E1E] text-white p-1 rounded-md space-x-2">
+                            <TabsTrigger
+                              value="account"
+                              className="text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 data-[state=active]:bg-[#7C3AED] data-[state=active]:text-white hover:bg-[#2A2A3B]"
+                            >
+                              Account
+                            </TabsTrigger>
+                            <TabsTrigger
+                              value="password"
+                              className="text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 data-[state=active]:bg-[#7C3AED] data-[state=active]:text-white hover:bg-[#2A2A3B]"
+                            >
+                              Password
+                            </TabsTrigger>
+                          </TabsList>
+
+                          <TabsContent value="account">
+                            <div className="w-full h-full space-y-4 p-4 rounded-md">
+                              Enable Auto Save
+                              <div className="flex items-center justify-between p-3 bg-[#121212] rounded-md border border-[#2A2A3B]">
+                                <div>
+                                  <h4 className="text-sm font-medium text-white">
+                                    Allow other people to save code   
+                                  </h4>
+                                  <p className="text-xs text-zinc-400">
+                                    Automatically save your code after each
+                                    change.
+                                  </p>
+                                </div>
+                                <Switch
+                                  checked={autoSave}
+                                  onCheckedChange={setAutoSave}
+                                  className="data-[state=checked]:bg-[#7C3AED]"
+                                />
+                              </div>
+
+                              Enable Code Sync
+                              <div className="flex items-center justify-between p-3 bg-[#121212] rounded-md border border-[#2A2A3B]">
+                                <div>
+                                  <h4 className="text-sm font-medium text-white">
+                                    Enable Room invite
+                                  </h4>
+
+                                  <p className="text-xs flex flex-col gap-1 text-zinc-400">
+                                    Let others invite new members to this room
+                                    <span className="text-xs text-zinc-500 italic">
+                                      Only users with invite permission can add
+                                      new members.
+                                    </span>
+                                  </p>
+                                </div>
+                                <Switch
+                                  checked={codeSync}
+                                  onCheckedChange={setCodeSync}
+                                  className="data-[state=checked]:bg-[#7C3AED]"
+                                />
+                              </div>
+
+                              Show Join Notifications
+                              <div className="flex items-center justify-between p-3 bg-[#121212] rounded-md border border-[#2A2A3B]">
+                                <div>
+                                  <h4 className="text-sm font-medium text-white">
+                                    Join Notifications
+                                  </h4>
+                                  <p className="text-xs text-zinc-400">
+                                    Notify when someone joins or leaves the
+                                    room.
+                                  </p>
+                                </div>
+                                <Switch
+                                  checked={joinNotif}
+                                  onCheckedChange={setJoinNotif}
+                                  className="data-[state=checked]:bg-[#7C3AED]"
+                                />
+                              </div>
+                            </div>
+                          </TabsContent>
+                          <TabsContent value="password">
+                            Change your password here.
+                          </TabsContent>
+                        </Tabs>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog> */}
 
                 {/* Divider */}
                 <Separator className="border-t border-zinc-700 my-1" />
@@ -186,24 +254,33 @@ const CodeNavbar = ({
             </PopoverContent>
           </Popover>
 
-          <button
-            onClick={CompileCode}
-            disabled={compileing}
-            aria-label={compileing ? "Compiling..." : "Compile Code"}
-            className={`relative flex items-center justify-center h-10 w-10 rounded-full border text-sm font-medium transition-all duration-200 ${
-              compileing
-                ? "bg-[#7C3AED] text-white border-[#3C3C4D] cursor-not-allowed"
-                : "bg-[#1E1E2E] hover:bg-[#7C3AED]/20 text-white border-[#3C3C4D] hover:border-[#7C3AED] cursor-pointer"
-            } `}
-          >
-            <Image
-              src={compileing ? "/gaerSpinner.svg" : "/play.svg"}
-              height={20}
-              width={20}
-              alt={compileing ? "Compiling..." : "Compile Icon"}
-              // className={compileing ? "" : ""}
-            />
-          </button>
+          {/* Font Size Control */}
+          <div className="w-1/2 select-none cursor-default max-w-sm">
+            <div className="flex items-center justify-between gap-2 px-2">
+              {/* Decrease Font Button */}
+              <button
+                onClick={decreaseFont}
+                disabled={fontSize <= 10}
+                className="w-8 h-8 text-md text-white border border-zinc-700 rounded-md transition-all duration-150 ease-in-out hover:bg-[#7C3AED]/30 hover:border[#7C3AED] disabled:opacity-40 disabled:cursor-not-allowed active:scale-90"
+              >
+                −
+              </button>
+
+              {/* Animated Font Size Text */}
+              <div className="text-md text-white font-mono w-20 text-center transition-all duration-150">
+                {fontSize}px
+              </div>
+
+              {/* Increase Font Button */}
+              <button
+                onClick={increaseFont}
+                disabled={fontSize >= 32}
+                className="w-8 h-8 text-md text-white border border-zinc-700 rounded-md transition-all duration-150 ease-in-out hover:bg-[#7C3AED]/30 hover:border[#7C3AED] disabled:opacity-40 disabled:cursor-not-allowed active:scale-90"
+              >
+                +
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Middle  */}
@@ -314,57 +391,27 @@ const CodeNavbar = ({
 
         {/* Right */}
         <div className="h-full flex gap-8 justify-end items-center w-[25%]">
-          <Popover>
-            <PopoverTrigger className="flex items-center gap-2 px-8 py-2 rounded-md border border-[#3C3C4D] text-[#E0E0E0] font-mono text-sm transition bg-[#7C3AED]/20 hover:bg-[#7C3AED] hover:text-white cursor-pointer">
-              Change
-            </PopoverTrigger>
+          <button
+            onClick={CompileCode}
+            disabled={compileing}
+            aria-label={compileing ? "Compiling..." : "Compile Code"}
+            className={`relative flex items-center justify-center gap-2 h-10 px-4 rounded-md border text-sm font-medium transition-all duration-200 ${
+              compileing
+                ? "bg-[#7C3AED] text-white border-[#3C3C4D] cursor-not-allowed"
+                : "bg-[#1E1E2E] hover:bg-[#7C3AED]/20 text-white border-[#3C3C4D] hover:border-[#7C3AED] cursor-pointer"
+            }`}
+          >
+            <Image
+              src={compileing ? "/gaerSpinner.svg" : "/play.svg"}
+              height={18}
+              width={18}
+              alt={compileing ? "Compiling..." : "Compile Icon"}
+            />
+            <span className="text-sm font-medium">
+              {compileing ? "Compiling..." : "Run Code"}
+            </span>
+          </button>
 
-            <PopoverContent className="w-[90vw] max-w-sm p-4 space-y-6 bg-[#121212] text-white border border-gray-800 rounded-xl shadow-xl">
-              {/* Font Size Control */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Font Size</Label>
-                <div className="flex items-center justify-between gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={decreaseFont}
-                    disabled={fontSize <= 10}
-                    className="w-10 border-gray-600 text-black text-xl flex justify-center items-center"
-                  >
-                    -
-                  </Button>
-                  <span className="text-sm font-mono">{fontSize}px</span>
-                  <Button
-                    variant="outline"
-                    onClick={increaseFont}
-                    disabled={fontSize >= 32}
-                    className="w-10 border-gray-600 text-black text-xl flex justify-center items-center"
-                  >
-                    +
-                  </Button>
-                </div>
-              </div>
-
-              {/* Theme Selector */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Theme</Label>
-                <Select
-                  defaultValue={theme}
-                  onValueChange={(value) => setTheme(value)}
-                >
-                  <SelectTrigger className="w-full bg-[#1E1E1E] text-white border border-gray-700">
-                    <SelectValue placeholder="Select Theme" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#1E1E1E] text-white border border-gray-700">
-                    {Object.entries(themes).map(([key, { name }]) => (
-                      <SelectItem key={key} value={key}>
-                        {name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </PopoverContent>
-          </Popover>
           <UserProfileButton session={session} />
         </div>
       </div>

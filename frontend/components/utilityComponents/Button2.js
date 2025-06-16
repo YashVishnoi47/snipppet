@@ -16,7 +16,7 @@ const StyledButton = styled.button`
   border-radius: 8px;
   width: ${(props) => props.width};
   height: 40px;
-  font-weight: 500;
+  font-weight: 300;
   cursor: pointer;
 
   /* Only transition the properties that are inexpensive: background, border, transform */
