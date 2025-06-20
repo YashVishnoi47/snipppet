@@ -17,7 +17,7 @@ export const authOptions = {
         await connectDB();
         try {
           if (!credentials?.email || !credentials?.password) {
-            return null;
+            throw new Error("Please fill all fields correctly.");
           }
 
           const user = await User.findOne({

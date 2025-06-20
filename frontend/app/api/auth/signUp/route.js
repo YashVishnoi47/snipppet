@@ -3,20 +3,14 @@ import User from "@/lib/db/models/user.model";
 import { connectDB } from "@/lib/db/db";
 
 export const POST = async (req) => {
-  const {
-    name,
-    email,
-    password,
-    FirstName,
-    LastName,
-    aboutUser,
-    userName,
-  } = await req.json();
+  const { name, email, password, FirstName, LastName, aboutUser, userName } =
+    await req.json();
   await connectDB();
 
   const exsistingUser = await User.findOne({ email });
+
   if (exsistingUser)
-    return new Response("User already exists", { status: 409 });
+    return Response.json({ message: "User already exists" }, { status: 409 });
 
   const hashPassword = await hash(password, 12);
 
