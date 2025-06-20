@@ -13,7 +13,7 @@ const SearchBar = ({ value, onChange }) => {
       w-full
       h-[45px]
       text-white
-      bg-[#2F2F38]
+      bg-[#7C3AED]/10
       placeholder-[#A3A3A3]
       px-5
       rounded-2xl
@@ -28,6 +28,7 @@ const SearchBar = ({ value, onChange }) => {
       hover:shadow-[0px_0px_20px_-10px_rgba(124,58,237,0.4)]
       active:scale-[0.95]
       focus:border-[#7C3AED]
+      focus:bg-[#7C3AED]/15
     "
       />
     </div>

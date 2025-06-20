@@ -3,7 +3,6 @@ import Room from "@/lib/db/models/room.model";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
-import User from "@/lib/db/models/user.model";
 
 export const POST = async (req) => {
   await connectDB();
@@ -26,6 +25,7 @@ export const POST = async (req) => {
 
     if (newRoom) {
       return NextResponse.json(
+        { newRoom },
         { message: "Room Created Successfully" },
         { status: 201 }
       );

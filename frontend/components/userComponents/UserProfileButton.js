@@ -1,15 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MdDashboard } from "react-icons/md";
-import { IoSettingsOutline } from "react-icons/io5";
-import { Separator } from "@/components/ui/separator";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import LogoutButton from "../LogoutButton";
 
 const UserProfileButton = ({ session }) => {
   const user = session?.user;

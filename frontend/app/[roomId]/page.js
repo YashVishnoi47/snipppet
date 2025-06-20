@@ -36,7 +36,13 @@ const Room = () => {
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
   const [live, setLive] = useState(false);
+
   const [openDialog, setOpenDialog] = useState(false);
+  const [joinRequest, setJoinRequest] = useState(null);
+  const [joindenied, setJoindenied] = useState(false);
+  const [noOwnerDialog, setNoOwnerDialog] = useState(false);
+  const [ownerRemovedDialog, setownerRemovedDialog] = useState(false);
+
   const themeMap = {
     dark: oneDark,
     GithubDark: githubDark,
@@ -48,6 +54,7 @@ const Room = () => {
   const params = useParams();
   const { socket, connectSocket } = useContext(SocketContext);
   const userName = session?.user.userName || "TEST";
+  const UserID = session?.user._id;
   const roomId = params.roomId;
 
   // Trigger socket connection when live mode is enabled
@@ -62,7 +69,7 @@ const Room = () => {
   useEffect(() => {
     if (socket && live === "public") {
       setOpenDialog(false);
-      console.log("Dialog is now disabled");
+      // console.log("Dialog is now disabled");
     }
   }, [socket, live]);
 
@@ -242,6 +249,31 @@ const Room = () => {
     getRoomOwner();
   }, [room.createdBy]);
 
+  // Function for Emiting join Request
+  const handleResponse = (accepted) => {
+    if (!joinRequest) return;
+
+    socket.emit("join_request", {
+      roomId: joinRequest.roomId,
+      user: {
+        name: joinRequest.user.name,
+        userId: joinRequest.user.userId,
+        socketId: joinRequest.user.socketId,
+      },
+      accepted,
+    });
+
+    // if (accepted) {
+    //   setWaiting(true);
+    // }
+    setJoinRequest(null); // Close popup
+  };
+
+  // function for handling join Denies.
+  const handleJoinReq = () => {
+    router.push("/");
+  };
+
   // All the socket events of all the Languages are handled here.
   useEffect(() => {
     const ownerID = room.createdBy;
@@ -277,33 +309,25 @@ const Room = () => {
     if (!socket) return;
 
     socket.on("join_request", ({ user, roomId }) => {
-      const confirmJoin = window.confirm(
-        `${user.name} wants to join the room.`
-      );
-      socket.emit("join_request", {
-        roomId,
-        user: {
-          name: user.name,
-          userId: user.userId,
-          socketId: user.socketId,
-        },
-        accepted: confirmJoin,
-      });
+      setJoinRequest({ user, roomId });
+      // setWaiting(true);
     });
 
     socket.on("join_denied", () => {
-      alert("Room owner denied your join request.");
-      router.push("/");
+      setJoindenied(true);
+      // setWaiting(false);
     });
 
     socket.on("no_Owner", () => {
-      alert("Owner is not in the room you canot join.");
+      alert("Owner is not in the room you cannot join.");
+      setNoOwnerDialog(true);
       router.push("/");
     });
 
     return () => {
       socket.off("join_request");
       socket.off("join_denied");
+      socket.off("no_Owner");
     };
   }, [socket]);
 
@@ -318,8 +342,7 @@ const Room = () => {
   useEffect(() => {
     if (!socket) return;
     const handleUserRemoved = () => {
-      alert("Room owner removed you from the room.");
-      router.push("/");
+      setownerRemovedDialog(true);
     };
 
     socket.on("user_removed", handleUserRemoved);
@@ -354,8 +377,7 @@ const Room = () => {
     if (!socket) return;
 
     const handleForceExit = ({ reason }) => {
-      alert(reason || "You were removed from the room.");
-      router.push("/");
+      setownerRemovedDialog(true);
     };
 
     socket.on("force_exit", handleForceExit);
@@ -372,7 +394,6 @@ const Room = () => {
     } else {
       setTerminal(true);
     }
-    console.log(terminal);
   };
 
   // Function to switch Private and public status of room.
@@ -390,7 +411,7 @@ const Room = () => {
         if (res) {
           setLive("public");
           setOpenDialog(true);
-          console.log("Dilaog is now enabled");
+          // console.log("Dilaog is now enabled");
           toast.success("Your Room is Public now.");
         }
       } catch (error) {
@@ -474,6 +495,11 @@ const Room = () => {
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
+            joinRequest={joinRequest}
+            setJoindenied={setJoindenied}
+            joindenied={joindenied}
+            setJoinRequest={setJoinRequest}
+            handleResponse={handleResponse}
             themeMap={themeMap}
             theme={theme}
             SaveCodeToDatabase={SaveCodeToDatabase}
@@ -490,6 +516,10 @@ const Room = () => {
             setCursorPosition={setCursorPosition}
             terminal={terminal}
             openDialog={openDialog}
+            handleJoinReq={handleJoinReq}
+            UserID={UserID}
+            noOwnerDialog={noOwnerDialog}
+            ownerRemovedDialog={ownerRemovedDialog}
           />
         ) : (
           <h1 className="w-full h-full text-white flex justify-center items-center font-extrabold bg-black">

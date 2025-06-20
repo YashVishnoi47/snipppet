@@ -1,41 +1,20 @@
 import React from "react";
-import styled from "styled-components";
+import clsx from "clsx";
 
 const Button2 = ({ text, width = "120px", createPrivateRoom, loading }) => {
   return (
-    <StyledButton onClick={createPrivateRoom} width={width} disabled={loading}>
+    <button
+      onClick={createPrivateRoom}
+      disabled={loading}
+      className={`h-10 rounded-md font-light border transition-all duration-200 transform
+  bg-[#7C3AED]/20 text-[#e0e0e0] text-sm border-[#333348]
+  hover:enabled:bg-[#7C3AED]/50 hover:enabled:border-[#7c3aed] hover:enabled:text-white
+  disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer`}
+      style={{ width }}
+    >
       {loading ? "Loading..." : text}
-    </StyledButton>
+    </button>
   );
 };
-
-const StyledButton = styled.button`
-  background-color: #2f2f38;       /* Dark charcoal base */
-  color: #e0e0e0;                  /* Light gray text */
-  border: 1px solid #333348;       /* Subtle border */
-  border-radius: 8px;
-  width: ${(props) => props.width};
-  height: 40px;
-  font-weight: 300;
-  cursor: pointer;
-
-  /* Only transition the properties that are inexpensive: background, border, transform */
-  transition: 
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
-
-  &:hover:not(:disabled) {
-    background-color: #333348;     /* Slightly lighter on hover */
-    border-color: #7c3aed;         /* Purple accent border */
-    color: #ffffff;                /* White text on hover */
-    transform: scale(1.02);        /* Subtle pop */
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-`;
 
 export default Button2;

@@ -18,8 +18,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Loader2 } from "lucide-react";
 
-const UserRooms = ({ room, index, FetchUserRooms }) => {
+const UserRooms = ({ room, index, FetchUserRooms, loading, setLoading }) => {
   const router = useRouter();
   const config = Object.values(editorConfigs).find(
     (c) => c.language === room.codingLang
@@ -30,6 +31,7 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     const res = await fetch("/api/room/deleteRoom", {
       method: "DELETE",
       headers: {
@@ -39,6 +41,7 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
     });
 
     if (res.ok) {
+      setLoading(false);
       FetchUserRooms();
       toast.success("Room Deleted", {
         description: "Your room was successfully removed.",
@@ -83,7 +86,7 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
           {/* Delete Button */}
           <AlertDialog>
             <AlertDialogTrigger className="flex items-center gap-2 bg-[#18181B] text-[#E0E0E0] border border-[#2A2A3B] hover:bg-[#1F1F29] hover:border-[#7C3AED] hover:text-white rounded-full px-4 py-2 transition-all duration-300 ease-in-out cursor-pointer">
-              <RiDeleteBin6Line className="text-lg" />
+              {loading ? <Loader2 /> : <RiDeleteBin6Line className="text-lg" />}
             </AlertDialogTrigger>
 
             <AlertDialogContent className="bg-[#0F0F11] border border-[#2A2A3B] text-[#E0E0E0] shadow-xl rounded-xl">
@@ -124,10 +127,3 @@ const UserRooms = ({ room, index, FetchUserRooms }) => {
 };
 
 export default UserRooms;
-
-{
-  /* <RiDeleteBin6Line
-          onClick={handleDelete}
-          className="text-4xl hover:scale-110 transition-all border-white duration-300 ease-in-out absolute p-2 border-2 right-4 top-4 text-[#fff] bg-[#8B5CF6] hover:text[#8B5CF6AA] rounded-full"
-        /> */
-}

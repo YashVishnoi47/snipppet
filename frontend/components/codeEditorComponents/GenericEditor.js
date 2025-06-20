@@ -3,7 +3,11 @@ import CodeMirror from "@uiw/react-codemirror";
 import { editorConfigs } from "@/config/EditorConfig";
 import Terminal from "./Terminal";
 import DialogBox from "../dialogBoxes/DialogBox";
-
+import ConformationBox from "../dialogBoxes/ConformationBox";
+import JoinDeniedBox from "../dialogBoxes/JoinDeniedBox";
+import WaitingBox from "../dialogBoxes/Waiting";
+import Noowner from "../dialogBoxes/Noowner";
+import OwnerRemovedDialog from "../dialogBoxes/OwnerRemovedDialog";
 
 const GenericEditor = ({
   socket,
@@ -12,6 +16,7 @@ const GenericEditor = ({
   themeMap,
   room,
   termialfunc,
+  UserID,
 
   fileCodes,
   setFileCodes,
@@ -21,6 +26,14 @@ const GenericEditor = ({
   setCursorPosition,
   terminal,
   openDialog,
+  joinRequest,
+  handleResponse,
+  setJoinRequest,
+  handleJoinReq,
+  setJoindenied,
+  joindenied,
+  noOwnerDialog,
+  ownerRemovedDialog,
 }) => {
   const terminalWrapperRef = useRef(null);
   const [mode, setMode] = useState("split");
@@ -87,7 +100,7 @@ const GenericEditor = ({
             }}
             onUpdate={handleUpdate}
             theme={themeMap[theme]}
-            className={`w-full h-[100%] text-[${fontSize}]`}
+            className={`w-full h-[100%]`}
             style={{ fontSize: `${fontSize}px` }}
           />
         </div>
@@ -102,6 +115,31 @@ const GenericEditor = ({
       <div className="w-full h-full flex flex-col">
         <div className="flex w-full h-full overflow-auto bg-zinc-900">
           {openDialog === true && <DialogBox />}
+
+          {room.createdBy === UserID && (
+            <ConformationBox
+              setJoinRequest={setJoinRequest}
+              handleResponse={handleResponse}
+              joinRequest={joinRequest}
+            />
+          )}
+          {room.createdBy !== UserID && (
+            <JoinDeniedBox
+              setJoindenied={setJoindenied}
+              joindenied={joindenied}
+              handleJoinReq={handleJoinReq}
+            />
+          )}
+
+          {room.createdBy !== UserID && (
+            <Noowner noOwnerDialog={noOwnerDialog} />
+          )}
+          {room.createdBy !== UserID && (
+            <OwnerRemovedDialog ownerRemovedDialog={ownerRemovedDialog} />
+          )}
+
+          {/* {waiting && room.createdBy !== UserID && <WaitingBox />} */}
+
           {renderEditor()}
         </div>
       </div>
