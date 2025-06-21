@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { userUpdateSchema } from "@/lib/validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,13 +19,25 @@ const UserSettingsComponent = ({ user }) => {
   const form = useForm({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      email: user?.email,
-      FirstName: user?.FirstName,
-      LastName: user?.LastName,
-      aboutUser: user?.aboutUser,
+      email: "",
+      FirstName: "",
+      LastName: "",
+      aboutUser: "",
     },
   });
 
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        email: user.email || "",
+        FirstName: user.FirstName || "",
+        LastName: user.LastName || "",
+        aboutUser: user.aboutUser || "",
+      });
+    }
+  }, [user, form]);
+
+  // Function for Updating user Profile.
   async function onSubmit(values) {
     try {
       const res = await fetch("/api/user/updateUserProfile", {
@@ -50,9 +62,9 @@ const UserSettingsComponent = ({ user }) => {
   }
 
   return (
-    <div className="w-full h-full px-4 py-6 space-y-8">
+    <div className="w-full h-full px-4 py-6 space-y-8 select-none">
       {/* Profile Section */}
-      <div className="flex flex-col items-center justify-center gap-4 border border-[#222] rounded-2xl bg-[#000] p-6 shadow-md">
+      <div className="flex flex-col items-center justify-center gap-4 border border-[#222] rounded-2xl bg-[#000] p-6">
         <img
           src="/avatar-placeholder.png"
           alt="Profile"
@@ -69,7 +81,7 @@ const UserSettingsComponent = ({ user }) => {
           className="w-full max-w-3xl mx-auto space-y-6"
         >
           {/* Username */}
-          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000]">
             <label className="text-lg font-medium text-white">
               Username
               <span className="block text-xs text-gray-400 font-normal mt-1">
@@ -85,7 +97,7 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* First and Last Name */}
-          <div className="flex flex-col md:flex-row gap-6 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
+          <div className="flex flex-col md:flex-row gap-6 border border-[#222] rounded-2xl p-6 bg-[#000]">
             <div className="w-full md:w-1/2">
               <FormField
                 control={form.control}
@@ -127,7 +139,7 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* Email */}
-          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000]">
             <FormField
               control={form.control}
               name="email"
@@ -148,7 +160,7 @@ const UserSettingsComponent = ({ user }) => {
           </div>
 
           {/* About User */}
-          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000] shadow-sm">
+          <div className="flex flex-col gap-2 border border-[#222] rounded-2xl p-6 bg-[#000]">
             <FormField
               control={form.control}
               name="aboutUser"
@@ -171,7 +183,7 @@ const UserSettingsComponent = ({ user }) => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#7C3AED] text-white font-semibold rounded-full hover:bg-[#5B21B6] transition-all duration-200"
+              className="px-6 py-2 bg-[#7C3AED] text-white font-medium rounded-full hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] border border-black transition-all duration-300 active:scale-95 cursor-pointer"
             >
               Save Changes
             </button>
