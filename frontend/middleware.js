@@ -8,9 +8,10 @@ export async function middleware(request) {
     secret: process.env.NEXTAUTH_SECRET,
   });
   const url = request.nextUrl;
+  console.log(url.pathname);
 
-  if(token) {
-    if (url.pathname === "/sign-in" || url.pathname === "/sign-up") {
+  if (token) {
+    if (url.pathname === "/signIn" || url.pathname === "/signUp") {
       return NextResponse.redirect(new URL("/userProfile", request.url));
     }
   }
@@ -18,5 +19,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/hys"],
+  matcher: ["/sign"],
 };

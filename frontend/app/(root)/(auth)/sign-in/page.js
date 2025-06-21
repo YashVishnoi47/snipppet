@@ -26,7 +26,7 @@ const SignInpage = () => {
     });
 
     if (res.ok) {
-      router.push("/");
+      router.push("/userProfile");
       setLoading(false);
     } else {
       setLoading(false);
@@ -101,7 +101,16 @@ const SignInpage = () => {
             whileTap={{ scale: 0.97 }}
             whileHover={{ scale: 1.02 }}
           >
-            {loading ? <Image src={"/gaerSpinner.svg"} width={20} height={20} alt="gear"/> : "Sign In"}
+            {loading ? (
+              <Image
+                src={"/gaerSpinner.svg"}
+                width={20}
+                height={20}
+                alt="gear"
+              />
+            ) : (
+              "Sign In"
+            )}
           </motion.button>
 
           <motion.div

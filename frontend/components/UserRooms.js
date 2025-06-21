@@ -19,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const UserRooms = ({ room, index, FetchUserRooms, loading, setLoading }) => {
   const router = useRouter();
@@ -55,7 +56,16 @@ const UserRooms = ({ room, index, FetchUserRooms, loading, setLoading }) => {
   };
 
   return (
-    <div className="max-w-sm w-full hover:scale-[1.02] active:scale-[0.98] rounded-3xl border border-[#1B1B2F] bg-[#111114] shadow-md hover:shadow-[#7C3AED]/50 transition-all duration-300 ease-in-out cursor-default overflow-hidden flex sm:flex-row flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.5,
+        delay: 0.9,
+        // ease: [0.22, 1, 0.36, 1], // easeOutCubic (more natural than "anticipate")
+      }}
+      className="max-w-sm w-full hover:scale-[1.02] active:scale-[0.98] rounded-3xl border border-[#1B1B2F] bg-[#111114] shadow-md hover:shadow-[#7C3AED]/50 transition-all duration-300 ease-in-out cursor-default overflow-hidden flex sm:flex-row flex-col"
+    >
       {/* Image Section */}
       <div className="sm:w-[35%] w-full h-[150px] sm:h-auto flex items-center justify-center bg-[#18181B] sm:rounded-l-3xl rounded-t-3xl sm:rounded-t-none p-4">
         <Image
@@ -122,7 +132,7 @@ const UserRooms = ({ room, index, FetchUserRooms, loading, setLoading }) => {
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

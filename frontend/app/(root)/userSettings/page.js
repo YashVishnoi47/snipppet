@@ -55,7 +55,7 @@ const UserSettings = () => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full bg-black">
       <Navbar />
       <div className="w-full min-h-screen flex flex-col justify-start items-center bg-black py-10 px-4">
         <div className="w-full max-w-6xl flex flex-col md:flex-row bg-[#0A0A0A] rounded-2xl shadow-lg overflow-hidden border border-[#1A1A1A]">

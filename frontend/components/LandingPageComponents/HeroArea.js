@@ -55,28 +55,22 @@ const HeroArea = () => {
           }}
           className="w-full md:w-[75%] flex justify-center gap-6"
         >
-          {/* <motion.button
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-[#7C3AED] text-[#E0E0E0] border border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white cursor-pointer"
-          >
-            Get Started
-          </motion.button> */}
           <motion.button
+            whileTap={{ scale: 0.95 }}
             onClick={() => {
               router.push("/sign-in");
             }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-[#7C3AED] flex justify-center  items-center gap-2 text-[#E0E0E0] border border-[#3C3C4D] rounded-lg font-medium transition-all duration-300 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white cursor-pointer"
+            className="px-8 py-4 bg-[#7C3AED] text-[#E0E0E0] border border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white cursor-pointer"
           >
-            Sign In to continue <FaArrowRight  />
+            Get Started
           </motion.button>
 
-          {/* <motion.button
+          <motion.button
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 bg-transparent text-[#E0E0E0] border border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white cursor-pointer"
           >
             Learn more
-          </motion.button> */}
+          </motion.button>
         </motion.div>
       </div>
     </div>

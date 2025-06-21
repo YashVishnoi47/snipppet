@@ -18,6 +18,7 @@ import Button2 from "@/components/utilityComponents/Button2";
 import UserRooms from "@/components/UserRooms";
 import Loader from "@/components/utilityComponents/Loader";
 import Navbar from "@/components/Navbar";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -47,6 +48,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -186,12 +188,22 @@ const UserProfile = () => {
         {/* top section */}
         <div className="w-full h-[10vh] border-b-2 py-2 justify-between flex items-center">
           {/* Search Box */}
-          <div className="w-full max-w-[300px]">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.5, type: "spring" }}
+            className="w-full max-w-[300px]"
+          >
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
-          </div>
+          </motion.div>
 
           {/* Filter */}
-          <div className="flex gap-6 justify-end w-1/2 h-full p-2">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, type: "spring", delay: 0.4 }}
+            className="flex gap-6 justify-end w-1/2 h-full p-2"
+          >
             <Popover>
               <PopoverTrigger className="text-[#E0E0E0] px-4 cursor-pointer rounded-full hover:bg-[#7C3AED]/30 hover:text-white transition-all duration-300 ease-in-out flex gap-2 justify-center items-center">
                 <IoFilter className="text-xl" />
@@ -235,7 +247,7 @@ const UserProfile = () => {
                 </div>
               </PopoverContent>
             </Popover>
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom Section */}
@@ -243,15 +255,30 @@ const UserProfile = () => {
           {/* Header Text */}
           <div className="w-full py-2 mt-2 flex justify-between items-start gap-2">
             <div className="w-1/2 flex flex-col gap-1 sm:gap-2">
-              <h1 className="text-4xl sm:text-3xl font-semibold capitalize tracking-tight text-[#E0E0E0]">
+              <motion.h1
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.6, type: "spring" }}
+                className="text-4xl sm:text-3xl font-semibold capitalize tracking-tight text-[#E0E0E0]"
+              >
                 {`${session?.user.userName}'s Rooms`}
-              </h1>
-              <p className="text-sm text-[#A3A3A3]">
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.7, type: "spring" }}
+                className="text-sm text-[#A3A3A3]"
+              >
                 Total Rooms: {rooms.length}
-              </p>
+              </motion.p>
             </div>
             <div className="w-1/2 flex justify-end items-center">
-              <div className="flex gap-4">
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.9, type: "spring" }}
+                className="flex gap-4"
+              >
                 {/* Create Room */}
                 <Dialog>
                   <DialogTrigger asChild>
@@ -413,7 +440,7 @@ const UserProfile = () => {
                     </div>
                   </PopoverContent>
                 </Popover>
-              </div>
+              </motion.div>
             </div>
           </div>
 
@@ -436,7 +463,7 @@ const UserProfile = () => {
                 {fetching ? (
                   <Loader />
                 ) : (
-                  <h1 className="text-2xl font-semibold text-gray-500">
+                  <h1 className="text-2xl font-semibold gap-2 text-gray-500 flex justify-center items-center flex-col">
                     No Rooms Found
                   </h1>
                 )}
