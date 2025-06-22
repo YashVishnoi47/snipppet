@@ -111,9 +111,9 @@ const UserRooms = ({ room, index, FetchUserRooms, loading, setLoading }) => {
                 <AlertDialogDescription className="text-sm text-[#A1A1AA] mt-2 leading-relaxed">
                   This action is{" "}
                   <span className="text-red-500 font-medium">permanent</span>.
-                  All associated data will be lost forever, and you won't be
+                  {`All associated data will be lost forever, and you won't be
                   able to recover it. Please make sure this is what you really
-                  want to do.
+                  want to do.`}
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
