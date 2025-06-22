@@ -32,7 +32,7 @@ export const POST = async (req) => {
     }
     return new Response("Room not created", { status: 409 });
   } catch (error) {
-    // console.error("Error creating room:", error);
+    console.error("Error creating room:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

@@ -1,5 +1,6 @@
 import Room from "@/lib/db/models/room.model";
 import { connectDB } from "@/lib/db/db";
+import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
   try {
@@ -8,8 +9,9 @@ export const POST = async (req) => {
     const RoomId = searchParams.get("roomId");
     const live = searchParams.get("live");
     if (!RoomId) {
-      return new Response(
-        JSON.stringify({ error: "RoomId is not available" }, { status: 401 })
+      return NextResponse.json(
+        { error: "RoomId is not available" },
+        { status: 401 }
       );
     }
 
@@ -19,28 +21,20 @@ export const POST = async (req) => {
       { new: true }
     );
     if (!room) {
-      return new Response(JSON.stringify({ error: "Room not found" }), {
-        status: 404,
-      });
+      return NextResponse.json(
+        { error: "Room not found" },
+        {
+          status: 404,
+        }
+      );
     }
 
-    // if (room.isPublic === live) {
-      console.log(`Room is now ${live}`);
-      return new Response(JSON.stringify({ room }), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    // }
+    return NextResponse.json(room, { status: 200 });
   } catch (error) {
     console.error("Update room status error:", error);
-    return new Response(
-      JSON.stringify({
-        error: "Internal Server Error",
-        details: error.message,
-      }),
-      { status: 500 }
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { details: error.message }
     );
   }
 };

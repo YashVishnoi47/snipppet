@@ -2,13 +2,14 @@ import User from "@/lib/db/models/user.model";
 import { connectDB } from "@/lib/db/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
+import { NextResponse } from "next/server";
 
 export const GET = async () => {
   await connectDB();
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user || !session.user._id) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user._id;
@@ -16,13 +17,13 @@ export const GET = async () => {
     const user = await User.findById(userId);
 
     if (user) {
-      return new Response(JSON.stringify({ user }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+      return NextResponse.json({ user }, { status: 200 });
     }
   } catch (error) {
-    console.error("Error in getUser:", error);
-    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+    console.log("Error Fetching User", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };

@@ -7,7 +7,6 @@ export async function POST(req) {
 
   try {
     const { roomId, roomCode } = await req.json();
-    console.log(roomCode);
     if (!roomId || !roomCode) {
       return NextResponse.json(
         { error: "Room ID and code are required" },
@@ -24,8 +23,7 @@ export async function POST(req) {
     await room.save();
 
     return NextResponse.json(
-      { message: "Room code saved successfully.", roomCode: room.roomCode },
-
+      { message: "Code saved to DataBase!" },
       { status: 200 }
     );
   } catch (error) {

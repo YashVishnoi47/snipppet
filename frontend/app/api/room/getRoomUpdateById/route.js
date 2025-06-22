@@ -1,5 +1,6 @@
 import Room from "@/lib/db/models/room.model";
 import { connectDB } from "@/lib/db/db";
+import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
   try {
@@ -9,16 +10,22 @@ export const GET = async (req) => {
     const roomId = searchParams.get("roomId");
 
     if (!roomId) {
-      return new Response("Room ID is required", { status: 400 });
+      return NextResponse.json(
+        { error: "Room-ID is not available." },
+        { status: 400 }
+      );
     }
 
     const room = await Room.findById(roomId).select("updatedAt createdAt");
 
     if (room) {
-      return new Response(JSON.stringify(room), { status: 200 });
+      return NextResponse.json(room, { status: 200 });
     }
   } catch (error) {
     console.error("Error fetching room:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };

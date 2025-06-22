@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db/db";
 import User from "@/lib/db/models/user.model";
+import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
   await connectDB();
@@ -8,27 +9,19 @@ export const GET = async (req) => {
 
     const OwnerID = searchParams.get("ownerID");
     if (!OwnerID) {
-      return Response.json({ error: "Provide Owner ID" }, { status: 401 });
+      return NextResponse.json({ error: "Owner Id is not available." }, { status: 401 });
     }
 
-    const Owner = await User.findById(OwnerID);
+    const Owner = await User.findById(OwnerID).select("-password");
 
     if (Owner) {
-      return new Response(JSON.stringify({ Owner }), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      return NextResponse.json(Owner, { status: 200 });
     }
   } catch (error) {
     console.log("Error Fetching Owner", error);
-    return new Response(
-      JSON.stringify({
-        error: "Internal Server Error",
-        details: error.message,
-      }),
-      { status: 500 }
+    return NextResponse(
+      { error: "Internal Server Error" },
+      { ErrorDetails: error }
     );
   }
 };

@@ -18,6 +18,8 @@ import DialogBox from "@/components/dialogBoxes/DialogBox";
 
 const Room = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+  const params = useParams();
   const [lastSavedCode, setLastSavedCode] = useState("");
   const [compiledCode, setCompiledCode] = useState("");
   const [compileing, setCompileing] = useState(false);
@@ -36,12 +38,16 @@ const Room = () => {
   const [room, setRoom] = useState({});
   const [owner, setOwner] = useState();
   const [live, setLive] = useState(false);
-
   const [openDialog, setOpenDialog] = useState(false);
   const [joinRequest, setJoinRequest] = useState(null);
   const [joindenied, setJoindenied] = useState(false);
   const [noOwnerDialog, setNoOwnerDialog] = useState(false);
   const [ownerRemovedDialog, setownerRemovedDialog] = useState(false);
+
+  const { socket, connectSocket } = useContext(SocketContext);
+  const userName = session?.user.userName || "TEST";
+  const UserID = session?.user._id;
+  const roomId = params.roomId;
 
   const themeMap = {
     dark: oneDark,
@@ -50,12 +56,6 @@ const Room = () => {
     material: material,
     sublime: sublime,
   };
-  const router = useRouter();
-  const params = useParams();
-  const { socket, connectSocket } = useContext(SocketContext);
-  const userName = session?.user.userName || "TEST";
-  const UserID = session?.user._id;
-  const roomId = params.roomId;
 
   // Trigger socket connection when live mode is enabled
   useEffect(() => {
@@ -97,10 +97,10 @@ const Room = () => {
     });
     const data = await res.json();
     if (data.error) {
-      console.error("Error saving code", data.error);
+      console.error("Error saving code to database.", data.error);
     } else {
       setLastSavedCode(codeToSave);
-      toast.success("Code saved!");
+      toast.success(data.message);
     }
   };
 
@@ -204,15 +204,22 @@ const Room = () => {
   // Fetching the room latest Update time by roomId.
   useEffect(() => {
     const getRoomUpdateById = async () => {
-      const res = await fetch(`/api/room/getRoomUpdateById?roomId=${roomId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      if (data) {
-        setUpdateTime(data.updatedAt);
+      try {
+        const res = await fetch(
+          `/api/room/getRoomUpdateById?roomId=${roomId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await res.json();
+        if (data) {
+          setUpdateTime(data.updatedAt);
+        }
+      } catch (error) {
+        console.log("Error Fetching Room Latest Update Time ", error);
       }
     };
 
@@ -239,7 +246,7 @@ const Room = () => {
           const data = await res.json();
           setOwner(data);
         } else {
-          console.log("Owner not found");
+          console.log(data.error || data.message);
         }
       } catch (err) {
         console.error("Error fetching room owner:", err);
@@ -411,7 +418,6 @@ const Room = () => {
         if (res) {
           setLive("public");
           setOpenDialog(true);
-          // console.log("Dilaog is now enabled");
           toast.success("Your Room is Public now.");
         }
       } catch (error) {

@@ -49,6 +49,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
+import { ShieldAlert } from "lucide-react";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -162,19 +163,17 @@ const UserProfile = () => {
 
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
-        <div className="p-8 rounded-2xl shadow-lg bg-white text-center">
-          <h1 className="text-2xl font-semibold text-gray-800 mb-4">
-            Access Restricted
-          </h1>
-          <p className="text-gray-600 mb-6">
-            Please log in to access this page.
+      <div className="w-full min-h-screen flex items-center justify-center bg-black text-[#E0E0E0] px-4">
+        <div className="max-w-md w-full flex flex-col items-center text-center gap-6 border border-[#2A2A2A] bg-[#111111] rounded-2xl p-8 shadow-xl">
+          <ShieldAlert className="text-red-500 w-12 h-12" />
+          <h1 className="text-2xl font-bold text-[#F5F5F5]">Access Denied</h1>
+          <p className="text-sm text-gray-400">
+            You are not allowed to access this page. Please log in to continue.
           </p>
-          <Link
-            href="/sign-in"
-            className="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
-          >
-            Go to Login
+          <Link href="/sign-in">
+            <Button className="bg-[#7C3AED] cursor-pointer hover:bg-[#7C3AED]/30 hover:border-[#7C3AED] border border-black transition-all duration-300 ease-in-out w-full">
+              Go to Sign In
+            </Button>
           </Link>
         </div>
       </div>
