@@ -24,7 +24,7 @@ const FloatNav = () => {
       >
         {/* left */}
         <div className="w-1/2 h-full flex justify-start items-center">
-          <h1 className="text-3xl text-white cursor-pointer font-bold">Snippet</h1>
+          <h1 className="text-3xl text-white cursor-pointer font-bold">Snipppet</h1>
           {/* Other Links */}
           <div className="p-4 h-full w-full ml-1 flex justify-start items-center">
             <Link href={"/"}>

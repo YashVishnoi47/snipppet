@@ -27,7 +27,7 @@ const Navbar = () => {
             onClick={() => router.push("/")}
             className="text-3xl cursor-pointer font-bold"
           >
-            Snippet
+            Snipppet
           </h1>
         </div>
 

@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Snippet",
+  title: "Snipppet",
   description: "Seamless Real-Time Code Collaboration.",
 };
 
