@@ -14,7 +14,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import Image from "next/image";
-import { object } from "zod";
+import { EditorView } from "@uiw/react-codemirror";
 
 const GenericEditor = ({
   socket,
@@ -110,7 +110,7 @@ const GenericEditor = ({
           value={fileCodes[key]}
           height="100%"
           width="100%"
-          extensions={[config.extension]}
+          extensions={[config.extension, EditorView.lineWrapping]}
           onChange={(value) => {
             handleCodeChange(value, key);
           }}
