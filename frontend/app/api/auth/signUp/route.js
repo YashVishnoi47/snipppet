@@ -25,7 +25,12 @@ export const POST = async (req) => {
   });
 
   return Response.json(
-    { message: "User Created Successfully" },
-    { status: 201 }
+    {
+      message: "User Created Successfully",
+      user: user,
+    },
+    {
+      status: 201,
+    }
   );
 };

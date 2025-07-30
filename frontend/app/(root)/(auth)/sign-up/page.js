@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { convertOffsetToTimes, motion } from "framer-motion";
 import { Separator } from "@radix-ui/react-select";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,24 @@ export default function SignUp() {
   });
   const router = useRouter();
 
+  const handleSignIn = async ({ email }) => {
+    const res = await signIn("credentials", {
+      email,
+      password: formData.password,
+      redirect: false,
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      router.push("/userProfile");
+      setLoading(false);
+    } else {
+      setLoading(false);
+      toast.error("data.error");
+    }
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -28,12 +47,16 @@ export default function SignUp() {
       body: JSON.stringify(formData),
     });
 
+    const data = await res.json();
+    console.log(data)
+
     if (res.ok) {
-      router.push("/sign-in");
-      setLoading(false);
+      if (data.user) {
+        handleSignIn({ email: data.user.email });
+      }
     } else {
       setLoading(false);
-      const { message } = await res.json();
+      const message = data.message;
       toast.error(message);
     }
   };
