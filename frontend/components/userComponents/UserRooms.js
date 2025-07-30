@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { editorConfigs } from "@/config/EditorConfig";
 import Image from "next/image";
 import { toast } from "sonner";

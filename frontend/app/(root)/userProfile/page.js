@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import SearchBar from "@/components/utilityComponents/SearchBar";
 import Button2 from "@/components/utilityComponents/Button2";
-import UserRooms from "@/components/UserRooms";
+import UserRooms from "@/components/userComponents/UserRooms";
 import Loader from "@/components/utilityComponents/Loader";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -48,8 +48,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Image from "next/image";
 import { ShieldAlert } from "lucide-react";
+import { ThemeConfig } from "@/config/ThemeConfig";
+import { object } from "zod";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -62,6 +63,8 @@ const UserProfile = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [filterTerm, setFilterTerm] = useState("all");
+  const [roomTheme, setRoomTheme] = useState("oneDark");
+  const [showAdvanceSettings, setShowAdvanceSettings] = useState(false);
 
   // Debounced Search Logic
   useEffect(() => {
@@ -78,8 +81,8 @@ const UserProfile = () => {
     resolver: zodResolver(roommFormSchema),
     defaultValues: {
       roomName: "",
-      codingLang: "",
-      idPublic: false,
+      codingLang: "webDev",
+      idublic: false,
     },
   });
 
@@ -112,6 +115,7 @@ const UserProfile = () => {
       body: JSON.stringify({
         roomName: values.roomName,
         codingLang: values.codingLang,
+        theme: roomTheme,
       }),
     });
     const data = await res.json();
@@ -238,8 +242,7 @@ const UserProfile = () => {
                 <div className="flex justify-end">
                   <Button
                     onClick={() => setFilter("all")}
-                    className="rounded-full px-4 py-2 bg-[#7C3AED] text-white hover:bg-[#5B21B6] transition-all duration-300 ease-in-out
-        "
+                    className="rounded-full px-4 py-2 bg-[#7C3AED] text-white hover:bg-[#5B21B6] transition-all duration-300 ease-in-out"
                   >
                     Clear Filter
                   </Button>
@@ -251,8 +254,9 @@ const UserProfile = () => {
 
         {/* Bottom Section */}
         <div className="w-full flex flex-col items-start h-[90vh] border-red-700">
-          {/* Header Text */}
+          {/* Header Text and action buttons */}
           <div className="w-full py-2 mt-2 flex justify-between items-start gap-2">
+            {/* Basic Room details */}
             <div className="w-1/2 flex flex-col gap-1 sm:gap-2">
               <motion.h1
                 initial={{ opacity: 0, x: -40 }}
@@ -271,6 +275,8 @@ const UserProfile = () => {
                 Total Rooms: {rooms.length}
               </motion.p>
             </div>
+
+            {/* Create Room and Join Room Buttons. */}
             <div className="w-1/2 flex justify-end items-center">
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
@@ -292,7 +298,7 @@ const UserProfile = () => {
                   </DialogTrigger>
 
                   {loading ? (
-                    <DialogContent className="w-full max-w-sm bg-[#18181B] p-8 rounded-2xl shadow-xl border border-white/10 flex flex-col items-center justify-center space-y-6 text-white">
+                    <DialogContent className="w-full max-w-sm bg-[#18181B]/10  backdrop-blur-xl   p-8 rounded-2xl shadow-xl border border-white/10 flex flex-col items-center justify-center space-y-6 text-white">
                       {/* Loader Animation */}
                       <div className="relative w-16 h-16">
                         <Loader />
@@ -309,7 +315,7 @@ const UserProfile = () => {
                       </p>
                     </DialogContent>
                   ) : (
-                    <DialogContent className="bg-[#1C1C27] text-[#E0E0E0] border border-[#333348] rounded-2xl max-w-md w-full shadow-lg">
+                    <DialogContent className="bg-[#1C1C27]/10 backdrop-blur-xl text-[#E0E0E0] border border-[#333348] rounded-2xl max-w-md w-full shadow-lg">
                       <DialogHeader className="mb-4">
                         <DialogTitle className="text-2xl font-semibold">
                           Create Room
@@ -342,8 +348,31 @@ const UserProfile = () => {
                             )}
                           />
 
+                          {/* Theme Selector */}
+                          <div className="w-full h-fit flex flex-col justify-center items-start">
+                            <h1 className="text-sm text-[#E0E0E0] mb-4">
+                              Select Your Theme
+                            </h1>
+                            <div className="w-full flex justify-start items-center gap-2 flex-wrap">
+                              {Object.entries(ThemeConfig).map(
+                                ([key, item]) => (
+                                  <div
+                                    key={key}
+                                    className={`text-sm w-[100px] bg-[#7C3AED]/10 border border-[#36334E] backdrop-blur-2xl flex justify-center items-center py-2 rounded-md text-[#E0E0E0] cursor-pointer mt-1 hover:bg-[#3C1C73] hover:border-[#7C3AED] transition-all duration-200 ease-in-out ${
+                                      roomTheme === item.value &&
+                                      "bg-[#7C3AED]/50 border border-[#7C3AED]/70 hover:bg-[#7C3AED]/50"
+                                    }`}
+                                    onClick={() => setRoomTheme(item.value)}
+                                  >
+                                    {item.name}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+
                           {/* Language Selector */}
-                          <FormField
+                          {/* <FormField
                             control={form.control}
                             name="codingLang"
                             render={({ field }) => (
@@ -378,7 +407,46 @@ const UserProfile = () => {
                                 <FormMessage />
                               </FormItem>
                             )}
-                          />
+                          /> */}
+
+                          {/* Advance Settings button and advance settings */}
+                          {showAdvanceSettings === false ? (
+                            <div className="w-full h-fit flex justify-start items-center">
+                              <div
+                                onClick={() => setShowAdvanceSettings(true)}
+                                className="text-sm text-[#E0E0E0] font-bold cursor-pointer py-3 px-4 rounded-lg relative overflow-hidden group"
+                              >
+                                {/* This is the animated border layer */}
+                                <span className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#7C3AED] transition-all duration-300 ease-in-out group-hover:w-full"></span>
+
+                                {/* This is the text layer */}
+                                <span className="relative z-10">
+                                  Advance Settings
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-full py-6 flex flex-col items-start gap-4">
+                              {/* Professional message text */}
+                              <h1 className="text-base md:text-lg text-gray-300 font-medium tracking-wide">
+                                Advanced settings will be available soon.
+                              </h1>
+
+                              {/* Button with animated underline hover */}
+                              <button
+                                onClick={() => setShowAdvanceSettings(false)}
+                                className="text-sm text-gray-200 font-semibold px-4 py-2 relative group focus:outline-none cursor-pointer"
+                              >
+                                {/* Hover underline animation */}
+                                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7C3AED] transition-all duration-300 group-hover:w-full"></span>
+
+                                {/* Button text */}
+                                <span className="relative z-10">
+                                  Close Settings
+                                </span>
+                              </button>
+                            </div>
+                          )}
 
                           {/* Submit Button */}
                           <div className="flex justify-end">

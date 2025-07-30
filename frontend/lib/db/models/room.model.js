@@ -27,6 +27,18 @@ const roomSchema = new Schema(
       type: String,
       default: "",
     },
+    htmlCode: {
+      type: String,
+      default: "",
+    },
+    cssCode: {
+      type: String,
+      default: "",
+    },
+    jsCode: {
+      type: String,
+      default: "",
+    },
 
     roomSettings: {
       theme: {
@@ -35,10 +47,8 @@ const roomSchema = new Schema(
       fontSize: {
         type: String,
       },
-      theme: {
-        type: String,
-      },
     },
+
     //   chatId: {
     //     type: String,
     //     required: true,

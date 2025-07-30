@@ -3,7 +3,6 @@ import { SocketContext } from "@/context/SocketContext";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import CodeNavbar from "@/components/CodeNavbar";
 import GenericEditor from "@/components/codeEditorComponents/GenericEditor";
 import { editorConfigs } from "@/config/EditorConfig";
 import { toast } from "sonner";
@@ -15,6 +14,8 @@ import { material } from "@uiw/codemirror-theme-material";
 import { sublime } from "@uiw/codemirror-theme-sublime";
 import Taskbar from "@/components/codeEditorComponents/Taskbar";
 import DialogBox from "@/components/dialogBoxes/DialogBox";
+import CodeMenu from "@/components/codeEditorComponents/CodeMenu";
+import Image from "next/image";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -26,7 +27,6 @@ const Room = () => {
   const [activeUsers, setActiveUsers] = useState([]);
   const [updateTime, setUpdateTime] = useState("");
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
-  const [theme, setTheme] = useState("dark");
   const [terminal, setTerminal] = useState(false);
   const [fileCodes, setFileCodes] = useState({
     html: "",
@@ -34,8 +34,10 @@ const Room = () => {
     js: "",
     python: "",
   });
+
   const [fontSize, setFontSize] = useState(14);
   const [room, setRoom] = useState({});
+  const [theme, setTheme] = useState("dark");
   const [owner, setOwner] = useState();
   const [live, setLive] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -43,6 +45,7 @@ const Room = () => {
   const [joindenied, setJoindenied] = useState(false);
   const [noOwnerDialog, setNoOwnerDialog] = useState(false);
   const [ownerRemovedDialog, setownerRemovedDialog] = useState(false);
+  const [codeMenuOpen, setCodeMenuOpen] = useState(true);
 
   const { socket, connectSocket } = useContext(SocketContext);
   const userName = session?.user.userName || "TEST";
@@ -56,6 +59,14 @@ const Room = () => {
     material: material,
     sublime: sublime,
   };
+
+  // Setting Theme
+  useEffect(() => {
+    if (!room) return;
+    if (room?.roomSettings?.theme) {
+      setTheme(room.roomSettings.theme);
+    }
+  }, [room]);
 
   // Trigger socket connection when live mode is enabled
   useEffect(() => {
@@ -75,16 +86,23 @@ const Room = () => {
 
   // Function to save the code in the Database
   const SaveCodeToDatabase = async () => {
-    const editorKey = Object.entries(editorConfigs).find(
-      ([key, config]) => config.language === room.codingLang
-    )?.[0];
+    // const editorKey = Object.entries(editorConfigs).find(
+    //   ([key, config]) => config.language === room.codingLang
+    // )?.[0];
 
-    if (!editorKey) {
-      console.error("No editor found for this coding language.");
+    const editorKey2 = Object.entries(editorConfigs).filter(
+      ([key, config]) => config.language === room.codingLang
+    );
+
+    if (!editorKey2) {
+      console.error("Keys not found.");
       return;
     }
 
-    const codeToSave = fileCodes[editorKey];
+    // const codeToSave = fileCodes[editorKey];
+    const htmlcodeToSave = fileCodes[editorKey2?.[0]?.[0]];
+    const csscodeToSave = fileCodes[editorKey2?.[1]?.[0]];
+    const jscodeToSave = fileCodes[editorKey2?.[2]?.[0]];
     const res = await fetch("api/room/saveCodeToDatabase", {
       method: "POST",
       headers: {
@@ -92,14 +110,18 @@ const Room = () => {
       },
       body: JSON.stringify({
         roomId: roomId,
-        roomCode: codeToSave,
+        // roomCode: codeToSave,
+        htmlCode: htmlcodeToSave,
+        cssCode: csscodeToSave,
+        jsCode: jscodeToSave,
       }),
     });
+
     const data = await res.json();
     if (data.error) {
       console.error("Error saving code to database.", data.error);
     } else {
-      setLastSavedCode(codeToSave);
+      setLastSavedCode(htmlcodeToSave);
       toast.success(data.message);
     }
   };
@@ -129,46 +151,46 @@ const Room = () => {
   }, [fileCodes, lastSavedCode, room.codingLang]);
 
   // Function For Compiling Code.
-  const CompileCode = async () => {
-    setCompileing(true);
-    try {
-      const editorKey = Object.entries(editorConfigs).find(
-        ([key, config]) => config.language === room.codingLang
-      )?.[0];
+  // const CompileCode = async () => {
+  //   setCompileing(true);
+  //   try {
+  //     const editorKey = Object.entries(editorConfigs).find(
+  //       ([key, config]) => config.language === room.codingLang
+  //     )?.[0];
 
-      if (!editorKey) {
-        console.error("No editor-key found for this coding language.");
-        return;
-      }
-      const code = fileCodes[editorKey];
-      const config = editorConfigs[editorKey];
-      const languageId = config.language_id;
+  //     if (!editorKey) {
+  //       console.error("No editor-key found for this coding language.");
+  //       return;
+  //     }
+  //     const code = fileCodes[editorKey];
+  //     const config = editorConfigs[editorKey];
+  //     const languageId = config.language_id;
 
-      const res = await fetch("/api/compile", {
-        method: "POST",
-        body: JSON.stringify({
-          source_code: code,
-          language_id: languageId,
-        }),
-      });
+  //     const res = await fetch("/api/compile", {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         source_code: code,
+  //         language_id: languageId,
+  //       }),
+  //     });
 
-      const data = await res.json();
-      const result = data.result;
+  //     const data = await res.json();
+  //     const result = data.result;
 
-      if (result.stderr) {
-        setCompiledCode(result.stderr);
-        setTerminal(true);
-      } else {
-        setCompiledCode(result.stdout || result.compile_output || "No output");
-        setTerminal(true);
-      }
+  //     if (result.stderr) {
+  //       setCompiledCode(result.stderr);
+  //       setTerminal(true);
+  //     } else {
+  //       setCompiledCode(result.stdout || result.compile_output || "No output");
+  //       setTerminal(true);
+  //     }
 
-      setCompileing(false);
-    } catch (error) {
-      console.log("Error Compiling Code from Code Editor", error);
-      setCompileing(false);
-    }
-  };
+  //     setCompileing(false);
+  //   } catch (error) {
+  //     console.log("Error Compiling Code from Code Editor", error);
+  //     setCompileing(false);
+  //   }
+  // };
 
   // Fetching the room data by roomId.
   useEffect(() => {
@@ -182,15 +204,17 @@ const Room = () => {
       const data = await res.json();
       setRoom(data);
       setLive(data.isPublic);
-      if (data?.roomCode) {
-        const editorKey = Object.entries(editorConfigs).find(
+      if (data?.htmlCode || data?.cssCode || data?.jsCode) {
+        const editorKey = Object.entries(editorConfigs).filter(
           ([key, config]) => config.language === data.codingLang
-        )?.[0];
+        );
 
         if (editorKey) {
           setFileCodes((prev) => ({
             ...prev,
-            [editorKey]: data.roomCode,
+            [editorKey?.[0]?.[0]]: data.htmlCode,
+            [editorKey?.[1]?.[0]]: data.cssCode,
+            [editorKey?.[2]?.[0]]: data.jsCode,
           }));
         }
       }
@@ -394,15 +418,6 @@ const Room = () => {
     };
   }, [socket]);
 
-  // Terminal State.
-  const termialfunc = () => {
-    if (terminal === true) {
-      setTerminal(false);
-    } else {
-      setTerminal(true);
-    }
-  };
-
   // Function to switch Private and public status of room.
   const handleRoomStatus = async () => {
     if (live === "private") {
@@ -486,18 +501,31 @@ const Room = () => {
   }
 
   return (
-    <div className="flex flex-col w-full h-screen bg-black">
-      <CodeNavbar
-        live={live}
-        compileing={compileing}
-        setFontSize={setFontSize}
-        fontSize={fontSize}
-        RemoveUserFromRoom={RemoveUserFromRoom}
-        CompileCode={CompileCode}
+    <div className="flex flex-col relative w-full h-screen bg-black">
+      {/* Code menu toggle button. */}
+      <button
+        onClick={() => setCodeMenuOpen(!codeMenuOpen)}
+        className={
+          "fixed w-[4%] top-8 h-[8.5%] right-6 z-30 bg-black text-white px-4 py-2 rounded-xl shadow-lg hover:bg-[#7C3AED] transition-all backdrop-blur-xl flex justify-center items-center cursor-pointer"
+        }
+      >
+        <Image
+          src={codeMenuOpen ? "./close.svg" : "./menu.svg"}
+          height={30}
+          width={30}
+          alt="Icon"
+        />
+      </button>
+
+      <CodeMenu
+        codeMenuOpen={codeMenuOpen}
         session={session}
         room={room}
+        live={live}
         activeUsers={activeUsers}
+        RemoveUserFromRoom={RemoveUserFromRoom}
       />
+
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
@@ -514,13 +542,13 @@ const Room = () => {
             activeUsers={activeUsers}
             room={room}
             codingLang={room.codingLang}
-            termialfunc={termialfunc}
+            // termialfunc={termialfunc}
+            // terminal={terminal}
             fileCodes={fileCodes}
             setFileCodes={setFileCodes}
             compiledCode={compiledCode}
             fontSize={fontSize}
             setCursorPosition={setCursorPosition}
-            terminal={terminal}
             openDialog={openDialog}
             handleJoinReq={handleJoinReq}
             UserID={UserID}
@@ -539,7 +567,9 @@ const Room = () => {
               session={session}
               SaveCodeToDatabase={SaveCodeToDatabase}
               hasUnsavedChanges={hasUnsavedChanges}
-              termialfunc={termialfunc}
+              // termialfunc={termialfunc}
+              setFontSize={setFontSize}
+              fontSize={fontSize}
               theme={theme}
               setTheme={setTheme}
               activeUsers={activeUsers}
@@ -557,3 +587,14 @@ const Room = () => {
 };
 
 export default Room;
+
+{
+  // Terminal State.
+  // const termialfunc = () => {
+  //   if (terminal === true) {
+  //     setTerminal(false);
+  //   } else {
+  //     setTerminal(true);
+  //   }
+  // };
+}

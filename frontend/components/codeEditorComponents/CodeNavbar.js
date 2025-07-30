@@ -1,18 +1,13 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import UserProfileButton from "./userComponents/UserProfileButton";
 import { FaUserPlus } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
 import { MdOutlinePersonRemove } from "react-icons/md";
 import { FaPython } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch";
-import { IoMdSettings } from "react-icons/io";
 import { ImExit } from "react-icons/im";
-import { FaRegSave } from "react-icons/fa";
 import { editorConfigs } from "@/config/EditorConfig";
-import { Label } from "@/components/ui/label";
-import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import {
   Popover,
@@ -28,8 +23,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
@@ -45,8 +38,6 @@ const CodeNavbar = ({
   activeUsers,
   live,
 }) => {
-  const [tab, setTab] = useState("general");
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const increaseFont = () => {
     setFontSize((prev) => Math.min(prev + 2, 32));
   };
@@ -84,9 +75,9 @@ const CodeNavbar = ({
         bounce: 0.25,
         delay: 0.5,
       }}
-      className="w-[full] cursor-text items-center justify-center bg-[#000] flex min-h-[10%] border-2 border-black"
+      className="w-full cursor-text items-center justify-center bg-[#000]/10 backdrop-blur-lg flex min-h-[10%] border-2 border-black"
     >
-      <div className="h-full flex justify-between w-[90%] ">
+      <div className="h-full flex justify-between w-[90%]">
         {/* Left*/}
         <div className="h-full flex gap-4 justify-start items-center w-[25%] ">
           <Popover>
@@ -342,56 +333,11 @@ const CodeNavbar = ({
             </Popover>
           )}
 
-          {/* Active User */}
-          <Popover>
-            <PopoverTrigger
-              className="flex items-center gap-2 px-4 py-2 rounded-md border bg-[#7C3AED]/20 border-[#3C3C4D] text-[#E0E0E0] font-mono text-sm hover:bg-[#7C3AED] hover:text-white transition-all duration-200 focus:outline-none   cursor-pointer"
-              aria-label="Show active users"
-            >
-              Active Users – {activeUsers.length}
-            </PopoverTrigger>
-
-            <PopoverContent className="w-80 p-4 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50">
-              <section>
-                <h3 className="text-white text-base font-semibold mb-3">
-                  👤 Active Users
-                </h3>
-                <div className="flex flex-col gap-3 max-h-64 overflow-y-auto">
-                  {activeUsers.length > 0 ? (
-                    activeUsers.map((user) => (
-                      <div
-                        key={user.socketId}
-                        className="flex items-center justify-between px-4 py-2 rounded-md bg-zinc-800 border border-zinc-700"
-                      >
-                        <div className="flex items-center gap-2 text-white">
-                          <span className="text-green-400 text-sm">●</span>
-                          <p className="text-sm font-medium">{user.name}</p>
-                        </div>
-                        <button
-                          onClick={() => RemoveUserFromRoom(user)}
-                          title="Remove User"
-                          className="text-red-400 hover:text-red-500 transition-colors duration-150"
-                        >
-                          {session?.user._id === room.createdBy && (
-                            <MdOutlinePersonRemove size={18} />
-                          )}
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-400">
-                      No active users right now.
-                    </p>
-                  )}
-                </div>
-              </section>
-            </PopoverContent>
-          </Popover>
         </div>
 
         {/* Right */}
         <div className="h-full flex gap-8 justify-end items-center w-[25%]">
-          <button
+          {/* <button
             onClick={CompileCode}
             disabled={compileing}
             aria-label={compileing ? "Compiling..." : "Compile Code"}
@@ -410,9 +356,9 @@ const CodeNavbar = ({
             <span className="text-sm font-medium">
               {compileing ? "Compiling..." : "Run Code"}
             </span>
-          </button>
+          </button> */}
 
-          <UserProfileButton session={session} />
+          {/* <UserProfileButton session={session} /> */}
         </div>
       </div>
     </motion.div>

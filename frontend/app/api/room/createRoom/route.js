@@ -15,12 +15,15 @@ export const POST = async (req) => {
 
     const createdBy = session.user._id;
 
-    const { roomName, codingLang } = await req.json();
+    const { roomName, codingLang, theme } = await req.json();
 
     const newRoom = await Room.create({
       roomName,
       codingLang,
       createdBy,
+      roomSettings: {
+        theme: theme,
+      },
     });
 
     if (newRoom) {

@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { FaArrowRight } from "react-icons/fa";
 
 const HeroArea = () => {
   const router = useRouter();
@@ -10,7 +9,7 @@ const HeroArea = () => {
     <div className="w-full h-full flex justify-center items-center">
       <div className="h-full min-w-[80%] flex flex-col justify-center items-center gap-6 p-8">
         {/* Heading One */}
-        <div className="w-full md:w-[70%] text-center mb-2 mt-8">
+        <div className="w-full md:w-[80%] text-center mb-2 mt-8">
           <motion.h1
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -19,7 +18,7 @@ const HeroArea = () => {
               delay: 0.8,
               ease: "easeOut",
             }}
-            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight"
+            className="text-4xl md:text-6xl lg:text-7xl xl:text-7xl font-extrabold tracking-tight"
           >
             Seamless <span className="text-[#7C3AED]">Real-Time</span> Code
             Collaboration.

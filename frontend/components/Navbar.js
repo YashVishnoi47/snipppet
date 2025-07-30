@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Button3 from "./utilityComponents/Button3";
 import UserProfileButton from "./userComponents/UserProfileButton";
 import Link from "next/link";
-import LogoutButton from "./LogoutButton";
+import LogoutButton from "./utilityComponents/LogoutButton";
 import { motion } from "framer-motion";
 
 const Navbar = () => {

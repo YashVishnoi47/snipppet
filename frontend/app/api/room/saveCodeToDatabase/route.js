@@ -6,8 +6,8 @@ export async function POST(req) {
   await connectDB();
 
   try {
-    const { roomId, roomCode } = await req.json();
-    if (!roomId || !roomCode) {
+    const { roomId, roomCode, htmlCode, cssCode, jsCode } = await req.json();
+    if (!roomId) {
       return NextResponse.json(
         { error: "Room ID and code are required" },
         { status: 400 }
@@ -19,7 +19,10 @@ export async function POST(req) {
       return NextResponse.json({ error: "Room not found" }, { status: 404 });
     }
 
-    room.roomCode = roomCode;
+    // room.roomCode = roomCode;
+    room.htmlCode = htmlCode;
+    room.cssCode = cssCode;
+    room.jsCode = jsCode;
     await room.save();
 
     return NextResponse.json(
