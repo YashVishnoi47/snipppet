@@ -1,5 +1,4 @@
-import { formatDateForCode, getRelativeTime } from "@/lib/utils";
-import React from "react";
+import React, { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -20,14 +19,17 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
-import { SettingsIcon } from "lucide-react";
+import { AlertCircle, ArrowUpNarrowWide, SettingsIcon } from "lucide-react";
 import { ThemeConfig } from "@/config/ThemeConfig";
+import Image from "next/image";
+import { FaUserPlus } from "react-icons/fa";
+import { MdOutlinePersonRemove } from "react-icons/md";
+import { toast } from "sonner";
 
 const Taskbar = ({
   room,
   session,
   hasUnsavedChanges,
-  SaveCodeToDatabase,
 
   setTheme,
   theme,
@@ -37,11 +39,26 @@ const Taskbar = ({
   handleRoomStatus,
   setFontSize,
   fontSize,
+
+  activeUsers,
+  RemoveUserFromRoom,
 }) => {
   const isLive = room.isPublic;
+  // For collabration pop up
 
   const handleFontChange = (value) => {
     setFontSize(value[0]);
+  };
+
+  const handleCopyText = () => {
+    navigator.clipboard
+      .writeText(room._id)
+      .then(() => {
+        toast.success("room Id copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
   };
 
   return (
@@ -56,7 +73,7 @@ const Taskbar = ({
         bounce: 0.25,
         delay: 1,
       }}
-      className="flex items-center w-full min-h-full text-white"
+      className={`flex items-center w-full min-h-full text-white overflow-hidden`}
     >
       {/* Theme changer and Font size changer */}
       <div className="h-full w-[40%] flex items-center">
@@ -128,42 +145,12 @@ const Taskbar = ({
 
       {/* Right Side of the TaskBar*/}
       <div className="h-full w-[60%] gap-1 items-center flex justify-end">
-        {/* Code save info and button */}
-        <Tooltip delayDuration={200}>
-          <TooltipTrigger>
-            {" "}
-            <p className="text-[#E0E0E0] text-sm capitalize px-3 py-1 transition-all duration-200 ease-in-out rounded-lg">
-              Last Saved - {getRelativeTime(updateTime)}
-            </p>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{formatDateForCode(updateTime)}</p>
-          </TooltipContent>
-        </Tooltip>
-        {session?.user._id === room.createdBy && (
-          <button
-            disabled={!hasUnsavedChanges()}
-            onClick={SaveCodeToDatabase}
-            type="button"
-            aria-label="Save"
-            className={`items-center justify-center rounded py-1 px-2 text-white border border-black transition-all duration-300 ease-in-out bg-[#7C3AED]/20  hover:bg-[#7C3AED] hover:text-black mr-1 ${
-              !hasUnsavedChanges() ? "cursor-not-allowed" : "cursor-pointer"
-            }`}
-          >
-            {!hasUnsavedChanges() ? (
-              <p className="text-[#E0E0E0] text-xs">Already Saved</p>
-            ) : (
-              <p className="text-[#E0E0E0] text-xs">Save Code</p>
-            )}
-          </button>
-        )}
-
         {/* Room Status and status update button */}
         {session?.user._id === room.createdBy ? (
           <>
             <div
               onClick={handleRoomStatus}
-              className="flex justify-between items-center px-3 py-2 hover:bg-[#7C3AED]/20 transition-all duration-200 ease-in-out cursor-default select-none text-sm font-medium text-[#E0E0E0] hover:text-white h-[95%] mr-1"
+              className="flex justify-between items-center px- py-2 hover:bg-[#7C3AED]/20 transition-all duration-200 ease-in-out cursor-default select-none text-sm font-medium text-[#E0E0E0] hover:text-white h-[95%] mr-1"
             >
               <div className="flex items-center gap-2">
                 {/* Label text */}
@@ -188,34 +175,131 @@ const Taskbar = ({
                 </div>
               </div>
             </div>
+
+            {live === "public" && (
+              <Popover>
+                <PopoverTrigger
+                  className="w-10 border-white flex justify-center items-center hover:bg-[#7C3AED]/20 transition-all duration-200 cursor-pointer"
+                >
+                  <Image
+                    className={`transition-all duration-200 ease-in-out`}
+                    src="/up arrow.svg"
+                    alt="Arrow"
+                    width={35}
+                    height={35}
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="mr-8 mb-4 h-100 bg-black shadow shadow-black border-white/20">
+                  <div className="w-full h-full flex justify-start items-center py-2 flex-col">
+                    {/* Invite People */}
+                    <div className="w-full h-fit rounded-md shadow-lg">
+                      <section className="flex flex-col gap-4">
+                        <h2 className="text-base font-semibold text-white flex items-center gap-2">
+                          <FaUserPlus size={16} />
+                          Invite People
+                        </h2>
+
+                        {/* Parent wrapper with relative positioning for absolute button */}
+                        <div className="relative w-full sm:max-w-md">
+                          {/* Input box for Room ID */}
+                          <input
+                            type="text"
+                            value={room._id}
+                            readOnly
+                            className="w-full rounded-full border border-zinc-700 bg-zinc-800 py-3 pr-24 pl-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                            placeholder="Room Link"
+                          />
+
+                          {/* Copy Button fused inside the input on right side */}
+                          <button
+                            onClick={handleCopyText}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 py-2 px-4 text-sm font-medium text-white bg-[#7C3AED] hover:bg-[#6B21A8] rounded-full transition-all duration-200"
+                          >
+                            Copy
+                          </button>
+                        </div>
+
+                        <p className="text-gray-300 text-sm ml-2 w-full">
+                          Share this room code with others to invite them
+                          instantly.
+                        </p>
+                      </section>
+                    </div>
+
+                    <div className="w-full h-0.5 bg-white/20 mt-3 mb-3" />
+
+                    {/* Active Users */}
+                    <div className="w-full z-50 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-transparent">
+                      <section>
+                        <h3 className="text-white text-base font-semibold mb-3">
+                          👤 Active Users
+                        </h3>
+                        <div className="flex flex-col gap-3 max-h-64 overflow-y-auto pr-2 scroll-smooth scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-transparent">
+                          {activeUsers.length > 0 ? (
+                            activeUsers.map((user) => (
+                              <div
+                                key={user.socketId}
+                                className="flex items-center justify-between px-4 py-2 rounded-lg bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 transition"
+                              >
+                                <div className="flex items-center gap-2 text-white">
+                                  <span className="text-green-400 text-sm">
+                                    ●
+                                  </span>
+                                  <p className="text-sm font-medium">
+                                    {user.name}
+                                  </p>
+                                </div>
+
+                                {/* Remove user button, only visible if current user is the creator */}
+                                {session?.user._id === room.createdBy && (
+                                  <button
+                                    onClick={() => RemoveUserFromRoom(user)}
+                                    title="Remove User"
+                                    className="text-red-400 hover:text-red-500 transition-colors duration-150"
+                                  >
+                                    <MdOutlinePersonRemove size={18} />
+                                  </button>
+                                )}
+                              </div>
+                            ))
+                          ) : (
+                            // Show when there are no users
+                            <p className="text-sm text-gray-400">
+                              No active users right now.
+                            </p>
+                          )}
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
           </>
         ) : (
-          <div className="px-3 py-1 items-center gap-2 flex justify-end hover:bg-[#7C3AED]/20 text-[#E0E0E0] hover:text-white transition-all font-medium duration-200 ease-in-out cursor-default select-none mr-4">
-            <Tooltip delayDuration={100}>
-              <TooltipTrigger asChild>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-md border border-white/20 bg-white/5 hover:bg-white/10 transition-all cursor-default">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      live === "public" ? "bg-green-500" : "bg-red-500"
-                    }`}
-                  />
-                  <p
-                    className={`text-sm capitalize font-medium ${
-                      live === "public" ? "text-green-400" : "text-red-400"
-                    }`}
-                  >
-                    {live === "public" ? "Live" : "Offline"}
-                  </p>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="text-xs">
-                <p>
-                  {live === "public"
-                    ? "Your room is live and ready for collaboration"
-                    : "Your room is offline. Click to go live"}
+          <div className="flex justify-bestween items-center px- py-2 hover:bg-[#7C3AED]/20 transition-all duration-200 ease-in-out cursor-default select-none text-sm font-medium text-[#E0E0E0] hover:text-white h-[95%] mr-1">
+            <div className="flex items-center gap-2">
+              {/* Label text */}
+              <p className="capitalize">Collaboration</p>
+
+              {/* Status chip */}
+              <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10">
+                {/* Status dot */}
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    live === "public" ? "bg-green-500" : "bg-red-500"
+                  }`}
+                />
+                {/* Status text */}
+                <p
+                  className={`capitalize font-semibold ${
+                    live === "public" ? "text-green-400" : "text-red-400"
+                  }`}
+                >
+                  {live === "public" ? "Live" : "Off"}
                 </p>
-              </TooltipContent>
-            </Tooltip>
+              </div>
+            </div>
           </div>
         )}
 

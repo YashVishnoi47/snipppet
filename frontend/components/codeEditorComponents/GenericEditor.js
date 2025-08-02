@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/resizable";
 import Image from "next/image";
 import { EditorView } from "@uiw/react-codemirror";
+import { Save } from "lucide-react";
+import { ImExit } from "react-icons/im";
+import Link from "next/link";
 
 const GenericEditor = ({
   socket,
@@ -33,6 +36,7 @@ const GenericEditor = ({
   openDialog,
   joinRequest,
   handleResponse,
+  SaveCodeToDatabase,
   setJoinRequest,
   handleJoinReq,
   setJoindenied,
@@ -125,44 +129,65 @@ const GenericEditor = ({
   return (
     <div className="flex relative w-full h-full overflow-hidden">
       {/* Code Sidebar */}
-      <div className="h-full w-[60px]  border-r border-[#333348] flex flex-col items-center py-4 space-y-4 shadow-md">
-        {/* Top Icon */}
-        <Image
-          src="/codeIcons.svg"
-          width={28}
-          height={28}
-          alt="Code Icon"
-          className="opacity-90"
-        />
+      <div className="h-full w-[60px]  border-r border-[#333348] flex flex-col items-center p space-y-4 shadow-md">
+        {/* Top section */}
+        <div className="w-full h-1/2 flex flex-col space-y-4 justify-start items-center py-4">
+          {/* Top Icon */}
+          <Image
+            src="/codeIcons.svg"
+            width={28}
+            height={28}
+            alt="Code Icon"
+            className="opacity-90"
+          />
 
-        {/* Divider */}
-        <div className="w-8 border-b border-gray-600" />
+          {/* Divider */}
+          <div className="w-8 border-b border-gray-600" />
 
-        {/* Language Icons */}
-        {[
-          { name: "html", icon: "/lang Icons/HTML icon.svg" },
-          { name: "css", icon: "/lang Icons/css icon.svg" },
-          { name: "js", icon: "/lang Icons/javascript Icon.svg" },
-        ].map((item) => (
-          <button
-            key={item.name}
-            onClick={() => setTab(item.name)}
-            className={`group cursor-pointer w-10 h-10 flex items-center justify-center rounded-md transition-all duration-200 
+          {/* Language Icons */}
+          {[
+            { name: "html", icon: "/lang Icons/HTML icon.svg" },
+            { name: "css", icon: "/lang Icons/css icon.svg" },
+            { name: "js", icon: "/lang Icons/javascript Icon.svg" },
+          ].map((item) => (
+            <button
+              key={item.name}
+              onClick={() => setTab(item.name)}
+              className={`group cursor-pointer w-10 h-10 flex items-center justify-center rounded-md transition-all duration-200 
         ${
           tab === item.name
             ? "bg-[#7C3AED]/20 border border-[#7C3AED]"
             : "hover:bg-white/10"
         }`}
+            >
+              <Image
+                src={item.icon}
+                alt={item.name}
+                width={24}
+                height={24}
+                className="group-hover:scale-110 transition-transform duration-200"
+              />
+            </button>
+          ))}
+        </div>
+
+        {/* Bottom section */}
+        <div className="w-full h-1/2 border-pink-50 text-white flex flex-col space-y-2 justify-end items-center py-1">
+          {/* Code Save Button */}
+          <div
+            onClick={SaveCodeToDatabase}
+            className="p-3 rounded-md hover:bg-white/10 transition-all duration-200 ease-in-out cursor-pointer "
           >
-            <Image
-              src={item.icon}
-              alt={item.name}
-              width={24}
-              height={24}
-              className="group-hover:scale-110 transition-transform duration-200"
-            />
-          </button>
-        ))}
+            <Save />
+          </div>
+
+          <Link
+            href={"/userProfile"}
+            className="p-3 rounded-md hover:bg-red-500/10 transition-all duration-200 ease-in-out cursor-pointer active:scale-95"
+          >
+            <Image src="/exit.svg" width={25} height={25} alt="Exit" />
+          </Link>
+        </div>
       </div>
 
       <ResizablePanelGroup direction="horizontal">

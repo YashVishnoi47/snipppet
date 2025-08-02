@@ -45,7 +45,6 @@ const Room = () => {
   const [joindenied, setJoindenied] = useState(false);
   const [noOwnerDialog, setNoOwnerDialog] = useState(false);
   const [ownerRemovedDialog, setownerRemovedDialog] = useState(false);
-  const [codeMenuOpen, setCodeMenuOpen] = useState(true);
 
   const { socket, connectSocket } = useContext(SocketContext);
   const userName = session?.user.userName || "TEST";
@@ -502,30 +501,6 @@ const Room = () => {
 
   return (
     <div className="flex flex-col relative w-full h-screen bg-black">
-      {/* Code menu toggle button. */}
-      <button
-        onClick={() => setCodeMenuOpen(!codeMenuOpen)}
-        className={
-          "fixed w-[4%] top-8 h-[8.5%] right-6 z-30 bg-black text-white px-4 py-2 rounded-xl shadow-lg hover:bg-[#7C3AED] transition-all backdrop-blur-xl flex justify-center items-center cursor-pointer"
-        }
-      >
-        <Image
-          src={codeMenuOpen ? "./close.svg" : "./menu.svg"}
-          height={30}
-          width={30}
-          alt="Icon"
-        />
-      </button>
-
-      <CodeMenu
-        codeMenuOpen={codeMenuOpen}
-        session={session}
-        room={room}
-        live={live}
-        activeUsers={activeUsers}
-        RemoveUserFromRoom={RemoveUserFromRoom}
-      />
-
       <div className="flex flex-col w-full h-full">
         {session ? (
           <GenericEditor
@@ -561,25 +536,28 @@ const Room = () => {
           </h1>
         )}
         {session && (
-          <div className="flex justify-center items-center h-10 bg-black text-lg text-white">
-            <Taskbar
-              room={room}
-              session={session}
-              SaveCodeToDatabase={SaveCodeToDatabase}
-              hasUnsavedChanges={hasUnsavedChanges}
-              // termialfunc={termialfunc}
-              setFontSize={setFontSize}
-              fontSize={fontSize}
-              theme={theme}
-              setTheme={setTheme}
-              activeUsers={activeUsers}
-              cursorPosition={cursorPosition}
-              terminal={terminal}
-              updateTime={updateTime}
-              live={live}
-              handleRoomStatus={handleRoomStatus}
-            />
-          </div>
+          <>
+            <div className="flex justify-center items-center h-10 bg-black text-lg text-white">
+              <Taskbar
+                room={room}
+                session={session}
+                SaveCodeToDatabase={SaveCodeToDatabase}
+                hasUnsavedChanges={hasUnsavedChanges}
+                // termialfunc={termialfunc}
+                setFontSize={setFontSize}
+                fontSize={fontSize}
+                theme={theme}
+                setTheme={setTheme}
+                activeUsers={activeUsers}
+                cursorPosition={cursorPosition}
+                terminal={terminal}
+                updateTime={updateTime}
+                live={live}
+                handleRoomStatus={handleRoomStatus}
+                RemoveUserFromRoom={RemoveUserFromRoom}
+              />
+            </div>
+          </>
         )}
       </div>
     </div>

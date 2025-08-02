@@ -13,7 +13,7 @@ const UserInRoom = {};
 const io = new Server(server, {
   cors: {
     // origin: "http://localhost:3000",
-    origin: "https://snipppet.vercel.app/",
+    origin: "https://collabrative-code-editor-restart-yash-bishnois-projects.vercel.app/",
     methods: ["GET", "POST"],
     credentials: true,
   },

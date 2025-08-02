@@ -75,7 +75,7 @@ const CodeNavbar = ({
         bounce: 0.25,
         delay: 0.5,
       }}
-      className="w-full cursor-text items-center justify-center bg-[#000]/10 backdrop-blur-lg flex min-h-[10%] border-2 border-black"
+      className="w-full cursor-text items-center flex-col justify-center bg-[#000]/10 backdrop-blur-lg flex min-h-[10%] border-2 border-black"
     >
       <div className="h-full flex justify-between w-[90%]">
         {/* Left*/}
@@ -332,7 +332,6 @@ const CodeNavbar = ({
               )}
             </Popover>
           )}
-
         </div>
 
         {/* Right */}
@@ -361,6 +360,7 @@ const CodeNavbar = ({
           {/* <UserProfileButton session={session} /> */}
         </div>
       </div>
+
     </motion.div>
   );
 };
