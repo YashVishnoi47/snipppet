@@ -27,6 +27,10 @@ io.on("connection", (socket) => {
 
     const isOwner = userId === ownerId;
 
+    socket.ownerId = ownerId;
+    socket.userId = userId;
+    socket.roomId = roomId;
+
     if (isOwner) {
       socket.join(roomId);
       UserInRoom[roomId].push(user);
@@ -36,7 +40,7 @@ io.on("connection", (socket) => {
       const Owner = UserInRoom[roomId].find((u) => u.userId === ownerId);
 
       if (Owner) {
-        console.log("Owner is in the room You can Join");
+        // console.log("Owner is in the room You can Join");
         io.to(Owner.socketId).emit("join_request", { user, roomId });
         console.log(`${username} requested to join room: ${roomId}`);
       } else {
@@ -106,18 +110,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    const userId = socket.userId;
+    const ownerId = socket.ownerId;
     for (const roomId in UserInRoom) {
       console.log("User Disconnected", socket.id);
-      const wasOwner = UserInRoom[roomId]?.some(
-        (user) => user.socketId === socket.id
-      );
+      const wasOwner = userId === ownerId;
 
       if (wasOwner) {
         console.log("Owner disconnected, making room private");
         io.to(roomId).emit("force_exit", {
           reason: "Room is now private because the owner left.",
         });
-
         // delete UserInRoom[roomId];
       } else {
         UserInRoom[roomId] = UserInRoom[roomId].filter(

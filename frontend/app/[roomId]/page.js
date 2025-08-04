@@ -13,9 +13,6 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { material } from "@uiw/codemirror-theme-material";
 import { sublime } from "@uiw/codemirror-theme-sublime";
 import Taskbar from "@/components/codeEditorComponents/Taskbar";
-import DialogBox from "@/components/dialogBoxes/DialogBox";
-import CodeMenu from "@/components/codeEditorComponents/CodeMenu";
-import Image from "next/image";
 
 const Room = () => {
   const { data: session } = useSession();
@@ -25,7 +22,6 @@ const Room = () => {
   const [compiledCode, setCompiledCode] = useState("");
   const [compileing, setCompileing] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
-  const [updateTime, setUpdateTime] = useState("");
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
   const [terminal, setTerminal] = useState(false);
   const [fileCodes, setFileCodes] = useState({
@@ -40,6 +36,7 @@ const Room = () => {
   const [theme, setTheme] = useState("dark");
   const [owner, setOwner] = useState();
   const [live, setLive] = useState(false);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [joinRequest, setJoinRequest] = useState(null);
   const [joindenied, setJoindenied] = useState(false);
@@ -79,7 +76,6 @@ const Room = () => {
   useEffect(() => {
     if (socket && live === "public") {
       setOpenDialog(false);
-      // console.log("Dialog is now disabled");
     }
   }, [socket, live]);
 
@@ -135,19 +131,19 @@ const Room = () => {
   };
 
   // Stoping the user to leave the room if the changes are not saved
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (hasUnsavedChanges()) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (e) => {
+  //     if (hasUnsavedChanges()) {
+  //       e.preventDefault();
+  //       e.returnValue = "";
+  //     }
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [fileCodes, lastSavedCode, room.codingLang]);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, [fileCodes, lastSavedCode, room.codingLang]);
 
   // Function For Compiling Code.
   // const CompileCode = async () => {
@@ -224,33 +220,6 @@ const Room = () => {
     }
   }, []);
 
-  // Fetching the room latest Update time by roomId.
-  useEffect(() => {
-    const getRoomUpdateById = async () => {
-      try {
-        const res = await fetch(
-          `/api/room/getRoomUpdateById?roomId=${roomId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        if (data) {
-          setUpdateTime(data.updatedAt);
-        }
-      } catch (error) {
-        console.log("Error Fetching Room Latest Update Time ", error);
-      }
-    };
-
-    if (roomId) {
-      getRoomUpdateById();
-    }
-  }, [lastSavedCode]);
-
   // Fetching the Owner of the room
   useEffect(() => {
     if (!room || !room.createdBy) return;
@@ -296,7 +265,7 @@ const Room = () => {
     // if (accepted) {
     //   setWaiting(true);
     // }
-    setJoinRequest(null); // Close popup
+    setJoinRequest(null);
   };
 
   // function for handling join Denies.
@@ -480,7 +449,7 @@ const Room = () => {
 
     const handleForceExit = ({ reason }) => {
       handleRoomStatus();
-      router.push("/");
+      // router.push("/");
       toast.error(reason || "Room is now private");
     };
 
@@ -551,7 +520,6 @@ const Room = () => {
                 activeUsers={activeUsers}
                 cursorPosition={cursorPosition}
                 terminal={terminal}
-                updateTime={updateTime}
                 live={live}
                 handleRoomStatus={handleRoomStatus}
                 RemoveUserFromRoom={RemoveUserFromRoom}

@@ -27,7 +27,7 @@ export default function SignUp() {
       redirect: false,
     });
 
-    const data = await res.json();
+    // const data = await res.json();
 
     if (res.ok) {
       router.push("/userProfile");
