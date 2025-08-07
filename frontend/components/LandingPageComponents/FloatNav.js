@@ -14,7 +14,7 @@ import Image from "next/image";
 const FloatNav = () => {
   const { data: session } = useSession();
   return (
-    <div className="fixed top-0 left-0 w-full h-[100px] bg-transparent flex justify-center items-center z-50">
+    <div className="fixed top-1 left-0 w-full h-[100px] max-w-screen bg-transparent flex justify-center items-center z-50">
       <motion.div
         initial={{ y: -100, opacity: 0, scale: 0.8 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
