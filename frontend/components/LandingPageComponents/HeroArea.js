@@ -2,20 +2,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import {
-  ArrowBigDown,
-  ArrowBigRight,
-  Keyboard,
-  KeyboardIcon,
-  KeyIcon,
-} from "lucide-react";
+import { KeyboardIcon } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
 
 const HeroArea = () => {
   const router = useRouter();
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <div className="h-full min-w-[80%] flex flex-col justify-center items-center gap-[16px] p-8">
+    <div className="w-full h-full flex justify-center items-center ">
+      <div className="h-full min-w-[80%] flex flex-col justify-start items-center gap-[16px] p-8">
         <motion.span
           initial={{ opacity: 0, y: -10 }} // start slightly above and invisible
           animate={{ opacity: 1, y: 0 }} // fade in and slide down
@@ -83,7 +77,7 @@ const HeroArea = () => {
             ⚡ Start Now
             <FaArrowRight />
           </motion.button>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-gray-400 mt-1 italic">
             No setup. No wait. Just code.
           </p>
 

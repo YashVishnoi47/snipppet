@@ -13,8 +13,9 @@ import Image from "next/image";
 
 const FloatNav = () => {
   const { data: session } = useSession();
+
   return (
-    <div className="fixed top-1 left-0 w-full h-[100px] max-w-screen bg-transparent flex justify-center items-center z-50">
+    <div className="w-full h-[110px] max-w-screen bg-transparent flex justify-center items-center z-50">
       <motion.div
         initial={{ y: -100, opacity: 0, scale: 0.8 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -26,35 +27,44 @@ const FloatNav = () => {
           bounce: 0.25,
           delay: 1.6,
         }}
-        className="min-w-[70%] h-[70%] rounded-2xl flex px-4 bg-[#fff]/10 backdrop-blur-md"
+        className=" w-[70%] h-[90%] rounded-2xl bg-black/10 flex px-4 backdrop-blur-md"
       >
         {/* left */}
-        <div className="w-1/2 h-full flex justify-start items-center">
+        <div className="w-[60%] h-full flex justify-start items-center">
           <h1 className="text-3xl text-white cursor-pointer font-bold">
             Snipppet
           </h1>
           {/* Other Links */}
-          <div className="p-4 h-full w-full ml-1 sm:flex hidden justify-start items-center">
-            <Link href={"/"}>
-              <button className="px-4  py-3 rounded-lg text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-sm">
-                Features
-              </button>
-            </Link>
-            <Link href={"/"}>
-              <button className="px-4 rounded-lg py-3 text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-sm">
-                Pricing
-              </button>
-            </Link>
-            <Link href={"/"}>
-              <button className="px-4 rounded-lg py-3 text-[#E0E0E0] hover:bg-[#7C3AED]/20 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-sm">
-                Contact
-              </button>
-            </Link>
+          <div className="p-4  h-full w-full ml-1 sm:flex hidden justify-start items-center">
+            {[
+              {
+                title: "Home",
+                link: "#home",
+              },
+              {
+                title: "Features",
+                link: "#features",
+              },
+              {
+                title: "Explore",
+                link: "#Built for Everyone",
+              },
+              // {
+              //   title: "Contact",
+              //   link: "/",
+              // },
+            ].map((item, idx) => (
+              <a key={idx} href={item.link}>
+                <button className="px-4 py-3 rounded-lg text-[#E0E0E0] hover:bg-[#7C3AED]/10 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-md">
+                  {item.title}
+                </button>
+              </a>
+            ))}
           </div>
         </div>
 
         {/* Right */}
-        <div className="w-1/2 h-full flex gap-4 justify-end items-center">
+        <div className="w-[40%] h-full flex gap-4 justify-end items-center">
           {session ? (
             <div className="w-full sm:flex hidden h-full gap-3 justify-end items-center">
               <Link href={"/userProfile"}>

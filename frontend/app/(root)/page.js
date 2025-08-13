@@ -1,20 +1,42 @@
 import FloatNav from "@/components/LandingPageComponents/FloatNav";
 import HeroArea from "@/components/LandingPageComponents/HeroArea";
-import Image from "next/image";
-import Particles from "@/components/LandingPageComponents/ParticlesBackground";
+import Features from "@/components/LandingPageComponents/FeaturesSection";
+import ExploreSection from "@/components/LandingPageComponents/ExploreSection";
 
 export default function Home() {
   return (
     <div className="flex w-full bg-black selection:bg-[#7C3AED] selection:text-black flex-col items-center  text-white justify-start relative">
       <div className="relative z-10">
-        <FloatNav />
-        <section className="flex w-full relative flex-col items-center text-white justify-start h-screen bg-transparent ">
+        {/* Hero Section */}
+        <section
+          id="hero"
+          className="flex w-full relative flex-col items-center text-white justify-start h-screen bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.3)_0%,rgba(0,0,0,1)_100%)]"
+        >
+          <FloatNav />
           <HeroArea />
         </section>
-        {/* <section className="flex w-full border-2 flex-col items-center bg-[#] text-white justify-start h-screen">
 
-          
-        </section> */}
+        {/* Features Section */}
+        <section
+          id="features"
+          className="flex w-full flex-col items-center text-white justify-end py-4 h-fit mt-32"
+        >
+          <Features />
+        </section>
+
+        {/* Explore Section */}
+        <section
+          id="Built for Everyone"
+          className="flex w-full flex-col items-center text-white justify-center h-fit py-4 mt-64"
+        >
+          <ExploreSection />
+        </section>
+
+        {/* Section - 4 */}
+        <section
+          id="Built for Everyone"
+          className="flex w-full flex-col items-center text-white justify-center h-screen py-4 mt-64"
+        ></section>
       </div>
     </div>
   );
