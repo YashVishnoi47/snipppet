@@ -2,6 +2,8 @@ import FloatNav from "@/components/LandingPageComponents/FloatNav";
 import HeroArea from "@/components/LandingPageComponents/HeroArea";
 import Features from "@/components/LandingPageComponents/FeaturesSection";
 import ExploreSection from "@/components/LandingPageComponents/ExploreSection";
+import CenterText from "@/components/LandingPageComponents/Section 4 Components/CenterText";
+import HowToUseSection from "@/components/LandingPageComponents/HowToUseSection";
 
 export default function Home() {
   return (
@@ -32,11 +34,21 @@ export default function Home() {
           <ExploreSection />
         </section>
 
-        {/* Section - 4 */}
+        {/* Center Text Section */}
         <section
           id="Built for Everyone"
-          className="flex w-full flex-col items-center text-white justify-center h-screen py-4 mt-64"
-        ></section>
+          className="flex w-full flex-col items-center text-white justify-center h-screen py-4 mt-64 bg-[#0b0715] bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.25)_0%,transparent_40%),radial-gradient(circle_at_bottom_right,rgba(124,58,237,0.25)_0%,transparent_40%)]"
+        >
+          <CenterText />
+        </section>
+
+        {/* Section - 5 */}
+        <section
+          id="How to use"
+          className="flex w-full flex-col items-center text-white justify-center h-fit py-4 mt-8"
+        >
+          <HowToUseSection />
+        </section>
       </div>
     </div>
   );

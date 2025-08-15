@@ -16,7 +16,7 @@ const Student = () => {
       >
         <div className="h-[90%] lg:py-6 min-w-[60%] border border-white/10 rounded-2xl bg-[#7C3AED]/10  flex justify-center  items-center">
           <Image
-            src="/Explore Images/students.png"
+            src="/Explore Images/studentssvg.svg"
             alt="student"
             width={450}
             height={500}

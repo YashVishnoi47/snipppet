@@ -49,10 +49,10 @@ const FloatNav = () => {
                 title: "Explore",
                 link: "#Built for Everyone",
               },
-              // {
-              //   title: "Contact",
-              //   link: "/",
-              // },
+              {
+                title: "How it works",
+                link: "#How to use",
+              },
             ].map((item, idx) => (
               <a key={idx} href={item.link}>
                 <button className="px-4 py-3 rounded-lg text-[#E0E0E0] hover:bg-[#7C3AED]/10 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-md">
