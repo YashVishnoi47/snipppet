@@ -18,17 +18,17 @@ const HowToUseSection = () => {
             ttile: "Create a Room",
             description:
               "Begin by creating a new room to start your collaboration journey.",
-            link: "/How to use images/step1-2.png",
+            link: "/How to use images/step1.svg",
           },
           {
             ttile: "Share the Link",
             description: "Copy your room link and share it with your team.",
-            link: "/How to use images/step2.png",
+            link: "/How to use images/step2.svg",
           },
           {
             ttile: "Collaborate in Real Time",
             description: "Code together, see changes live, and chat instantly.",
-            link: "/How to use images/step3.png",
+            link: "/How to use images/step3.svg",
           },
         ].map((item, idx) => (
           <motion.div
