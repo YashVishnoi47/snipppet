@@ -18,17 +18,17 @@ const HowToUseSection = () => {
             ttile: "Create a Room",
             description:
               "Begin by creating a new room to start your collaboration journey.",
-            link: "/How to use images/step1.svg",
+            link: "/HowToUseImages/step1.svg",
           },
           {
             ttile: "Share the Link",
             description: "Copy your room link and share it with your team.",
-            link: "/How to use images/step2.svg",
+            link: "/HowToUseImages/step2.svg",
           },
           {
             ttile: "Collaborate in Real Time",
             description: "Code together, see changes live, and chat instantly.",
-            link: "/How to use images/step3.svg",
+            link: "/HowToUseImages/step3.svg",
           },
         ].map((item, idx) => (
           <motion.div
@@ -55,7 +55,7 @@ const HowToUseSection = () => {
                 <Image
                   className="rounded-tr-4xl rounded-tl-4xl"
                   src={item.link}
-                  alt="step1"
+                  alt={item.ttile}
                   width={1000}
                   height={1000}
                 />
