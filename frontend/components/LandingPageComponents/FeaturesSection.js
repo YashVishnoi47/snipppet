@@ -3,25 +3,26 @@ import React from "react";
 import SpotlightCard from "./SpotlightCard ";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
+import Image from "next/image";
 
 const FeaturesList = [
   {
     title: "Real-Time collabration",
     description:
       "Work together instantly—see every code change appear the moment it’s made. No delays, no refreshes—just seamless, in - sync collaboration from anywhere.",
-    icon: "",
+    icon: "landing page icons/Features/real time collab.svg",
   },
   {
     title: "Multi-Language Support",
     description:
       "Work in your own language—switch between coding and communication instantly. No barriers, no confusion—just seamless collaboration in every language you prefer anywhere.",
-    icon: "",
+    icon: "landing page icons/Features/multi lang.svg",
   },
   {
     title: "Real-Time Voice & Video Chat",
     description:
       "Speak with your team instantly—voice or video, the choice is yours. No switching apps, no delays—just natural conversations that keep everyone connected anywhere.",
-    icon: "",
+    icon: "landing page icons/Features/voice and video.svg",
   },
 ];
 
@@ -41,14 +42,22 @@ const Features = () => {
             className="h-[500px] lg:w-[35%] w-[80%]  relative"
           >
             <SpotlightCard
-              className="h-full w-full flex flex-col justify-center items-centerp-0 p-4 shrink-0"
+              className="h-full w-full flex flex-col justify-center items-centerp-0  shrink-0"
               spotlightColor="rgba(124,58,237,0.2)"
             >
               {/* Icon */}
-              <div className="w-full h-[50%]"></div>
+              <div className="w-full h-[50%] flex justify-center items-start">
+                <Image
+                  src={feature.icon}
+                  alt=""
+                  width={220}
+                  height={220}
+                  className=""
+                />
+              </div>
 
               {/* Text */}
-              <div className="w-full h-[50%] flex flex-col justify-start items-start gap-4 relative">
+              <div className="w-full h-[50%] flex flex-col justify-start items-start gap-4 relative p-4">
                 <h4 className="text-2xl font-bold tracking-">
                   {feature.title}
                 </h4>

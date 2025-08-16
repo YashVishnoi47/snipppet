@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import LogoutButton from "../utilityComponents/LogoutButton";
 import {
@@ -27,7 +27,7 @@ const FloatNav = () => {
           bounce: 0.25,
           delay: 1.6,
         }}
-        className="w-[70%] h-[90%] rounded-2xl bg-black/10 flex px-4 backdrop-blur-md"
+        className="w-[70%] max-w-[1400px] h-[90%] rounded-2xl bg-black/10 flex px-4 backdrop-blur-md"
       >
         {/* left */}
         <div className="w-[60%] h-full flex justify-start items-center">
@@ -35,7 +35,7 @@ const FloatNav = () => {
             Snipppet
           </h1>
           {/* Other Links */}
-          <div className="p-4  h-full w-full ml-1 sm:flex hidden justify-start items-center">
+          <div className="p-4  h-full w-full ml-1 lg:flex hidden justify-start items-center">
             {[
               {
                 title: "Home",
@@ -66,7 +66,7 @@ const FloatNav = () => {
         {/* Right */}
         <div className="w-[40%] h-full flex gap-4 justify-end items-center">
           {session ? (
-            <div className="w-full sm:flex hidden h-full gap-3 justify-end items-center">
+            <div className="w-full lg:flex hidden h-full gap-3 justify-end items-center">
               <Link href={"/userProfile"}>
                 <button className="cursor-pointer px-6 py-2 text-[#E0E0E0] border bg-[#7C3AED] border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white">
                   Dashboard
@@ -80,7 +80,7 @@ const FloatNav = () => {
               />
             </div>
           ) : (
-            <div className="gap-4 sm:flex hidden">
+            <div className="gap-4 lg:flex hidden">
               <Link href={"/sign-in"}>
                 <button className="cursor-pointer px-6 py-2 bg-transparent text-[#E0E0E0] border border-[#3C3C4D] rounded-lg font-medium transition-all duration-200 ease-in-out hover:bg-[#7C3AED]/20 hover:border-[#7C3AED] hover:text-white">
                   Log in
@@ -96,46 +96,89 @@ const FloatNav = () => {
           )}
 
           {/* Mobile DropDown */}
-          <div className="sm:hidden flex">
-            <Popover className={"border-none"}>
+          <div className="lg:hidden flex">
+            <Popover>
               <PopoverTrigger>
                 <Image src={"/menu.svg"} height={20} width={20} alt="Icon" />
               </PopoverTrigger>
               <PopoverContent
                 className={
-                  "h-44 w-36 flex flex-col justify-start items-center p-0 bg-black text-white border border-neutral-700 rounded-xl "
+                  "h-56 w-44 flex flex-col justify-start items-center p-0 bg-transparent backdrop-blu2xl text-white rounded-xl mt-6 border-none"
                 }
               >
                 {/* Dashboard and log-in Sign-up */}
                 {session ? (
-                  <div className="w-full h-1/2 flex flex-col justify-start items-center py-2">
-                    <Link
-                      className="text-md w-[90%] rounded-md flex justify-center items-center px-2 py-1"
-                      href={"/userProfile"}
-                    >
-                      {" "}
-                      Dashboard
-                    </Link>
+                  <div className="w-full h-1/2 flex flex-col justify-start gap-2 items-center py-2">
+                    {[
+                      {
+                        title: "Home",
+                        link: "#home",
+                      },
+                      {
+                        title: "Features",
+                        link: "#features",
+                      },
+                      {
+                        title: "Explore",
+                        link: "#Built for Everyone",
+                      },
+                      {
+                        title: "How it works",
+                        link: "#How to use",
+                      },
+                      {
+                        title: "Dashboard",
+                        link: "/userProfile",
+                      },
+                    ].map((item, idx) => (
+                      <motion.a
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: idx * 0.1 }}
+                        key={idx}
+                        href={item.link}
+                        className="w-full flex-col flex justify-center items-center"
+                      >
+                        <button className="px-4 py-3 w-[90%] bg-black/50 backdrop-blur-2xl rounded-lg text-[#E0E0E0] hover:bg-[#7C3AED]/10 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-md">
+                          {item.title}
+                        </button>
+                      </motion.a>
+                    ))}
                   </div>
                 ) : (
-                  [
-                    { name: "Sign up", link: "./sign-up" },
-                    { name: "Log in", link: "./sign-in" },
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="w-[90%] mt-2 rounded-xl border-neutral-600 border flex flex-col justify-start items-center py-2"
-                    >
-                      <Link
+                  <div className="w-full h-1/2 flex flex-col justify-start gap-2 items-center py-2">
+                    {[
+                      {
+                        title: "Home",
+                        link: "#home",
+                      },
+                      {
+                        title: "Features",
+                        link: "#features",
+                      },
+                      {
+                        title: "Explore",
+                        link: "#Built for Everyone",
+                      },
+                      {
+                        title: "How it works",
+                        link: "#How to use",
+                      },
+                    ].map((item, idx) => (
+                      <motion.a
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: idx * 0.1 }}
                         key={idx}
-                        className="text-md w-[90%] rounded-md flex justify-center items-center px-2 py-1"
                         href={item.link}
+                        className="w-full flex-col flex justify-center items-center"
                       >
-                        {" "}
-                        {item.name}
-                      </Link>
-                    </div>
-                  ))
+                        <button className="px-4 py-3 w-[90%] bg-black/50 backdrop-blur-2xl rounded-lg text-[#E0E0E0] hover:bg-[#7C3AED]/10 hover:text-white transition-all duration-200 ease-in-out cursor-pointer text-md">
+                          {item.title}
+                        </button>
+                      </motion.a>
+                    ))}
+                  </div>
                 )}
               </PopoverContent>
             </Popover>

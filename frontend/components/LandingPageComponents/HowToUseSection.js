@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const HowToUseSection = () => {
   return (
-    <div className="w-full flex flex-col justify-start min-h-[500px] items-center gap-32 py-8">
+    <div className="w-full max-w-[1400px] flex flex-col justify-start min-h-[500px] items-center gap-32 py-8">
       <div className="w-full flex flex-col justify-center items-center gap-4">
         <SectionHeading text={"How it works"} />
         {/* <p className="text-lg text-neutral-300">Create a room, invite your team, and start coding together in seconds.</p> */}
@@ -49,7 +49,7 @@ const HowToUseSection = () => {
               </p>
             </div>
 
-            <div className="lg:w-[80%] w-[90%] border-red-500 md:h-[500px] sm:h-[300px] h-[200px] flex flex-col justify-center items-start rounded-4xl bg-gradient-to-r from-[rgba(124,58,237,0.5)] via-[rgba(255,107,107,0.5)] to-[rgba(255,217,61,0.5)]">
+            <div className="lg:w-[80%] w-[90%] border-red-500 md:h-[500px] sm:h-[300px] h-[200px] flex flex-col justify-center items-start rounded-4xl bg-gradient-to-r from-[rgba(124,58,237,0.7)] via-[rgba(255,107,107,0.7)] to-[rgba(255,217,61,0.7)]">
               {/* Image */}
               <div className="w-full h-full flex flex-col gap-4 justify-end items-center">
                 <Image

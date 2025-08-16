@@ -7,7 +7,7 @@ import HowToUseSection from "@/components/LandingPageComponents/HowToUseSection"
 
 export default function Home() {
   return (
-    <div className="flex w-full bg-black selection:bg-[#7C3AED] selection:text-black flex-col items-center  text-white justify-start relative">
+    <div className="flex w-full bg-black selection:bg-[#7C3AED] selection:text-black flex-col items-center text-white justify-start relative">
       <div className="relative z-10">
         {/* Hero Section */}
         <section
@@ -35,12 +35,12 @@ export default function Home() {
         </section>
 
         {/* Center Text Section */}
-        <section
+        {/* <section
           id="Built for Everyone"
-          className="flex w-full flex-col items-center text-white justify-center h-screen py-4 mt-64 bg-[#0b0715] bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.25)_0%,transparent_40%),radial-gradient(circle_at_bottom_right,rgba(124,58,237,0.25)_0%,transparent_40%)]"
+          className="flex w-full flex-col items-center text-white justify-center h-screen py-4 mt-64 bg-[#0b0715] bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.25)_0%,transparent_40%),radial-gradient(circle_at_bottom_right,rgba(124,58,237,0.25)_0%,transparent_40%)] border"
         >
           <CenterText />
-        </section>
+        </section> */}
 
         {/* Section - 5 */}
         <section
