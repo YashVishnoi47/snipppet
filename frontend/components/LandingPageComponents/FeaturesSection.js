@@ -64,7 +64,7 @@ const Features = () => {
                 <p className="lg:text-md text-neutral-500 tracking-tight">
                   {feature.description}
                 </p>
-                <p className="absolute bottom-0 right-0 text-xs font-semibold py-1.5 px-4 rounded-lg bg-black/40 backdrop-blur-sm  border-white/10 shadow-lg text-transparent bg-clip-text  bg-gradient-to-tr from-[#7C3AED] via-fuchsia-500 to-[#FF6FD8] border transition-all duration-300 ease-out">
+                <p className="absolute bottom-4 right-4 text-xs font-semibold py-1.5 px-4 rounded-lg bg-black/40 backdrop-blur-sm  border-white/10 shadow-lg text-transparent bg-clip-text  bg-gradient-to-tr from-[#7C3AED] via-fuchsia-500 to-[#FF6FD8] border transition-all duration-300 ease-out">
                   Awesomeness #{idx + 1}
                 </p>
               </div>

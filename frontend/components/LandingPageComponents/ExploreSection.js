@@ -13,7 +13,7 @@ const ExploreSection = () => {
 
   return (
     <div className="w-full max-w-[1400px] flex flex-col gap-16 justify-center items-center">
-      <SectionHeading text={"Built for Everyone Who Loves to Code Together"} />
+      <SectionHeading text={"Built for Everyone"} />
 
       <div className="lg:w-[80%] w-full min-h-[700px] flex flex-col justify-center gap-4 items-center">
         {/* Top bar */}

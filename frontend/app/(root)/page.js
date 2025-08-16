@@ -4,6 +4,7 @@ import Features from "@/components/LandingPageComponents/FeaturesSection";
 import ExploreSection from "@/components/LandingPageComponents/ExploreSection";
 import CenterText from "@/components/LandingPageComponents/Section 4 Components/CenterText";
 import HowToUseSection from "@/components/LandingPageComponents/HowToUseSection";
+import Footer from "@/components/LandingPageComponents/Footer";
 
 export default function Home() {
   return (
@@ -42,12 +43,20 @@ export default function Home() {
           <CenterText />
         </section> */}
 
-        {/* Section - 5 */}
+        {/* How to use*/}
         <section
           id="How to use"
           className="flex w-full flex-col items-center text-white justify-center h-fit py-4 mt-8"
         >
           <HowToUseSection />
+        </section>
+
+        {/* Footer */}
+        <section
+          id="How to use"
+          className="flex w-full flex-col items-center text-white justify-center h-fit py-4 mt-8"
+        >
+          <Footer />
         </section>
       </div>
     </div>
