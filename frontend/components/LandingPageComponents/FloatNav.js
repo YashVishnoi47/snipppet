@@ -27,7 +27,7 @@ const FloatNav = () => {
           bounce: 0.25,
           delay: 1.6,
         }}
-        className=" max-w-[70%] w-[70%] h-[90%] rounded-2xl bg-black/10 flex px-4 backdrop-blur-md"
+        className="w-[70%] h-[90%] rounded-2xl bg-black/10 flex px-4 backdrop-blur-md"
       >
         {/* left */}
         <div className="w-[60%] h-full flex justify-start items-center">

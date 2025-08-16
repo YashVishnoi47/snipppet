@@ -23,7 +23,7 @@ const HowToUseSection = () => {
           {
             ttile: "Share the Link",
             description: "Copy your room link and share it with your team.",
-            link: "/HowToUseImages/step2.svg",
+            link: "/HowToUseImages/Step2.svg",
           },
           {
             ttile: "Collaborate in Real Time",
